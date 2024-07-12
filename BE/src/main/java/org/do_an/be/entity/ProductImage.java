@@ -17,7 +17,7 @@ public class ProductImage {
     public static final int MAXIMUM_IMAGES_PER_PRODUCT = 6;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "product_id")

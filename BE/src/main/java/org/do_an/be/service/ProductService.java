@@ -2,10 +2,14 @@ package org.do_an.be.service;
 
 import lombok.RequiredArgsConstructor;
 import org.do_an.be.dtos.ProductDTO;
+import org.do_an.be.dtos.ProductImageDTO;
 import org.do_an.be.entity.Category;
 import org.do_an.be.entity.Product;
+import org.do_an.be.entity.ProductImage;
 import org.do_an.be.exception.DataNotFoundException;
+import org.do_an.be.exception.InvalidParamException;
 import org.do_an.be.repository.CategoryRepository;
+import org.do_an.be.repository.ProductImageRepository;
 import org.do_an.be.repository.ProductRepository;
 import org.do_an.be.responses.product.ProductResponse;
 import org.springframework.data.domain.Page;
@@ -19,6 +23,7 @@ import java.util.Optional;
 public class ProductService {
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
+    private final ProductImageRepository productImageRepository;
 
     @Transactional
     public Product createProduct(ProductDTO productDTO) throws DataNotFoundException {
@@ -32,6 +37,8 @@ public class ProductService {
                 .name(productDTO.getName())
                 .price(productDTO.getPrice())
                 .description(productDTO.getDescription())
+                .sku(productDTO.getSku())
+                .inventory(productDTO.getInventory())
                 .category(existingCategory)
                 .build();
         return productRepository.save(newProduct);
@@ -82,5 +89,30 @@ public class ProductService {
             return productRepository.save(existingProduct);
         }
         return null;
+    }
+
+    @Transactional
+    public ProductImage createProductImage(
+            Integer productId,
+            ProductImageDTO productImageDTO) throws Exception {
+        Product existingProduct = productRepository
+                .findById(productId)
+                .orElseThrow(() ->
+                        new DataNotFoundException(
+                                "Cannot find product with id: "+productImageDTO.getProductId()));
+        ProductImage newProductImage = ProductImage.builder()
+                .product(existingProduct)
+                .imageUrl(productImageDTO.getImageUrl())
+                .build();
+        //Ko cho insert quá 5 ảnh cho 1 sản phẩm
+        int size = productImageRepository.findByProductId(productId).size();
+        if(size >= ProductImage.MAXIMUM_IMAGES_PER_PRODUCT) {
+            throw new InvalidParamException(
+                    "Number of images must be <= "
+                            +ProductImage.MAXIMUM_IMAGES_PER_PRODUCT);
+        }
+
+        productRepository.save(existingProduct);
+        return productImageRepository.save(newProductImage);
     }
 }

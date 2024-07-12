@@ -22,4 +22,7 @@ public class ProductDTO  {
    private Integer categoryId;
    private MultipartFile file;
    private String description;
+   private Integer inventory;
+
+
 }

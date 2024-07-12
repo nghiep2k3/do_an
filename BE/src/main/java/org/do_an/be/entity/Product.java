@@ -34,9 +34,8 @@ public class Product extends BaseEntity {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "inventory_id")
-    private ProductInventory inventory;
+    @Column(name = "inventory")
+    private Integer inventory;
 
     @Column(name = "price")
     private Float price;

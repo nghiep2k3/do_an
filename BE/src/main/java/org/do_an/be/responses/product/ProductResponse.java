@@ -28,15 +28,17 @@ public class ProductResponse extends BaseResponse {
     private String description;
     // Thêm trường totalPages
     private int totalPages;
-
+    private String sku;
+    private Integer inventory;
     @JsonProperty("product_images")
     private List<ProductImage> productImages = new ArrayList<>();
 
     @JsonProperty("comments")
     private List<CommentResponse> comments = new ArrayList<>();
 
-    @JsonProperty("favorites")
-    private List<FavoriteResponse> favorites = new ArrayList<>();
+//    @JsonProperty("favorites")
+//    private List<FavoriteResponse> favorites = new ArrayList<>();
+
 
     @JsonProperty("category_id")
     private Integer categoryId;
@@ -50,6 +52,8 @@ public class ProductResponse extends BaseResponse {
                 .id(product.getId())
                 .name(product.getName())
                 .price(product.getPrice())
+                .sku(product.getSku())
+                .inventory(product.getInventory())
                 .comments(comments.stream().map(CommentResponse::fromComment).toList()) // Collect sorted comments into a list
                 .description(product.getDescription())
                 .categoryId(product.getCategory().getId())
