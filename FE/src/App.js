@@ -5,6 +5,8 @@ import Header from './components/Header/Header';
 import Carousel from './components/Carousel/Carousel';
 import { Outlet, } from "react-router-dom";
 import Detail from './components/Detail/Detail.jsx'
+import Footer from './components/Footer/Footer.jsx';
+import ContactBox from './components/ContactBox/ContactBox.jsx';
 function App() {
   const location = useLocation();
   const hideCarousel = location.pathname === "/";
@@ -13,7 +15,8 @@ function App() {
     <div >
       {!hideCarousel && <Header />}
       <Outlet />
-      {/* <Detail></Detail> */}
+      {!hideCarousel && <ContactBox />}
+      {!hideCarousel && <Footer />}
     </div>
   );
 }

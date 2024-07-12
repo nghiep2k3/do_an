@@ -11,6 +11,7 @@ import Detail from "./components/Detail/Detail";
 import Bestsell from "./page/BestSell/Bestsell";
 import Login from "./page/Login/Login"
 import Test from "./page/Test/Test"
+import Admin from "./page/Admin/Admin";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -25,6 +26,7 @@ root.render(
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/test" element={<Test />} />
+        <Route path="/admin" element={<Admin />} />
       </Routes>
     </Router>
   </React.StrictMode>

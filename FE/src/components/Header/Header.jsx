@@ -4,13 +4,42 @@ import { HeartOutlined, LockOutlined, PhoneOutlined, SearchOutlined, ShoppingCar
 import { Button, Dropdown, Space } from "antd";
 import Search from "antd/es/input/Search";
 import { Link } from 'react-router-dom';
-
-
 import Cookies from "universal-cookie";
 import { auth, db } from "../../firebase";
 const cookies = new Cookies();
 
 export default function Header() {
+  const data = [
+    {
+      "id": 1,
+      "name": "Màn hình Dell P2719HC Type C - Cũ đẹp (Không vỏ hộp)",
+      "price": "3.499.000 ₫",
+      "image": {
+        "src": "https://hanoicomputercdn.com/media/product/120_82071_man_hinh_dell_p2719hc_type_c_cu_dep_1.jpg",
+        "alt": "Màn hình Dell P2719HC"
+      }
+    },
+    {
+      "id": 2,
+      "name": "Apple MacBook Pro 16 inch",
+      "price": "55.999.000 ₫",
+      "image": {
+        "src": "https://hanoicomputercdn.com/media/product/120_83616_super_si_cong_20w_kem_cap_type_c_to_lightning_1m__3_.jpg",
+        "alt": "Apple MacBook Pro 16 inch"
+      }
+    },
+    {
+      "id": 3,
+      "name": "Samsung Galaxy S21 Ultra",
+      "price": "25.999.000 ₫",
+      "image": {
+        "src": "https://hanoicomputercdn.com/media/product/120_83616_super_si_cong_20w_kem_cap_type_c_to_lightning_1m__3_.jpg",
+        "alt": "Samsung Galaxy S21 Ultra"
+      }
+    }
+  ];
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
   const [isAuth, setIsAuth] = useState(cookies.get("auth-token-nghiep"));
   const [sticky, setSticky] = useState(false);
   const value = localStorage.getItem('user') || '';
@@ -21,6 +50,16 @@ export default function Header() {
       ...prevState,
       [category]: state,
     }));
+  };
+  const handleSearch = (event) => {
+    const term = event.target.value;
+    setSearchTerm(term);
+    setIsSearching(term.trim() !== '');
+  };
+  const filteredData = data.filter(item =>
+    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  const handle = (term) => {
   };
   const handleScroll = () => {
     if (window.scrollY > 350) {
@@ -46,7 +85,7 @@ export default function Header() {
   return (
     <div>
       <div className={`${styles.First_Navbar} animate__animated animate__fadeInDown`}>
-        {role == "admin" ? (<div className={styles.Item}><UserOutlined />Quản lý</div>) : ""}
+        {role == "admin" ? (<Link to='/admin'> <div className={styles.Item}><UserOutlined />Quản lý</div></Link>) : ""}
         <div className={styles.Item}><UserOutlined />Tài khoản của tôi</div>
         <div className={styles.Item}><HeartOutlined />Danh sách yêu thích</div>
         <div className={styles.Item}><ShoppingOutlined />Thanh toán</div>
@@ -60,8 +99,24 @@ export default function Header() {
           </div>
 
           <div className={styles.search_container}>
-            <input type="text" className={styles.search_input} placeholder="Tìm kiếm..." />
-            <button className={styles.search_button}><SearchOutlined /></button>
+            <input type="text" value={searchTerm} className={styles.search_input} placeholder="Tìm kiếm..." onChange={handleSearch} />
+            <button className={styles.search_button} onClick={handle}><SearchOutlined /></button>
+            {console.log(searchTerm)}
+            {isSearching && (
+              <div className={`${styles.productSearch} Header_productSearch`}>
+                {filteredData.map(item => (
+                  <div key={item.id}>
+                    <a className='product' href="">
+                      <img src={item.image.src} alt={item.image.alt} />
+                      <span className={styles.inforSearch}>
+                        <span className={styles.name}>{item.name}</span>
+                        <span className={styles.price}> {item.price}   </span>
+                      </span>
+                    </a>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div

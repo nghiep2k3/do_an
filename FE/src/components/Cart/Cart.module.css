@@ -14,3 +14,9 @@
 .Image_Item:hover {
     transform: translateY(-12px);
 }
+.itemContent {
+    color: #000;
+}
+.oldPrice {
+    color: #000;
+}
