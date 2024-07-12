@@ -1,0 +1,16 @@
+.Container_Cart {
+    width: 230px;
+    height: 400px;
+    overflow: hidden;
+}
+
+
+.Image_Item {
+    height: 200px;
+    width: 200px;
+    transition: transform 0.6s;
+}
+
+.Image_Item:hover {
+    transform: translateY(-12px);
+}
