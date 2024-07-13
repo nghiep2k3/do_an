@@ -1,6 +1,6 @@
 .ContactBoxBottom {
     position: fixed;
-    bottom: 54px;
+    top: 50%;
     right: 10px;
     z-index: 10000;
     opacity: 0;

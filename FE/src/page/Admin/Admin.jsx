@@ -9,7 +9,7 @@ const Admin = () => {
         { id: 2, name: 'Product 2', date: '02-01-2024', status: 'Out of Stock' },
         { id: 3, name: 'Product 3', date: '03-01-2024', status: 'Available' },
     ]);
-
+    const [customers, setCustomers] = useState([])
     const handleMenuClick = (section) => {
         setActiveSection(section);
     };
