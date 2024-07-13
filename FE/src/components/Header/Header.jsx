@@ -1,13 +1,14 @@
+// Header.jsx
 import React, { useEffect, useState } from 'react';
 import styles from './Header.module.css';
 import { HeartOutlined, LockOutlined, PhoneOutlined, SearchOutlined, ShoppingCartOutlined, ShoppingOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Space } from "antd";
-import Search from "antd/es/input/Search";
 import { Link } from 'react-router-dom';
-
-
+import ButtonBs from 'react-bootstrap/Button';
+import Offcanvas from 'react-bootstrap/Offcanvas';
 import Cookies from "universal-cookie";
-import { auth, db } from "../../firebase";
+import { useCart } from '../../CartContext';
+
 const cookies = new Cookies();
 
 export default function Header() {
@@ -16,37 +17,92 @@ export default function Header() {
   const value = localStorage.getItem('user') || '';
   const role = localStorage.getItem('role');
   const [showSubNav, setShowSubNav] = useState({ laptop: false, phone: false, accessories: false });
+  const [show, setShow] = useState(false);
+  const { cartItems, removeFromCart } = useCart();
+
   const toggleSubNav = (category, state) => {
     setShowSubNav((prevState) => ({
       ...prevState,
       [category]: state,
     }));
   };
+
   const handleScroll = () => {
     if (window.scrollY > 350) {
       setSticky(true);
     } else {
-      if (window.scrollY == 0) {
+      if (window.scrollY === 0) {
         setSticky(false);
       }
     }
   };
+
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
   const handleLogout = () => {
     cookies.remove("auth-token-nghiep");
     localStorage.removeItem("user");
     window.location.reload();
     setIsAuth(false);
   };
+  const totalNewPrice = cartItems.reduce((acc, item) => {
+    // Xóa dấu chấm và "đ" từ chuỗi giá mới
+    const priceWithoutDot = item.newPrice.replace(/[.đ]/g, '');
+    // Chuyển đổi thành số và cộng vào tổng
+    return acc + parseInt(priceWithoutDot);
+  }, 0);
+
+  const OffCanvas = ({ name, ...props }) => {
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+    return (
+      <>
+        <ButtonBs variant="#color" style={{ padding: 0 }} onClick={handleShow}>
+          {name}
+        </ButtonBs>
+        <Offcanvas show={show} onHide={handleClose} {...props}>
+          <Offcanvas.Header closeButton>
+            <Offcanvas.Title>Giỏ hàng</Offcanvas.Title>
+          </Offcanvas.Header>
+          <Offcanvas.Body>
+            {cartItems.length === 0 ? (
+              <p>Giỏ hàng trống</p>
+            ) : (
+              cartItems.map((item, index) => (
+                <div key={index} className="cart-item">
+                  <div className="d-flex align-items-center">
+                    <img src={item.image} alt={item.name} style={{ width: '50px', marginRight: '10px' }} />
+                    <div>
+                      <p>Id: {item.id}</p>
+                      <p className="m-0 fw-bold">{item.name}</p>
+                      <p className="m-0 text-decoration-line-through">Giá cũ: {item.oldPrice}</p>
+                      <p className="m-0 text-danger">Giá mới: {item.newPrice}</p>
+                      <button onClick={() => removeFromCart(item.id)} type="button" className="btn btn-danger btn-sm mt-2">Xóa</button>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
+          </Offcanvas.Body>
+          <div className="p-3">
+            <p>Tổng giá mới: {totalNewPrice.toLocaleString()}đ</p>
+            <ButtonBs variant="primary" onClick={() => alert('Thanh toán thành công!')}>Thanh toán</ButtonBs>
+          </div>
+        </Offcanvas>
+      </>
+    );
+  };
+
   return (
     <div>
       <div className={`${styles.First_Navbar} animate__animated animate__fadeInDown`}>
-        {role == "admin" ? (<div className={styles.Item}><UserOutlined />Quản lý</div>) : ""}
+        {role === "admin" ? (<div className={styles.Item}><UserOutlined />Quản lý</div>) : ""}
         <div className={styles.Item}><UserOutlined />Tài khoản của tôi</div>
         <div className={styles.Item}><HeartOutlined />Danh sách yêu thích</div>
         <div className={styles.Item}><ShoppingOutlined />Thanh toán</div>
@@ -55,7 +111,6 @@ export default function Header() {
       <div className={sticky ? `${styles.sticky}` : `${styles.header}`}>
         <div className={styles.Mid_Navbar}>
           <div style={{ width: "25%" }} className='fw-bold fs-4'>
-            {/* <img style={{ maxWidth: "100%" }} src={''} alt="logo" /> */}
             TL ELECTRONIC
           </div>
 
@@ -64,14 +119,7 @@ export default function Header() {
             <button className={styles.search_button}><SearchOutlined /></button>
           </div>
 
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              width: '25%',
-            }}
-          >
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: '25%' }}>
             <div className='text-dark'>
               <PhoneOutlined
                 style={{
@@ -83,8 +131,7 @@ export default function Header() {
                 }}
                 className={styles.Reverse}
               />
-              <span>HN: 076 922 0162 - SG: 1900 636 648
-              </span>
+              <span>HN: 076 922 0162 - SG: 1900 636 648</span>
             </div>
 
             <div style={{ position: "relative" }}>
@@ -94,16 +141,17 @@ export default function Header() {
                   textAlign: "center",
                   borderRadius: "50%",
                   width: 20,
-                  height: 24,
+                  height: 20,
+                  color: "white",
                   position: "absolute",
                   top: -14,
                   right: -8,
                 }}
               >
-                2
+                {cartItems.length}
               </div>
               <div>
-                <ShoppingCartOutlined className='fs-2' />
+                <OffCanvas backdrop={true} placement={"end"} name={<ShoppingCartOutlined className='fs-2' />} />
               </div>
             </div>
           </div>
@@ -120,9 +168,7 @@ export default function Header() {
               <Link to='/Laptop'>Laptop</Link>
               {showSubNav.laptop && (
                 <div className={styles.sub_nav}>
-                  <div className={styles.sub_nav_item}>
-                    <Link to='/macbook'>MacBook</Link>
-                  </div>
+                  <div className={styles.sub_nav_item}><Link to='/macbook'>MacBook</Link></div>
                   <div className={styles.sub_nav_item}><Link to='/dell'>Dell</Link></div>
                   <div className={styles.sub_nav_item}><Link to='/hp'>HP</Link></div>
                 </div>
@@ -147,24 +193,18 @@ export default function Header() {
               onMouseEnter={() => toggleSubNav('accessories', true)}
               onMouseLeave={() => toggleSubNav('accessories', false)}
             >
-              <Link to='macbook'>Phụ kiện</Link>
+              <Link to='/accessories'>Phụ kiện</Link>
               {showSubNav.accessories && (
                 <div className={styles.sub_nav}>
-                  <div className={styles.sub_nav_item}><Link to='macbook'>Tai nghe</Link></div>
-                  <div className={styles.sub_nav_item}><Link to='macbook'>Sạc</Link></div>
-                  <div className={styles.sub_nav_item}><Link to='macbook'>Cáp</Link></div>
+                  <div className={styles.sub_nav_item}><Link to='/headphone'>Tai nghe</Link></div>
+                  <div className={styles.sub_nav_item}><Link to='/mouse'>Chuột</Link></div>
+                  <div className={styles.sub_nav_item}><Link to='/keyboard'>Bàn phím</Link></div>
                 </div>
               )}
             </div>
-            <div className={styles.nav_item}><Link to='/contact'>Liên hệ</Link></div>
-            <div className={styles.nav_item}><Link to='/shop'>Hệ thống cửa hàng</Link></div>
-            <div className={styles.nav_item}><Link to='/test'>Test</Link></div>
           </div>
         </div>
       </div>
-
-
     </div>
   );
-};
-
+}
