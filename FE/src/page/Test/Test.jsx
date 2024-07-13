@@ -1,62 +1,73 @@
+// PieChart.js
 import React from 'react';
+import { Pie } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  Title,
+} from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
-const data = {
-  status: "success",
-  data: {
-    users: [
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  Title,
+  ChartDataLabels
+);
+
+const PieChart = () => {
+  const totalItems = 100;
+  const laptops = 10;
+  const phones = 20;
+  const accessories = 15;
+  const remaining = totalItems - (laptops + phones + accessories);
+
+  const data = {
+    labels: ['Laptop', 'Điện thoại', 'Phụ kiện', 'Trống'],
+    datasets: [
       {
-        id: 1,
-        name: "Nguyễn Văn A",
-        email: "nguyenvana@example.com",
-        phone: "0123456789",
-        address: {
-          street: "123 Đường ABC",
-          city: "Hà Nội",
-          country: "Vietnam"
-        }
-      },
-      {
-        id: 2,
-        name: "Trần Thị B",
-        email: "tranthib@example.com",
-        phone: "0987654321",
-        address: {
-          street: "456 Đường DEF",
-          city: "Hồ Chí Minh",
-          country: "Vietnam"
-        }
-      },
-      {
-        id: 3,
-        name: "Lê Văn C",
-        email: "levanc@example.com",
-        phone: "0912345678",
-        address: {
-          street: "789 Đường GHI",
-          city: "Đà Nẵng",
-          country: "Vietnam"
-        }
+        label: 'Số lượng sản phẩm',
+        data: [laptops, phones, accessories, remaining],
+        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#C0C0C0'],
+        hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#C0C0C0']
       }
     ]
-  }
-};
+  };
 
-const UserList = () => {
+  const options = {
+    animation: {
+      animateRotate: true,
+      animateScale: true,
+      duration: 2000,
+      easing: 'linear', 
+    },
+    plugins: {
+      datalabels: {
+        color: '#fff',
+        font: {
+          weight: 'bold',
+          size: 17,
+        },
+        formatter: (value) => {
+          return value;
+        },
+      },
+    },
+  };
+
   return (
-    <div>
-      <h1>Danh sách người dùng</h1>
-      <ul>
-        {data.data.users.map(user => (
-          <li key={user.id}>
-            <h2>{user.name}</h2>
-            <p>Email: {user.email}</p>
-            <p>Phone: {user.phone}</p>
-            <p>Address: {user.address.street}, {user.address.city}, {user.address.country}</p>
-          </li>
-        ))}
-      </ul>
+    <div style={{ height: 350, width: 350 }}>
+      <h2>Số lượng sản phẩm bán được</h2>
+      <Pie data={data} options={options} />
     </div>
   );
 };
 
-export default UserList;
+export default PieChart;
