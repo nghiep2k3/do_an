@@ -22,3 +22,28 @@ function App() {
 }
 
 export default App;
+
+// import React from 'react';
+// import { CartProvider } from 'react-use-cart';
+// import CartOffcanvas from './CartOffcanvas';
+// import ProductList from './ProductList ';
+// import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap/dist/js/bootstrap.bundle.min';
+
+// const App = () => {
+//   return (
+//     <CartProvider>
+//       <div className="container">
+//         <h1>Giỏ hàng của tôi</h1>
+//         <button className="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
+//           Mở giỏ hàng
+//         </button>
+//         <ProductList />
+//         <CartOffcanvas />
+//       </div>
+//     </CartProvider>
+//   );
+// };
+
+// export default App;
+

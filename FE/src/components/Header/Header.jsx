@@ -7,7 +7,9 @@ import { Link } from 'react-router-dom';
 import ButtonBs from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import Cookies from "universal-cookie";
-import { useCart } from '../../CartContext';
+// import { useCart } from '../../CartContext';
+import { useCart } from 'react-use-cart';
+import CartOffcanvas from '../Cartoffcanvas/CartOffcanvas';
 
 const cookies = new Cookies();
 
@@ -48,8 +50,8 @@ export default function Header() {
   const value = localStorage.getItem('user') || '';
   const role = localStorage.getItem('role');
   const [showSubNav, setShowSubNav] = useState({ laptop: false, phone: false, accessories: false });
-  const [show, setShow] = useState(false);
-  const { cartItems, removeFromCart } = useCart();
+
+
 
   const toggleSubNav = (category, state) => {
     setShowSubNav((prevState) => ({
@@ -90,54 +92,12 @@ export default function Header() {
     window.location.reload();
     setIsAuth(false);
   };
-  const totalNewPrice = cartItems.reduce((acc, item) => {
-    // Xóa dấu chấm và "đ" từ chuỗi giá mới
-    const priceWithoutDot = item.newPrice.replace(/[.đ]/g, '');
-    // Chuyển đổi thành số và cộng vào tổng
-    return acc + parseInt(priceWithoutDot);
-  }, 0);
 
-  const OffCanvas = ({ name, ...props }) => {
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+ 
 
-    return (
-      <>
-        <ButtonBs variant="#color" style={{ padding: 0 }} onClick={handleShow}>
-          {name}
-        </ButtonBs>
-        <Offcanvas show={show} onHide={handleClose} {...props}>
-          <Offcanvas.Header closeButton>
-            <Offcanvas.Title>Giỏ hàng</Offcanvas.Title>
-          </Offcanvas.Header>
-          <Offcanvas.Body>
-            {cartItems.length === 0 ? (
-              <p>Giỏ hàng trống</p>
-            ) : (
-              cartItems.map((item, index) => (
-                <div key={index} className="cart-item">
-                  <div className="d-flex align-items-center">
-                    <img src={item.image} alt={item.name} style={{ width: '50px', marginRight: '10px' }} />
-                    <div>
-                      <p>Id: {item.id}</p>
-                      <p className="m-0 fw-bold">{item.name}</p>
-                      <p className="m-0 text-decoration-line-through">Giá cũ: {item.oldPrice}</p>
-                      <p className="m-0 text-danger">Giá mới: {item.newPrice}</p>
-                      <button onClick={() => removeFromCart(item.id)} type="button" className="btn btn-danger btn-sm mt-2">Xóa</button>
-                    </div>
-                  </div>
-                </div>
-              ))
-            )}
-          </Offcanvas.Body>
-          <div className="p-3">
-            <p>Tổng giá mới: {totalNewPrice.toLocaleString()}đ</p>
-            <ButtonBs variant="primary" onClick={() => alert('Thanh toán thành công!')}>Thanh toán</ButtonBs>
-          </div>
-        </Offcanvas>
-      </>
-    );
-  };
+
+ 
+
 
   return (
     <div>
@@ -204,10 +164,14 @@ export default function Header() {
                   right: -8,
                 }}
               >
-                {cartItems.length}
+                {/* {cartItems.length || 0} */}
+                0
               </div>
               <div>
-                <OffCanvas backdrop={true} placement={"end"} name={<ShoppingCartOutlined className='fs-2' />} />
+                <button className="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
+                  <ShoppingCartOutlined className='fs-2' />
+                </button>
+                <CartOffcanvas />
               </div>
             </div>
           </div>
@@ -258,6 +222,7 @@ export default function Header() {
                 </div>
               )}
             </div>
+            <Link to='/test'>Test</Link>
           </div>
         </div>
       </div>

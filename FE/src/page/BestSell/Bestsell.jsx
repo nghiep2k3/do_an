@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import Cart from '../../components/Cart/Cart'
+import Cart from '../../components/Card/Card'
 import { Link } from 'react-router-dom';
 export default function Bestsell() {
     useEffect(() => {

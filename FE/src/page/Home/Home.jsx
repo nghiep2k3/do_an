@@ -3,7 +3,10 @@ import Header from '../../components/Header/Header'
 import Carousels from '../../components/Carousel/Carousel'
 import CatSlider from '../../components/CatSlider/CatSlider'
 import Footer from '../../components/Footer/Footer'
-import Cart from '../../components/Cart/Cart';
+import Card from '../../components/Card/Card';
+
+
+
 export default function Home() {
     const products = [
         {
@@ -52,7 +55,7 @@ export default function Home() {
                 <div className="row">
                     {products.map((product, index) => (
                         <div key={index} className="col-md-3">
-                            <Cart product={product} />
+                            <Card product={product} />
                         </div>
                     ))}
                 </div>
