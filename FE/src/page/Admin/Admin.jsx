@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styles from './Admin.module.css';
 import { CheckSquareOutlined, DeleteOutlined, DownloadOutlined, EditOutlined, EuroCircleOutlined, FilterOutlined, LogoutOutlined, MenuUnfoldOutlined, MessageOutlined, NotificationOutlined, PieChartOutlined, PlusOutlined, RightOutlined, SearchOutlined, SettingOutlined, ShoppingOutlined, SmileOutlined, TeamOutlined, UsergroupDeleteOutlined, WindowsOutlined } from '@ant-design/icons';
+import PieChart from '../../components/PieChart/PieChart';
 
 const Admin = () => {
     const [activeSection, setActiveSection] = useState('Dashboard');
@@ -95,7 +96,7 @@ const Admin = () => {
                         <img src="img/people.png" />
                     </a>
                 </nav>
-                <main>
+                <main style={{overflow: "visible"}}>
                     {activeSection === 'Dashboard' && (
                         <div>
                             <div className={styles.headTitle}>
@@ -257,8 +258,8 @@ const Admin = () => {
                     )}
                     {activeSection === 'Statistic' && (
                         <div>
-                            <h1>statistic</h1>
-                            <p>This is the My Store section.</p>
+                            <h1>Thống kê</h1>
+                            <PieChart/>
                         </div>
                     )}
                 </main>

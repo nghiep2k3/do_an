@@ -31,7 +31,6 @@ const CartOffcanvas = () => {
           <ul className="list-group">
             {items.map((item) => (
               <li key={item.id} className="list-group-item d-flex justify-content-between align-items-center">
-                {console.log(2222, item)}
                 <div className="d-flex align-items-center">
                   <img src={item?.product_images?.[0].image_url} alt={item.name} style={{ width: '50px', marginRight: '10px' }} />
                   <div>

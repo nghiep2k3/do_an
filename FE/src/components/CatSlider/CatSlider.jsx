@@ -10,14 +10,17 @@ import axios from 'axios'
 export default function CatSlider() {
     const [data, setData] = useState(null);
     useEffect(() => {
-        axios.get("https://trandai03.online/api/products?category_id=3")
-            .then(response => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get("https://trandai03.online/api/products?category_id=3");
                 setData(response.data.data.products);
-                console.log(3333, response.data.data);
-            })
-            .catch(error => {
+                // console.log(3333, response.data.data);
+            } catch (error) {
                 console.error('Có lỗi xảy ra:', error);
-            });
+            }
+        };
+
+        fetchData();
     }, []);
     const settings = {
         dots: false,

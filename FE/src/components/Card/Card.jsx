@@ -14,7 +14,7 @@ export default function Card({ product }) {
   const oldPrice = product?.price ? parseInt(product.price) : 0;
   const discount = product?.discount || 0;
   const newPrice = oldPrice - (oldPrice * discount / 100);
-
+  
   const handleAddItem = () => {
     const productWithPrice = { ...product, price: newPrice };
     addItem(productWithPrice);
