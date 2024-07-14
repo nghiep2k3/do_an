@@ -10,12 +10,15 @@ const CartOffcanvas = () => {
     emptyCart,
   } = useCart();
 
-  // Chuyển đổi giá trị giá thành số nguyên trước khi tính tổng
+  // Tính tổng giá trị giỏ hàng
   const totalPrice = items.reduce((total, item) => {
-    // Chuyển đổi giá trị giá thành số nguyên
-    const price = parseFloat(item.newPrice.replace(/\./g, '').replace('đ', '').trim());
+    const price = item.price; // Sử dụng item.price vì giá trị đã được lưu là số
     return total + (price * item.quantity);
   }, 0);
+
+  const formatPrice = (price) => {
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' đ';
+  };
 
   return (
     <div className="offcanvas offcanvas-end" tabIndex="-1" id="offcanvasCart" aria-labelledby="offcanvasCartLabel">
@@ -28,12 +31,13 @@ const CartOffcanvas = () => {
           <ul className="list-group">
             {items.map((item) => (
               <li key={item.id} className="list-group-item d-flex justify-content-between align-items-center">
+                {console.log(2222, item)}
                 <div className="d-flex align-items-center">
-                  <img src={item.image} alt={item.name} style={{ width: '50px', marginRight: '10px' }} />
+                  <img src={item?.product_images?.[0].image_url} alt={item.name} style={{ width: '50px', marginRight: '10px' }} />
                   <div>
                     <div>{item.name}</div>
                     <div>
-                      {item.quantity} x {item.newPrice}
+                      {item.quantity} x {formatPrice(item.price)}
                     </div>
                   </div>
                 </div>

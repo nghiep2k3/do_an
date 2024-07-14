@@ -13,7 +13,7 @@ code {
 } */
 
 
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -26,4 +26,8 @@ code {
 
 [data-aos].aos-animate {
   opacity: 1;
+}
+
+.slick-arrow {
+  background-color: gray !important;
 }

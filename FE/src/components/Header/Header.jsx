@@ -93,11 +93,6 @@ export default function Header() {
     setIsAuth(false);
   };
 
- 
-
-
- 
-
 
   return (
     <div>
