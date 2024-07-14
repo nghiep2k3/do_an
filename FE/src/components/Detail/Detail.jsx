@@ -1,11 +1,27 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Header from '../../components/Header/Header'
 import styles from './Detail.module.css';
 import { Col, Image, Row } from 'antd';
-import { StarOutlined, StarFilled, StarTwoTone, GiftFilled, CheckOutlined, PhoneOutlined, HomeOutlined } from '@ant-design/icons';
+import { StarOutlined, StarFilled, StarTwoTone, GiftFilled, CheckOutlined, PhoneOutlined, HomeOutlined, PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import { WrapperStyleColImage, WrapperStyleImageSmall, WrapperStyleTextSell } from './style';
 import getFontSizes from 'antd/es/theme/themes/shared/genFontSizes';
 export default function Detail() {
+  const [quantity, setQuantity] = useState(1);
+  const stock = 6;
+  const minQuantity = 1;
+  const handleDecrement = (e) => {
+    e.preventDefault();
+    if (quantity > minQuantity) {
+      setQuantity(quantity - 1);
+    }
+  };
+
+  const handleIncrement = (e) => {
+    e.preventDefault();
+    if (quantity < stock) {
+      setQuantity(quantity + 1);
+    }
+  };
   return (
     <>
       <div className={styles.main}>
@@ -158,6 +174,17 @@ export default function Detail() {
                     </ul>
                   </div>
                 </div>
+                <div className={styles.proQuantity}>
+                  <a href="" onClick={handleDecrement} data-value="-1">-</a>
+                  <input type="number"
+                    className={styles.quantityChange}
+                    value={quantity}
+                    data-stock={stock}
+                    data-min={minQuantity}
+                    min={minQuantity}
+                    readOnly />
+                  <a href="" onClick={handleIncrement} data-value="1">+</a>
+                </div>
                 <div className={styles.btnAddCart}>
                   <a href="" className={styles.btnAdd}>Mua trả
                     góp <span className={styles.block}>Thủ tục đơn
@@ -173,7 +200,7 @@ export default function Detail() {
                     Địa chỉ kho hàng</h3>
                   <div style={{ display: 'block' }}>
                     <div className={styles.contentFilterStore}>
-                      <select  onChange="lay_danh_sach_cua_hang_theo_tinh(this.value)">
+                      <select onChange="lay_danh_sach_cua_hang_theo_tinh(this.value)">
                         <option value="0">Tỉnh/Thành</option>
                         <option value="1">Hà Nội</option>
                         <option value="2">TP.Hồ Chí Minh</option>

@@ -5,6 +5,7 @@ import CatSlider from '../../components/CatSlider/CatSlider'
 import Footer from '../../components/Footer/Footer'
 import ContactBox from '../../components/ContactBox/ContactBox'
 import Cart from '../../components/Cart/Cart'
+import Banner from '../../components/Banner/Banner'
 export default function Home() {
     const products = [
         {
@@ -47,11 +48,11 @@ export default function Home() {
         <div>
             <Header></Header>
             <ContactBox></ContactBox>
-            <Carousels></Carousels>
-            {/* <CatSlider></CatSlider> */}
-            sản phẩm bán chạy
             <div className="container">
                 <div className="row">
+                    <Carousels></Carousels>
+                    <Banner></Banner>
+                    <CatSlider></CatSlider>
                     {products.map((product, index) => (
                         <div key={index} className="col-md-3">
                             <Cart product={product} />
