@@ -2,7 +2,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import "bootstrap/dist/css/bootstrap.min.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "animate.css/animate.min.css";
@@ -13,8 +12,11 @@ import Bestsell from "./page/BestSell/Bestsell";
 import Login from "./page/Login/Login"
 import Test from "./page/Test/Test"
 import Admin from "./page/Admin/Admin";
-import { CartProvider } from "./CartContext"; // Import CartProvider
-import Profile from "./page/Profile/Profile";
+import "bootstrap/dist/css/bootstrap.min.css";
+import 'bootstrap/dist/js/bootstrap.bundle.min';
+// import { CartProvider } from "./CartContext";
+import { CartProvider } from 'react-use-cart';
+
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

@@ -1,22 +1,36 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Slider from 'react-slick';
 import styles from './CatSlider.module.css';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import Card from '../Card/Card';
+import { Skeleton } from 'antd';
+import axios from 'axios'
 
 export default function CatSlider() {
+    const [data, setData] = useState(null);
+    useEffect(() => {
+        axios.get("https://trandai03.online/api/products?category_id=3")
+            .then(response => {
+                setData(response.data.data.products);
+                console.log(3333, response.data.data);
+            })
+            .catch(error => {
+                console.error('Có lỗi xảy ra:', error);
+            });
+    }, []);
     const settings = {
-        dots: true,
+        dots: false,
         infinite: true,
         speed: 500,
         slidesToShow: 4,
-        slidesToScroll: 1,
+        slidesToScroll: 2,
         responsive: [
             {
                 breakpoint: 1024,
                 settings: {
                     slidesToShow: 3,
-                    slidesToScroll: 1,
+                    slidesToScroll: 2,
                     infinite: true,
                     dots: true
                 }
@@ -37,27 +51,25 @@ export default function CatSlider() {
             }
         ]
     };
-
+    if (!data) {
+        return (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '300px' }}>
+                <Skeleton active />
+            </div>
+        )
+    }
     return (
         <div className={styles.catSliderSection}>
             <div className={styles.gleeBlock}></div>
             <div className={styles.containerFluid}>
                 <Slider {...settings} className={styles.cat_Slider_Main}>
-                    <div className={styles.item}>
-                        <h4>Category 1</h4>
-                    </div>
-                    <div className={styles.item}>
-                        <h4>Category 2</h4>
-                    </div>
-                    <div className={styles.item}>
-                        <h4>Category 3</h4>
-                    </div>
-                    <div className={styles.item}>
-                        <h4>Category 4</h4>
-                    </div>
-                    <div className={styles.item}>
-                        <h4>Category 5</h4>
-                    </div>
+                    {data.map((x, index) => {
+                        return (
+                            <div className={`${styles.item} animate__animated animate__fadeInDownBig`} key={index}>
+                                <Card product={x} />
+                            </div>
+                        )
+                    })}
                 </Slider>
             </div>
         </div>

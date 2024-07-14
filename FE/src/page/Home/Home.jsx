@@ -3,9 +3,11 @@ import Header from '../../components/Header/Header'
 import Carousels from '../../components/Carousel/Carousel'
 import CatSlider from '../../components/CatSlider/CatSlider'
 import Footer from '../../components/Footer/Footer'
-import ContactBox from '../../components/ContactBox/ContactBox'
-import Cart from '../../components/Cart/Cart'
+import Card from '../../components/Card/Card';
 import Banner from '../../components/Banner/Banner'
+import ContactBox from '../../components/ContactBox/ContactBox'
+
+
 export default function Home() {
     const products = [
         {
@@ -47,17 +49,17 @@ export default function Home() {
     return (
         <div>
             <Header></Header>
-            <ContactBox></ContactBox>
-            <div className="container">
+            {/* <ContactBox></ContactBox> */}
+            <div className="container_Trùng_class_của_BS">
                 <div className="row">
                     <Carousels></Carousels>
                     <Banner></Banner>
                     <CatSlider></CatSlider>
-                    {products.map((product, index) => (
+                    {/* {products.map((product, index) => (
                         <div key={index} className="col-md-3">
-                            <Cart product={product} />
+                            <Card product={product} />
                         </div>
-                    ))}
+                    ))} */}
                 </div>
             </div>
             <Footer></Footer>
