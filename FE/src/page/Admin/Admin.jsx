@@ -2,9 +2,160 @@ import React, { useState } from 'react';
 import styles from './Admin.module.css';
 import { CheckSquareOutlined, DeleteOutlined, DownloadOutlined, EditOutlined, EuroCircleOutlined, FilterOutlined, LogoutOutlined, MenuUnfoldOutlined, MessageOutlined, NotificationOutlined, PieChartOutlined, PlusOutlined, RightOutlined, SearchOutlined, SettingOutlined, ShoppingOutlined, SmileOutlined, TeamOutlined, UsergroupDeleteOutlined, WindowsOutlined } from '@ant-design/icons';
 import PieChart from '../../components/PieChart/PieChart';
+import { Tag, Space, Modal, Image, Upload, Button, Form, Input, InputNumber, Select, message, Table } from 'antd';
+import axios from 'axios';
+
+const { Option } = Select;
 
 const Admin = () => {
     const [activeSection, setActiveSection] = useState('Dashboard');
+    const [previewOpen, setPreviewOpen] = useState(false);
+    const [previewImage, setPreviewImage] = useState('');
+    const [fileList, setFileList] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const getBase64 = (file) =>
+        new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            // reader.onerror = (error) => reject(error);
+        });
+
+    const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
+
+    const handlePreview = async (file) => {
+        if (!file.url && !file.preview) {
+            file.preview = await getBase64(file.originFileObj);
+        }
+        setPreviewImage(file.url || file.preview);
+        setPreviewOpen(true);
+    };
+
+    const handleSubmit = async (values) => {
+        const formData = new FormData();
+        formData.append('name', values.name);
+        formData.append('price', values.price);
+        formData.append('categoryId', values.categoryId);
+        formData.append('sku', values.sku);
+        formData.append('inventory', values.inventory);
+        if (fileList.length > 0) {
+            formData.append('files', fileList[0].originFileObj);
+        }
+
+        try {
+            const response = await axios.post('https://trandai03.online/api/products', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            message.success('Product added successfully!');
+            setFileList([]);
+        } catch (error) {
+            message.error('Failed to add product.');
+        }
+    };
+
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+    const handleOk = () => {
+        setIsModalOpen(false);
+    };
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
+
+    const uploadButton = (
+        <Button
+            icon={<PlusOutlined />}
+            style={{
+                border: '1px dashed #d9d9d9',
+                width: '104px',
+                height: '104px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+            }}
+        >
+            Upload
+        </Button>
+    );
+
+    const columns = [
+        {
+            title: 'Name',
+            dataIndex: 'name',
+            key: 'name',
+            align: 'center',
+            render: (text) => <a>{text}</a>,
+        },
+        {
+            title: 'Create Item',
+            dataIndex: 'createId',
+            key: 'createId',
+            align: 'center',
+        },
+        {
+            title: 'Status',
+            key: 'status',
+            dataIndex: 'status',
+            align: 'center',
+            render: (status) => {
+                let color = status === 'Available' ? 'green' : 'red';
+                return (
+                    <Tag color={color} key={status}>
+                        {status?.toUpperCase()}
+                    </Tag>
+                );
+            },
+        },
+        {
+            title: 'Action',
+            key: 'action',
+            align: 'center',
+            render: (_, record) => (
+                <Space size="middle">
+                    <EditOutlined />
+                    <DeleteOutlined />
+                    {/* <a>Invite {record.name}</a>
+                    <a>Delete</a> */}
+                </Space>
+            ),
+        },
+    ];
+    
+    const data = [
+        {
+            key: '1',
+            name: 'Nguyễn Thiện Nghiệp',
+            createId: "24-11-2003",
+            age: 32,
+            address: 'Duyên hải - Hưng hà - Thái bình',
+            tags: ['nice', 'developer'],
+            status: 'Available'
+        },
+        {
+            key: '2',
+            name: 'Jim Green',
+            createId: "23-07-2003",
+            age: 42,
+            address: 'Bắc sơn - Hưng hà - Thái bình',
+            tags: ['loser'],
+            status: 'Out of Stock'
+        },
+        {
+            key: '3',
+            name: 'Joe Black',
+            createId: "24-11-2003",
+            age: 32,
+            address: 'Duyên hải - Hưng hà - Thái bình',
+            tags: ['cool', 'teacher'],
+            status: 'Available'
+        },
+    ];
+    
+
     const [products, setProducts] = useState([
         { id: 1, name: 'Product 1', date: '01-01-2024', status: 'Available' },
         { id: 2, name: 'Product 2', date: '02-01-2024', status: 'Out of Stock' },
@@ -15,9 +166,6 @@ const Admin = () => {
         setActiveSection(section);
     };
 
-    const handleAddProduct = () => {
-        alert('Add Product');
-    };
 
     const handleEditProduct = (id) => {
         alert(`Edit Product ${id}`);
@@ -96,7 +244,7 @@ const Admin = () => {
                         <img src="img/people.png" />
                     </a>
                 </nav>
-                <main style={{overflow: "visible"}}>
+                <main style={{ overflow: "visible" }}>
                     {activeSection === 'Dashboard' && (
                         <div>
                             <div className={styles.headTitle}>
@@ -217,10 +365,64 @@ const Admin = () => {
                                         </li>
                                     </ul>
                                 </div>
-                                <button onClick={handleAddProduct} className={styles.btnDownload}>
-                                    <PlusOutlined />
-                                    <span className={styles.text}>Thêm sản phẩm</span>
-                                </button>
+                                <div>
+                                    <Button type="primary" onClick={showModal}>
+                                        Thêm sản phẩm
+                                    </Button>
+                                    <Modal title="Thêm sản phẩm" open={isModalOpen} okText="Thêm" onOk={handleSubmit} onCancel={handleCancel}>
+                                        <Form layout="vertical" onFinish={handleSubmit}>
+                                            <Form.Item name="name" label="Product Name" rules={[{ required: true, message: 'Please input the product name!' }]}>
+                                                <Input />
+                                            </Form.Item>
+                                            <Form.Item name="price" label="Price" rules={[{ required: true, message: 'Please input the price!' }]}>
+                                                <InputNumber min={0} style={{ width: '100%' }} />
+                                            </Form.Item>
+                                            <Form.Item name="categoryId" label="Category" rules={[{ required: true, message: 'Please select a category!' }]}>
+                                                <Select placeholder="Select a category">
+                                                    <Option value="1">Category 1</Option>
+                                                    <Option value="2">Laptop</Option>
+                                                    <Option value="3">Điện thoại</Option>
+                                                </Select>
+                                            </Form.Item>
+                                            <Form.Item name="sku" label="SKU" rules={[{ required: true, message: 'Please input the SKU!' }]}>
+                                                <Input />
+                                            </Form.Item>
+                                            <Form.Item name="inventory" label="Inventory" rules={[{ required: true, message: 'Please input the inventory!' }]}>
+                                                <InputNumber min={0} style={{ width: '100%' }} />
+                                            </Form.Item>
+                                            <Form.Item label="Upload Image">
+                                                <Upload
+                                                    action={null}
+                                                    listType="picture-card"
+                                                    fileList={fileList}
+                                                    onPreview={handlePreview}
+                                                    onChange={handleChange}
+                                                >
+                                                    {fileList.length >= 1 ? null : uploadButton}
+                                                </Upload>
+                                                {previewImage && (
+                                                    <Image
+                                                        wrapperStyle={{
+                                                            display: 'none',
+                                                        }}
+                                                        preview={{
+                                                            visible: previewOpen,
+                                                            onVisibleChange: (visible) => setPreviewOpen(visible),
+                                                            afterOpenChange: (visible) => !visible && setPreviewImage(''),
+                                                        }}
+                                                        src={previewImage}
+                                                    />
+                                                )}
+                                            </Form.Item>
+                                            {/* <Form.Item>
+                                                <Button type="primary" htmlType="submit">
+                                                    Add Product
+                                                </Button>
+                                            </Form.Item> */}
+                                        </Form>
+                                    </Modal>
+                                </div>
+
                             </div>
                             <div className={styles.tableData}>
                                 <div className={styles.order}>
@@ -229,6 +431,7 @@ const Admin = () => {
                                         <SearchOutlined />
                                         <FilterOutlined />
                                     </div>
+                                    <Table columns={columns} dataSource={data} />;
                                     <table>
                                         <thead>
                                             <tr>
@@ -259,7 +462,7 @@ const Admin = () => {
                     {activeSection === 'Statistic' && (
                         <div>
                             <h1>Thống kê</h1>
-                            <PieChart/>
+                            <PieChart />
                         </div>
                     )}
                 </main>

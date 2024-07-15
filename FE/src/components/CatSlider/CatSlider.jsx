@@ -5,16 +5,16 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Card from '../Card/Card';
 import { Skeleton } from 'antd';
-import axios from 'axios'
+import axios from 'axios';
 
 export default function CatSlider() {
     const [data, setData] = useState(null);
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await axios.get("https://trandai03.online/api/products?category_id=3");
                 setData(response.data.data.products);
-                // console.log(3333, response.data.data);
             } catch (error) {
                 console.error('Có lỗi xảy ra:', error);
             }
@@ -22,9 +22,10 @@ export default function CatSlider() {
 
         fetchData();
     }, []);
+
     const settings = {
         dots: false,
-        infinite: true,
+        infinite: false,
         speed: 500,
         slidesToShow: 4,
         slidesToScroll: 2,
@@ -54,6 +55,7 @@ export default function CatSlider() {
             }
         ]
     };
+
     if (!data) {
         return (
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '300px' }}>
@@ -61,12 +63,14 @@ export default function CatSlider() {
             </div>
         )
     }
+
+    const displayedData = data.slice(0, 5);
     return (
         <div className={styles.catSliderSection}>
             <div className={styles.gleeBlock}></div>
             <div className={styles.containerFluid}>
                 <Slider {...settings} className={styles.cat_Slider_Main}>
-                    {data.map((x, index) => {
+                    {displayedData.map((x, index) => {
                         return (
                             <div className={`${styles.item} animate__animated animate__fadeInDownBig`} key={index}>
                                 <Card product={x} />

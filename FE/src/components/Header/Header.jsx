@@ -106,7 +106,7 @@ export default function Header() {
     // Xóa token và user từ cookies và local storage
     cookies.remove("auth-token-nghiep");
     localStorage.removeItem("user");
-  
+
     // Đặt lại dữ liệu giỏ hàng trong local storage về trạng thái rỗng
     const cartData = {
       items: [],
@@ -117,12 +117,12 @@ export default function Header() {
       metadata: {},
     };
     localStorage.setItem('react-use-cart', JSON.stringify(cartData));
-  
+
     // Reload trang và đặt lại trạng thái authentication
     window.location.reload();
     setIsAuth(false);
   };
-  
+
   const formatPrice = (price) => {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' đ';
   };
@@ -163,7 +163,7 @@ export default function Header() {
               <div className={`${styles.productSearch} Header_productSearch`}>
                 {filteredData.map(item => (
                   <div key={item.id}>
-                    <div style={{display: 'none'}}>
+                    <div style={{ display: 'none' }}>
                       {newPrice = item.price - (item.price * item.discount / 100)}
                     </div>
                     <a className='product' href="#">
@@ -195,28 +195,8 @@ export default function Header() {
             </div>
 
             <div style={{ position: "relative" }}>
-              <div
-                style={{
-                  background: "red",
-                  textAlign: "center",
-                  borderRadius: "50%",
-                  width: 20,
-                  height: 20,
-                  color: "white",
-                  position: "absolute",
-                  top: -14,
-                  right: -8,
-                }}
-              >
-                {/* {cartItems.length || 0} */}
-                0
-              </div>
-              <div>
-                <button className="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
-                  <ShoppingCartOutlined className='fs-2' />
-                </button>
-                <CartOffcanvas />
-              </div>
+              <CartOffcanvas />
+
             </div>
           </div>
         </div>
