@@ -1,23 +1,38 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './Cart.module.css';
 import { useCart } from 'react-use-cart';
+import { database } from "../../firebase";
+import { getDatabase, ref, child, get, set } from "firebase/database";
+import { v4 as uuidv4 } from 'uuid';
+import { message } from 'antd';
 
 const formatPrice = (price) => {
   return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' đ';
 };
 
 export default function Card({ product }) {
+  const id = uuidv4();
+  const userData = localStorage.getItem('user');
   const { addItem } = useCart();
-
   const image = product?.product_images?.[0].image_url || 'chưa có data';
   const name = product?.name || 'chưa có data';
   const oldPrice = product?.price ? parseInt(product.price) : 0;
   const discount = product?.discount || 0;
   const newPrice = oldPrice - (oldPrice * discount / 100);
-  
-  const handleAddItem = () => {
+
+
+  const handleAddItem = async () => {
+    // console.log("product", product);
+    const save_cart = product;
+    // xử lý trên firebase
+    console.log("api", `user_cart/${userData}/${id}`);
+    await set(ref(database, `user_cart/${userData}/${id}`), save_cart);
+    message.success("Đã thêm vào giỏ hàng");
+
+
     const productWithPrice = { ...product, price: newPrice };
     addItem(productWithPrice);
+
   };
 
   return (

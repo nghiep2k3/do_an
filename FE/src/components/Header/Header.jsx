@@ -103,11 +103,26 @@ export default function Header() {
 
 
   const handleLogout = () => {
+    // Xóa token và user từ cookies và local storage
     cookies.remove("auth-token-nghiep");
     localStorage.removeItem("user");
+  
+    // Đặt lại dữ liệu giỏ hàng trong local storage về trạng thái rỗng
+    const cartData = {
+      items: [],
+      isEmpty: true,
+      totalItems: 0,
+      totalUniqueItems: 0,
+      cartTotal: 0,
+      metadata: {},
+    };
+    localStorage.setItem('react-use-cart', JSON.stringify(cartData));
+  
+    // Reload trang và đặt lại trạng thái authentication
     window.location.reload();
     setIsAuth(false);
   };
+  
   const formatPrice = (price) => {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' đ';
   };

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
-import { Image, Upload, Button, Form, Input, InputNumber, Select, message } from 'antd';
+import { Modal, Image, Upload, Button, Form, Input, InputNumber, Select, message } from 'antd';
 import axios from 'axios';
 
 const { Option } = Select;
@@ -9,13 +9,15 @@ export default function Test() {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [fileList, setFileList] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
 
   const getBase64 = (file) =>
     new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
+      // reader.onerror = (error) => reject(error);
     });
 
   const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
@@ -52,6 +54,16 @@ export default function Test() {
     }
   };
 
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
   const uploadButton = (
     <Button
       icon={<PlusOutlined />}
@@ -71,56 +83,63 @@ export default function Test() {
   return (
     <div>
       <h1>Tải hình ảnh và thêm sản phẩm</h1>
-      <Form layout="vertical" onFinish={handleSubmit}>
-        <Form.Item name="name" label="Product Name" rules={[{ required: true, message: 'Please input the product name!' }]}>
-          <Input />
-        </Form.Item>
-        <Form.Item name="price" label="Price" rules={[{ required: true, message: 'Please input the price!' }]}>
-          <InputNumber min={0} style={{ width: '100%' }} />
-        </Form.Item>
-        <Form.Item name="categoryId" label="Category" rules={[{ required: true, message: 'Please select a category!' }]}>
-          <Select placeholder="Select a category">
-            <Option value="1">Category 1</Option>
-            <Option value="2">Category 2</Option>
-            <Option value="3">Category 3</Option>
-          </Select>
-        </Form.Item>
-        <Form.Item name="sku" label="SKU" rules={[{ required: true, message: 'Please input the SKU!' }]}>
-          <Input />
-        </Form.Item>
-        <Form.Item name="inventory" label="Inventory" rules={[{ required: true, message: 'Please input the inventory!' }]}>
-          <InputNumber min={0} style={{ width: '100%' }} />
-        </Form.Item>
-        <Form.Item label="Upload Image">
-          <Upload
-            action={null}
-            listType="picture-card"
-            fileList={fileList}
-            onPreview={handlePreview}
-            onChange={handleChange}
-          >
-            {fileList.length >= 1 ? null : uploadButton}
-          </Upload>
-          {previewImage && (
-            <Image
-              wrapperStyle={{
-                display: 'none',
-              }}
-              preview={{
-                visible: previewOpen,
-                onVisibleChange: (visible) => setPreviewOpen(visible),
-                afterOpenChange: (visible) => !visible && setPreviewImage(''),
-              }}
-              src={previewImage}
-            />
-          )}
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Add Product
-          </Button>
-        </Form.Item>
-      </Form>
+      <div>
+        <Button type="primary" onClick={showModal}>
+          Thêm sản phẩm
+        </Button>
+        <Modal title="Thêm sản phẩm" open={isModalOpen} okText="Thêm" onOk={handleSubmit} onCancel={handleCancel}>
+          <Form layout="vertical" onFinish={handleSubmit}>
+            <Form.Item name="name" label="Product Name" rules={[{ required: true, message: 'Please input the product name!' }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item name="price" label="Price" rules={[{ required: true, message: 'Please input the price!' }]}>
+              <InputNumber min={0} style={{ width: '100%' }} />
+            </Form.Item>
+            <Form.Item name="categoryId" label="Category" rules={[{ required: true, message: 'Please select a category!' }]}>
+              <Select placeholder="Select a category">
+                <Option value="1">Category 1</Option>
+                <Option value="2">Laptop</Option>
+                <Option value="3">Điện thoại</Option>
+              </Select>
+            </Form.Item>
+            <Form.Item name="sku" label="SKU" rules={[{ required: true, message: 'Please input the SKU!' }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item name="inventory" label="Inventory" rules={[{ required: true, message: 'Please input the inventory!' }]}>
+              <InputNumber min={0} style={{ width: '100%' }} />
+            </Form.Item>
+            <Form.Item label="Upload Image">
+              <Upload
+                action={null}
+                listType="picture-card"
+                fileList={fileList}
+                onPreview={handlePreview}
+                onChange={handleChange}
+              >
+                {fileList.length >= 1 ? null : uploadButton}
+              </Upload>
+              {previewImage && (
+                <Image
+                  wrapperStyle={{
+                    display: 'none',
+                  }}
+                  preview={{
+                    visible: previewOpen,
+                    onVisibleChange: (visible) => setPreviewOpen(visible),
+                    afterOpenChange: (visible) => !visible && setPreviewImage(''),
+                  }}
+                  src={previewImage}
+                />
+              )}
+            </Form.Item>
+            {/* <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Add Product
+              </Button>
+            </Form.Item> */}
+          </Form>
+        </Modal>
+      </div>
     </div>
   );
 }
