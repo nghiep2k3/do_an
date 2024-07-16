@@ -1,4 +1,8 @@
 /* Test.module.css */
+a {
+  text-decoration: none !important;
+  color: black !important;
+}
 .header {
     width: 100%;
     position: sticky;
@@ -17,6 +21,10 @@
     height: 35px;
     align-items: center;
     justify-content: end;
+  }
+  .First_Navbar a {
+    color: #fff;
+    text-decoration: none;
   }
   
   .Item {
@@ -86,6 +94,8 @@
   .search_container {
     display: flex;
     align-items: center;
+    position: relative;
+    z-index: 998;
   }
   
   .search_input {
@@ -112,7 +122,46 @@
   .search_button:hover {
     background-color: #40a9ff;
   }
-  
+  .productSearch {
+    top: 50px;
+    border-radius: 0.4em;
+    position: absolute;
+    width: calc(100% + 4px);
+    border: 1px solid #ddd;
+    left: -2px;
+    max-height: 560px;
+    overflow: auto;
+    display: none;
+    background: #fff;
+    z-index: 999;
+    display: block;
+  }
+  .productSearch a{
+    display: block;
+    padding: 10px;
+    overflow: hidden;
+    text-decoration: none;
+    color: #333e48;
+  }
+  .productSearch a img {
+    width: 60px;
+    float: left;
+    max-width: 100%;
+    height: auto;
+  }
+  .inforSearch {
+    display: block;
+    margin-left: 65px;
+  }
+  .name {
+    display: block;
+    font-size: 13px;
+    color: #333e48;
+  }
+  .price {
+    font-size: 13px;
+    color: #e00;
+  }
   .Reverse {
     transform: scaleX(-1);
   }

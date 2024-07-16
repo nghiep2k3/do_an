@@ -6,16 +6,16 @@ export default function Carousels() {
     return (
         <Carousel autoplay draggable autoplaySpeed={3000}>
             <div>
-                <img src="https://via.placeholder.com/800x300" alt="Slide 1" style={{ width: '100%' }} />
+                <img src="https://hanoicomputercdn.com/media/banner/14_Jun720e3d5a4f0ffeff6abb179f996287d0.png" alt="Slide 1" style={{ width: '100%' }} />
             </div>
             <div>
-                <img src="https://via.placeholder.com/800x300" alt="Slide 2" style={{ width: '100%' }} />
+                <img src="https://hanoicomputercdn.com/media/banner/14_Jun720e3d5a4f0ffeff6abb179f996287d0.png" alt="Slide 2" style={{ width: '100%' }} />
             </div>
             <div>
-                <img src="https://via.placeholder.com/800x300" alt="Slide 3" style={{ width: '100%' }} />
+                <img src="https://hanoicomputercdn.com/media/banner/14_Jun720e3d5a4f0ffeff6abb179f996287d0.png" alt="Slide 3" style={{ width: '100%' }} />
             </div>
             <div>
-                <img src="https://via.placeholder.com/800x300" alt="Slide 4" style={{ width: '100%' }} />
+                <img src="https://hanoicomputercdn.com/media/banner/14_Jun720e3d5a4f0ffeff6abb179f996287d0.png" alt="Slide 4" style={{ width: '100%' }} />
             </div>
         </Carousel>
     );
