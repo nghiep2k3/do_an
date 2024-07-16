@@ -20,7 +20,7 @@ public class ProductDTO  {
    private String sku;
    private Float price;
    private Integer categoryId;
-   private MultipartFile file;
+   //private MultipartFile file;
    private String description;
    private Integer inventory;
 

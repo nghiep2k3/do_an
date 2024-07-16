@@ -2,11 +2,10 @@ package org.do_an.be.responses.comment;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.project.shopapp.responses.BaseResponse;
 import lombok.*;
 import org.do_an.be.entity.Comment;
 import org.do_an.be.responses.user.UserResponse;
-
+import org.do_an.be.responses.BaseResponse;
 @Getter
 @Setter
 @AllArgsConstructor

@@ -1,19 +1,16 @@
 package org.do_an.be.responses.product;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.project.shopapp.responses.BaseResponse;
+
 
 import lombok.*;
-import org.do_an.be.entity.Comment;
-import org.do_an.be.entity.Favorite;
-import org.do_an.be.entity.Product;
-import org.do_an.be.entity.ProductImage;
+import org.do_an.be.entity.*;
+import org.do_an.be.responses.BaseResponse;
 import org.do_an.be.responses.comment.CommentResponse;
 import org.do_an.be.responses.favorite.FavoriteResponse;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Getter
@@ -32,9 +29,12 @@ public class ProductResponse extends BaseResponse {
     private Integer inventory;
     @JsonProperty("product_images")
     private List<ProductImage> productImages = new ArrayList<>();
+    private Integer discount;
+    @JsonProperty("product_details")
+    private List<ProductDetail> productDetail = new ArrayList<>();
 
-    @JsonProperty("comments")
-    private List<CommentResponse> comments = new ArrayList<>();
+//    @JsonProperty("comments")
+//    private List<CommentResponse> comments = new ArrayList<>();
 
 //    @JsonProperty("favorites")
 //    private List<FavoriteResponse> favorites = new ArrayList<>();
@@ -51,13 +51,15 @@ public class ProductResponse extends BaseResponse {
         ProductResponse productResponse = ProductResponse.builder()
                 .id(product.getId())
                 .name(product.getName())
+                .discount(product.getDiscountId())
                 .price(product.getPrice())
                 .sku(product.getSku())
                 .inventory(product.getInventory())
-                .comments(comments.stream().map(CommentResponse::fromComment).toList()) // Collect sorted comments into a list
+                //.comments(comments.stream().map(CommentResponse::fromComment).toList()) // Collect sorted comments into a list
                 .description(product.getDescription())
                 .categoryId(product.getCategory().getId())
                 .productImages(product.getProductImages())
+                .productDetail(new ArrayList<>(product.getProductDetails()))
                 .totalPages(0)
                 .build();
         productResponse.setCreatedAt(product.getCreatedAt());

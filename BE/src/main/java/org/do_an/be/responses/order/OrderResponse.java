@@ -1,7 +1,8 @@
-package com.project.shopapp.responses.order;
+package org.do_an.be.responses.order;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.do_an.be.entity.Order;
 import org.do_an.be.entity.OrderDetail;
 import org.do_an.be.responses.order.OrderDetailResponse;
 
@@ -18,7 +19,7 @@ public class OrderResponse {
     private Long id;
 
     @JsonProperty("user_id")
-    private Long userId;
+    private Integer userId;
 
     @JsonProperty("fullname")
     private String fullName;
@@ -61,29 +62,29 @@ public class OrderResponse {
     @JsonProperty("order_details")
     private List<OrderDetailResponse> orderDetails;
 
-//    public static OrderResponse fromOrder(Order order) {
-//        List<OrderDetail> orderDetails = order.getOrderDetails();
-//        List<OrderDetailResponse> orderDetailResponses = orderDetails
-//                .stream()
-//                .map(orderDetail -> OrderDetailResponse.fromOrderDetail(orderDetail)).toList();
-//        OrderResponse orderResponse =  OrderResponse
-//                .builder()
-//                .id(order.getId())
-//                .userId(order.getUser().getId())
-//                .fullName(order.getFullName())
-//                .phoneNumber(order.getPhoneNumber())
-//                .email(order.getEmail())
-//                .address(order.getAddress())
-//                .note(order.getNote())
-//                .orderDate(order.getOrderDate())
-//                .status(order.getStatus())
-//                .totalMoney(order.getTotalMoney())
-//                .shippingMethod(order.getShippingMethod())
-//                .shippingAddress(order.getShippingAddress())
-//                .shippingDate(order.getShippingDate())
-//                .paymentMethod(order.getPaymentMethod())
-//                .orderDetails(orderDetailResponses) //important
-//                .build();
-//        return orderResponse;
-//    }
+    public static OrderResponse fromOrder(Order order) {
+        List<OrderDetail> orderDetails = order.getOrderDetails();
+        List<OrderDetailResponse> orderDetailResponses = orderDetails
+                .stream()
+                .map(orderDetail -> OrderDetailResponse.fromOrderDetail(orderDetail)).toList();
+        OrderResponse orderResponse =  OrderResponse
+                .builder()
+                .id(order.getId())
+                .userId(order.getUser().getId())
+                .fullName(order.getFullName())
+                .phoneNumber(order.getPhoneNumber())
+                .email(order.getEmail())
+                .address(order.getAddress())
+                .note(order.getNote())
+                .orderDate(order.getOrderDate())
+                .status(order.getStatus())
+                .totalMoney(order.getTotalMoney())
+                .shippingMethod(order.getShippingMethod())
+                .shippingAddress(order.getShippingAddress())
+                .shippingDate(order.getShippingDate())
+                .paymentMethod(order.getPaymentMethod())
+                .orderDetails(orderDetailResponses) //important
+                .build();
+        return orderResponse;
+    }
 }

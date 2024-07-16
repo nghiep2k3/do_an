@@ -2,6 +2,7 @@ package org.do_an.be.responses.order;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.do_an.be.entity.OrderDetail;
 
 @Getter
 @Setter
@@ -15,7 +16,7 @@ public class OrderDetailResponse {
     private Long orderId;
 
     @JsonProperty("product_id")
-    private Long productId;
+    private Integer productId;
 
     @JsonProperty("product_name")
     private String productName;
@@ -34,18 +35,17 @@ public class OrderDetailResponse {
 
     private String color;
 
-//    public static OrderDetailResponse fromOrderDetail(OrderDetail orderDetail) {
-//        return OrderDetailResponse
-//                .builder()
-//                .id(orderDetail.getId())
-//                .orderId(orderDetail.getOrder().getId())
-//                .productId(orderDetail.getProduct().getId())
-//                .productName(orderDetail.getProduct().getName())
-//                .thumbnail(orderDetail.getProduct().getThumbnail())
-//                .price(orderDetail.getPrice())
-//                .numberOfProducts(orderDetail.getNumberOfProducts())
-//                .totalMoney(orderDetail.getTotalMoney())
-//                .color(orderDetail.getColor())
-//                .build();
-//    }
+    public static OrderDetailResponse fromOrderDetail(OrderDetail orderDetail) {
+        return OrderDetailResponse
+                .builder()
+                .id(orderDetail.getId())
+                .orderId(orderDetail.getOrder().getId())
+                .productId(orderDetail.getProduct().getId())
+                .productName(orderDetail.getProduct().getName())
+                .price(orderDetail.getPrice())
+                .numberOfProducts(orderDetail.getNumberOfProducts())
+                .totalMoney(orderDetail.getTotalMoney())
+                .color(orderDetail.getColor())
+                .build();
+    }
 }
