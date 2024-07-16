@@ -17,7 +17,7 @@ export default function Test() {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => resolve(reader.result);
-      // reader.onerror = (error) => reject(error);
+      reader.onerror = (error) => reject(error);
     });
 
   const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
@@ -41,6 +41,11 @@ export default function Test() {
       formData.append('files', fileList[0].originFileObj);
     }
 
+    // Kiểm tra dữ liệu trong formData
+    for (let pair of formData.entries()) {
+      console.log(pair[0]+ ', ' + pair[1]); 
+    }
+
     try {
       const response = await axios.post('https://trandai03.online/api/products', formData, {
         headers: {
@@ -49,6 +54,7 @@ export default function Test() {
       });
       message.success('Product added successfully!');
       setFileList([]);
+      setIsModalOpen(false);
     } catch (error) {
       message.error('Failed to add product.');
     }
@@ -57,9 +63,7 @@ export default function Test() {
   const showModal = () => {
     setIsModalOpen(true);
   };
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
+
   const handleCancel = () => {
     setIsModalOpen(false);
   };
@@ -87,7 +91,13 @@ export default function Test() {
         <Button type="primary" onClick={showModal}>
           Thêm sản phẩm
         </Button>
-        <Modal title="Thêm sản phẩm" open={isModalOpen} okText="Thêm" onOk={handleSubmit} onCancel={handleCancel}>
+        <Modal
+          title="Thêm sản phẩm"
+          open={isModalOpen}
+          okText="Thêm"
+          onCancel={handleCancel}
+          footer={null} // Loại bỏ footer để không chặn onFinish
+        >
           <Form layout="vertical" onFinish={handleSubmit}>
             <Form.Item name="name" label="Product Name" rules={[{ required: true, message: 'Please input the product name!' }]}>
               <Input />
@@ -126,17 +136,16 @@ export default function Test() {
                   preview={{
                     visible: previewOpen,
                     onVisibleChange: (visible) => setPreviewOpen(visible),
-                    afterOpenChange: (visible) => !visible && setPreviewImage(''),
                   }}
                   src={previewImage}
                 />
               )}
             </Form.Item>
-            {/* <Form.Item>
+            <Form.Item>
               <Button type="primary" htmlType="submit">
-                Add Product
+                Thêm
               </Button>
-            </Form.Item> */}
+            </Form.Item>
           </Form>
         </Modal>
       </div>

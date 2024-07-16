@@ -4,6 +4,7 @@ import { CheckSquareOutlined, DeleteOutlined, DownloadOutlined, EditOutlined, Eu
 import PieChart from '../../components/PieChart/PieChart';
 import { Tag, Space, Modal, Image, Upload, Button, Form, Input, InputNumber, Select, message, Table } from 'antd';
 import axios from 'axios';
+import Mystore from '../Mystore/Mystore';
 
 const { Option } = Select;
 
@@ -42,6 +43,10 @@ const Admin = () => {
         if (fileList.length > 0) {
             formData.append('files', fileList[0].originFileObj);
         }
+        
+        // for (let pair of formData.entries()) {
+        //     console.log(pair[0]+ ', ' + pair[1]); 
+        //   }
 
         try {
             const response = await axios.post('https://trandai03.online/api/products', formData, {
@@ -82,78 +87,6 @@ const Admin = () => {
         </Button>
     );
 
-    const columns = [
-        {
-            title: 'Name',
-            dataIndex: 'name',
-            key: 'name',
-            align: 'center',
-            render: (text) => <a>{text}</a>,
-        },
-        {
-            title: 'Create Item',
-            dataIndex: 'createId',
-            key: 'createId',
-            align: 'center',
-        },
-        {
-            title: 'Status',
-            key: 'status',
-            dataIndex: 'status',
-            align: 'center',
-            render: (status) => {
-                let color = status === 'Available' ? 'green' : 'red';
-                return (
-                    <Tag color={color} key={status}>
-                        {status?.toUpperCase()}
-                    </Tag>
-                );
-            },
-        },
-        {
-            title: 'Action',
-            key: 'action',
-            align: 'center',
-            render: (_, record) => (
-                <Space size="middle">
-                    <EditOutlined />
-                    <DeleteOutlined />
-                    {/* <a>Invite {record.name}</a>
-                    <a>Delete</a> */}
-                </Space>
-            ),
-        },
-    ];
-    
-    const data = [
-        {
-            key: '1',
-            name: 'Nguyễn Thiện Nghiệp',
-            createId: "24-11-2003",
-            age: 32,
-            address: 'Duyên hải - Hưng hà - Thái bình',
-            tags: ['nice', 'developer'],
-            status: 'Available'
-        },
-        {
-            key: '2',
-            name: 'Jim Green',
-            createId: "23-07-2003",
-            age: 42,
-            address: 'Bắc sơn - Hưng hà - Thái bình',
-            tags: ['loser'],
-            status: 'Out of Stock'
-        },
-        {
-            key: '3',
-            name: 'Joe Black',
-            createId: "24-11-2003",
-            age: 32,
-            address: 'Duyên hải - Hưng hà - Thái bình',
-            tags: ['cool', 'teacher'],
-            status: 'Available'
-        },
-    ];
     
 
     const [products, setProducts] = useState([
@@ -179,7 +112,7 @@ const Admin = () => {
     return (
         <div>
             <section className={styles.sidebar}>
-                <a href="#" className={styles.brand}>
+                <a href="/" className={styles.brand}>
                     <SmileOutlined />
                     <span className={styles.text}>AdminHub</span>
                 </a>
@@ -369,7 +302,7 @@ const Admin = () => {
                                     <Button type="primary" onClick={showModal}>
                                         Thêm sản phẩm
                                     </Button>
-                                    <Modal title="Thêm sản phẩm" open={isModalOpen} okText="Thêm" onOk={handleSubmit} onCancel={handleCancel}>
+                                    <Modal title="Thêm sản phẩm" open={isModalOpen} onCancel={handleCancel} onOk={handleSubmit}  footer={null}>
                                         <Form layout="vertical" onFinish={handleSubmit}>
                                             <Form.Item name="name" label="Product Name" rules={[{ required: true, message: 'Please input the product name!' }]}>
                                                 <Input />
@@ -414,11 +347,11 @@ const Admin = () => {
                                                     />
                                                 )}
                                             </Form.Item>
-                                            {/* <Form.Item>
+                                            <Form.Item>
                                                 <Button type="primary" htmlType="submit">
                                                     Add Product
                                                 </Button>
-                                            </Form.Item> */}
+                                            </Form.Item>
                                         </Form>
                                     </Modal>
                                 </div>
@@ -431,30 +364,7 @@ const Admin = () => {
                                         <SearchOutlined />
                                         <FilterOutlined />
                                     </div>
-                                    <Table columns={columns} dataSource={data} />;
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>Tên sản phẩm</th>
-                                                <th>Ngày phát hành</th>
-                                                <th>Trạng thái</th>
-                                                <th>Hành động</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {products.map(product => (
-                                                <tr key={product.id}>
-                                                    <td>{product.name}</td>
-                                                    <td>{product.date}</td>
-                                                    <td><span style={{ color: '#000' }} className={styles.status}>{product.status}</span></td>
-                                                    <td>
-                                                        <button onClick={() => handleEditProduct(product.id)} className={styles.actionBtn}><EditOutlined /></button>
-                                                        <button style={{ marginLeft: '10px' }} onClick={() => handleDeleteProduct(product.id)} className={styles.actionBtn}><DeleteOutlined /></button>
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
+                                    <Mystore/>
                                 </div>
                             </div>
                         </div>

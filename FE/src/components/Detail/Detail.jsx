@@ -1,11 +1,16 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../../components/Header/Header'
 import styles from './Detail.module.css';
-import { Col, Image, Row } from 'antd';
+import { Col, Image, Row, Alert, Flex, Spin } from 'antd';
 import { StarOutlined, StarFilled, StarTwoTone, GiftFilled, CheckOutlined, PhoneOutlined, HomeOutlined, PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import { WrapperStyleColImage, WrapperStyleImageSmall, WrapperStyleTextSell } from './style';
 import getFontSizes from 'antd/es/theme/themes/shared/genFontSizes';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+
 export default function Detail() {
+  const { id } = useParams();
+  const [data, setData] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const stock = 6;
   const minQuantity = 1;
@@ -16,18 +21,52 @@ export default function Detail() {
     }
   };
 
+  useEffect(() => {
+    window.scroll(0, 0)
+  }, []);
+
+  // call api với usePrams
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`https://trandai03.online/api/products/detail?productId=${id}`);
+        setData(response.data.data);
+      } catch (error) {
+        console.error('Có lỗi xảy ra:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+
   const handleIncrement = (e) => {
     e.preventDefault();
     if (quantity < stock) {
       setQuantity(quantity + 1);
     }
   };
+
+  if (!data) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <p>{`LOADING: https://trandai03.online/api/detail?productId=${id}`}</p>
+        {/* Loading... */}
+      </div>
+    )
+  }
   return (
     <>
       <div className={styles.main}>
         <div className={styles.productDetaiTitle}>
-          <h1>Màn hình LG 24MR400-B (23.8 inch/FHD/IPS/100Hz/5ms)</h1>
+          <p>Id: {data.id}</p>
+          <p>Tên sản phẩm: {data.name}</p>
+          <p>Giá: {data.price}</p>
+          <p>Mô tả: {data.description}</p>
+          <p>Hãng: {data.sku}</p>
+          <h1>{data.name}</h1>
         </div>
+
         <div className={styles.Container}>
           <div style={{ marginTop: '10px', display: 'flex', background: '#fff', borderRadius: '1.3em' }}>
             <Row style={{ padding: '16px', }}>

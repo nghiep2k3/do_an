@@ -5,6 +5,7 @@ import { database } from "../../firebase";
 import { getDatabase, ref, child, get, set } from "firebase/database";
 import { v4 as uuidv4 } from 'uuid';
 import { message } from 'antd';
+import { Link } from 'react-router-dom';
 
 const formatPrice = (price) => {
   return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' đ';
@@ -14,18 +15,19 @@ export default function Card({ product }) {
   const id = uuidv4();
   const userData = localStorage.getItem('user');
   const { addItem } = useCart();
+  const idItem = product?.id;
   const image = product?.product_images?.[0].image_url || 'chưa có data';
   const name = product?.name || 'chưa có data';
   const oldPrice = product?.price ? parseInt(product.price) : 0;
   const discount = product?.discount || 0;
   const newPrice = oldPrice - (oldPrice * discount / 100);
 
+  console.log("itemId: ", product.id);
 
   const handleAddItem = async () => {
     // console.log("product", product);
     const save_cart = product;
     // xử lý trên firebase
-    console.log("api", `user_cart/${userData}/${id}`);
     await set(ref(database, `user_cart/${userData}/${id}`), save_cart);
     message.success("Đã thêm vào giỏ hàng");
 
@@ -38,9 +40,11 @@ export default function Card({ product }) {
   return (
     <div className={`${styles.Container_Cart} mt-2 shadow rounded py-3 px-3 rounded border border-2 border-secondary d-flex align-items-center justify-content-center`}>
       <div>
-        <div className={styles.Image_Item}>
-          <img className='w-100' src={image} alt={name} />
-        </div>
+        <Link to={`/details/${idItem}`}>
+          <div className={styles.Image_Item}>
+            <img className='w-100' src={image} alt={name} />
+          </div>
+        </Link>
 
         <div className={styles.Content}>
           <div className={`${styles.itemContent} Content_Item text-center fw-bold mt-3`}>{name}</div>

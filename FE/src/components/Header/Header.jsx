@@ -57,7 +57,7 @@ export default function Header() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("https://trandai03.online/api/products");
+        const response = await axios.get("https://trandai03.online/api/products/all");
         setData2(response.data.data.products);
         setLoad(false);
         console.log(11111, response.data.data.products?.[0].name);
@@ -163,16 +163,18 @@ export default function Header() {
               <div className={`${styles.productSearch} Header_productSearch`}>
                 {filteredData.map(item => (
                   <div key={item.id}>
-                    <div style={{ display: 'none' }}>
-                      {newPrice = item.price - (item.price * item.discount / 100)}
-                    </div>
-                    <a className='product' href="#">
-                      <img src={item.product_images?.[0].image_url} alt="khóc" />
-                      <span className={styles.inforSearch}>
-                        <span className={styles.name}>{item.name}</span>
-                        <span className={styles.price}> {formatPrice(newPrice)}   </span>
-                      </span>
-                    </a>
+                    <Link to={`/details/${item.id}`}>
+                      <div style={{ display: 'none' }}>
+                        {newPrice = item.price - (item.price * item.discount / 100)}
+                      </div>
+                      <a className='product'>
+                        <img src={item.product_images?.[0].image_url} alt="khóc" />
+                        <span className={styles.inforSearch}>
+                          <span className={styles.name}>{item.name}</span>
+                          <span className={styles.price}> {formatPrice(newPrice)}   </span>
+                        </span>
+                      </a>
+                    </Link>
                   </div>
                 ))}
               </div>
