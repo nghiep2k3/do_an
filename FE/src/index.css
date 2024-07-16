@@ -31,3 +31,13 @@ code {
 .slick-arrow {
   background-color: gray !important;
 }
+
+.ant-tooltip-hidden, .ant-tooltip{
+  display: none !important;
+}
+
+.ant-upload-list-item-error{
+  border: 2px solid green !important;
+
+}
+

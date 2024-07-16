@@ -1,9 +1,94 @@
 import React, { useState } from 'react';
 import styles from './Admin.module.css';
 import { CheckSquareOutlined, DeleteOutlined, DownloadOutlined, EditOutlined, EuroCircleOutlined, FilterOutlined, LogoutOutlined, MenuUnfoldOutlined, MessageOutlined, NotificationOutlined, PieChartOutlined, PlusOutlined, RightOutlined, SearchOutlined, SettingOutlined, ShoppingOutlined, SmileOutlined, TeamOutlined, UsergroupDeleteOutlined, WindowsOutlined } from '@ant-design/icons';
+import PieChart from '../../components/PieChart/PieChart';
+import { Tag, Space, Modal, Image, Upload, Button, Form, Input, InputNumber, Select, message, Table } from 'antd';
+import axios from 'axios';
+import Mystore from '../Mystore/Mystore';
+
+const { Option } = Select;
 
 const Admin = () => {
     const [activeSection, setActiveSection] = useState('Dashboard');
+    const [previewOpen, setPreviewOpen] = useState(false);
+    const [previewImage, setPreviewImage] = useState('');
+    const [fileList, setFileList] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const getBase64 = (file) =>
+        new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            // reader.onerror = (error) => reject(error);
+        });
+
+    const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
+
+    const handlePreview = async (file) => {
+        if (!file.url && !file.preview) {
+            file.preview = await getBase64(file.originFileObj);
+        }
+        setPreviewImage(file.url || file.preview);
+        setPreviewOpen(true);
+    };
+
+    const handleSubmit = async (values) => {
+        const formData = new FormData();
+        formData.append('name', values.name);
+        formData.append('price', values.price);
+        formData.append('categoryId', values.categoryId);
+        formData.append('sku', values.sku);
+        formData.append('inventory', values.inventory);
+        if (fileList.length > 0) {
+            formData.append('files', fileList[0].originFileObj);
+        }
+        
+        // for (let pair of formData.entries()) {
+        //     console.log(pair[0]+ ', ' + pair[1]); 
+        //   }
+
+        try {
+            const response = await axios.post('https://trandai03.online/api/products', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            message.success('Product added successfully!');
+            setFileList([]);
+        } catch (error) {
+            message.error('Failed to add product.');
+        }
+    };
+
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+    const handleOk = () => {
+        setIsModalOpen(false);
+    };
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
+
+    const uploadButton = (
+        <Button
+            icon={<PlusOutlined />}
+            style={{
+                border: '1px dashed #d9d9d9',
+                width: '104px',
+                height: '104px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+            }}
+        >
+            Upload
+        </Button>
+    );
+
+    
+
     const [products, setProducts] = useState([
         { id: 1, name: 'Product 1', date: '01-01-2024', status: 'Available' },
         { id: 2, name: 'Product 2', date: '02-01-2024', status: 'Out of Stock' },
@@ -14,9 +99,6 @@ const Admin = () => {
         setActiveSection(section);
     };
 
-    const handleAddProduct = () => {
-        alert('Add Product');
-    };
 
     const handleEditProduct = (id) => {
         alert(`Edit Product ${id}`);
@@ -30,7 +112,7 @@ const Admin = () => {
     return (
         <div>
             <section className={styles.sidebar}>
-                <a href="#" className={styles.brand}>
+                <a href="/" className={styles.brand}>
                     <SmileOutlined />
                     <span className={styles.text}>AdminHub</span>
                 </a>
@@ -95,7 +177,7 @@ const Admin = () => {
                         <img src="img/people.png" />
                     </a>
                 </nav>
-                <main>
+                <main style={{ overflow: "visible" }}>
                     {activeSection === 'Dashboard' && (
                         <div>
                             <div className={styles.headTitle}>
@@ -216,10 +298,64 @@ const Admin = () => {
                                         </li>
                                     </ul>
                                 </div>
-                                <button onClick={handleAddProduct} className={styles.btnDownload}>
-                                    <PlusOutlined />
-                                    <span className={styles.text}>Thêm sản phẩm</span>
-                                </button>
+                                <div>
+                                    <Button type="primary" onClick={showModal}>
+                                        Thêm sản phẩm
+                                    </Button>
+                                    <Modal title="Thêm sản phẩm" open={isModalOpen} onCancel={handleCancel} onOk={handleSubmit}  footer={null}>
+                                        <Form layout="vertical" onFinish={handleSubmit}>
+                                            <Form.Item name="name" label="Product Name" rules={[{ required: true, message: 'Please input the product name!' }]}>
+                                                <Input />
+                                            </Form.Item>
+                                            <Form.Item name="price" label="Price" rules={[{ required: true, message: 'Please input the price!' }]}>
+                                                <InputNumber min={0} style={{ width: '100%' }} />
+                                            </Form.Item>
+                                            <Form.Item name="categoryId" label="Category" rules={[{ required: true, message: 'Please select a category!' }]}>
+                                                <Select placeholder="Select a category">
+                                                    <Option value="1">Category 1</Option>
+                                                    <Option value="2">Laptop</Option>
+                                                    <Option value="3">Điện thoại</Option>
+                                                </Select>
+                                            </Form.Item>
+                                            <Form.Item name="sku" label="SKU" rules={[{ required: true, message: 'Please input the SKU!' }]}>
+                                                <Input />
+                                            </Form.Item>
+                                            <Form.Item name="inventory" label="Inventory" rules={[{ required: true, message: 'Please input the inventory!' }]}>
+                                                <InputNumber min={0} style={{ width: '100%' }} />
+                                            </Form.Item>
+                                            <Form.Item label="Upload Image">
+                                                <Upload
+                                                    action={null}
+                                                    listType="picture-card"
+                                                    fileList={fileList}
+                                                    onPreview={handlePreview}
+                                                    onChange={handleChange}
+                                                >
+                                                    {fileList.length >= 1 ? null : uploadButton}
+                                                </Upload>
+                                                {previewImage && (
+                                                    <Image
+                                                        wrapperStyle={{
+                                                            display: 'none',
+                                                        }}
+                                                        preview={{
+                                                            visible: previewOpen,
+                                                            onVisibleChange: (visible) => setPreviewOpen(visible),
+                                                            afterOpenChange: (visible) => !visible && setPreviewImage(''),
+                                                        }}
+                                                        src={previewImage}
+                                                    />
+                                                )}
+                                            </Form.Item>
+                                            <Form.Item>
+                                                <Button type="primary" htmlType="submit">
+                                                    Add Product
+                                                </Button>
+                                            </Form.Item>
+                                        </Form>
+                                    </Modal>
+                                </div>
+
                             </div>
                             <div className={styles.tableData}>
                                 <div className={styles.order}>
@@ -228,37 +364,15 @@ const Admin = () => {
                                         <SearchOutlined />
                                         <FilterOutlined />
                                     </div>
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>Tên sản phẩm</th>
-                                                <th>Ngày phát hành</th>
-                                                <th>Trạng thái</th>
-                                                <th>Hành động</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {products.map(product => (
-                                                <tr key={product.id}>
-                                                    <td>{product.name}</td>
-                                                    <td>{product.date}</td>
-                                                    <td><span style={{ color: '#000' }} className={styles.status}>{product.status}</span></td>
-                                                    <td>
-                                                        <button onClick={() => handleEditProduct(product.id)} className={styles.actionBtn}><EditOutlined /></button>
-                                                        <button style={{ marginLeft: '10px' }} onClick={() => handleDeleteProduct(product.id)} className={styles.actionBtn}><DeleteOutlined /></button>
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
+                                    <Mystore/>
                                 </div>
                             </div>
                         </div>
                     )}
                     {activeSection === 'Statistic' && (
                         <div>
-                            <h1>statistic</h1>
-                            <p>This is the My Store section.</p>
+                            <h1>Thống kê</h1>
+                            <PieChart />
                         </div>
                     )}
                 </main>

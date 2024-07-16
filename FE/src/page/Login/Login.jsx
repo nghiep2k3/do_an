@@ -62,8 +62,9 @@ function Login() {
         try {
             const response = await axios.post('https://trandai03.online/api/auth/signin', loginData);
             console.log(22222, response.data);
-            localStorage.setItem('user', email);
-            navigate("/xiaomi");
+            const username = email.split('@')[0];
+            localStorage.setItem('user', username);
+            navigate("/");
         } catch (error) {
             if (error.response) {
                 // Lỗi nhận từ phía máy chủ
