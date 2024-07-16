@@ -144,7 +144,9 @@ export default function Header() {
     <div>
       <div className={`${styles.First_Navbar} animate__animated animate__fadeInDown`}>
         {role == "admin" ? (<Link to='/admin'> <div className={styles.Item}><UserOutlined />Quản lý</div></Link>) : ""}
-        <div className={styles.Item}><UserOutlined />Tài khoản của tôi</div>
+        <Link to='/profile'>
+          <div className={styles.Item}><UserOutlined />Tài khoản của tôi</div>
+        </Link>
         <div className={styles.Item}><HeartOutlined />Danh sách yêu thích</div>
         <div className={styles.Item}><ShoppingOutlined />Thanh toán</div>
         {value ? (<div>{value} <button style={{ background: 'transparent', border: 'none' }} onClick={handleLogout}>Logout</button></div>) : (<div className={styles.Item}><LockOutlined /><Link to='/login'>Đăng nhập</Link></div>)}

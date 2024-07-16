@@ -9,14 +9,14 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./page/Home/Home";
 import Detail from "./components/Detail/Detail";
 import Bestsell from "./page/BestSell/Bestsell";
-import Login from "./page/Login/Login"
-import Test from "./page/Test/Test"
+import Login from "./page/Login/Login";
+import Test from "./page/Test/Test";
 import Admin from "./page/Admin/Admin";
 import "bootstrap/dist/css/bootstrap.min.css";
-import 'bootstrap/dist/js/bootstrap.bundle.min';
+import "bootstrap/dist/js/bootstrap.bundle.min";
 // import { CartProvider } from "./CartContext";
-import { CartProvider } from 'react-use-cart';
-
+import { CartProvider } from "react-use-cart";
+import Profile from "./page/Profile/Profile";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -28,6 +28,7 @@ root.render(
             <Route index element={<Home />} />
             <Route path="dell" />
             <Route path="details/:id" element={<Detail />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="xiaomi" />
           </Route>
           <Route path="/login" element={<Login />} />
