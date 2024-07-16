@@ -16,6 +16,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 // import { CartProvider } from "./CartContext";
 import { CartProvider } from 'react-use-cart';
+import Profile from "./page/Profile/Profile";
 
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
