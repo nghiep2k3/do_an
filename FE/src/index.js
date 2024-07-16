@@ -27,7 +27,7 @@ root.render(
           <Route path="/" element={<App />}>
             <Route index element={<Home />} />
             <Route path="dell" />
-            <Route path="details" element={<Detail />} />
+            <Route path="details/:id" element={<Detail />} />
             <Route path="xiaomi" />
           </Route>
           <Route path="/login" element={<Login />} />

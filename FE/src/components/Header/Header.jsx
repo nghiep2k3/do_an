@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from './Header.module.css';
 import { HeartOutlined, LockOutlined, PhoneOutlined, SearchOutlined, ShoppingCartOutlined, ShoppingOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Dropdown, Space } from "antd";
+import { Button, Dropdown, Skeleton, Space } from "antd";
 import { Link } from 'react-router-dom';
 import ButtonBs from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
@@ -10,9 +10,9 @@ import Cookies from "universal-cookie";
 // import { useCart } from '../../CartContext';
 import { useCart } from 'react-use-cart';
 import CartOffcanvas from '../Cartoffcanvas/CartOffcanvas';
+import axios from 'axios';
 
 const cookies = new Cookies();
-
 export default function Header() {
   const data = [
     {
@@ -43,6 +43,9 @@ export default function Header() {
       }
     }
   ];
+
+  const [data2, setData2] = useState(null);
+  const [load, setLoad] = useState(true);
   const [isSearching, setIsSearching] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [isAuth, setIsAuth] = useState(cookies.get("auth-token-nghiep"));
@@ -51,7 +54,20 @@ export default function Header() {
   const role = localStorage.getItem('role');
   const [showSubNav, setShowSubNav] = useState({ laptop: false, phone: false, accessories: false });
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("https://trandai03.online/api/products/all");
+        setData2(response.data.data.products);
+        setLoad(false);
+        console.log(11111, response.data.data.products?.[0].name);
+      } catch (error) {
+        console.error('Có lỗi xảy ra:', error);
+      }
+    };
 
+    fetchData();
+  }, []);
 
   const toggleSubNav = (category, state) => {
     setShowSubNav((prevState) => ({
@@ -64,9 +80,8 @@ export default function Header() {
     setSearchTerm(term);
     setIsSearching(term.trim() !== '');
   };
-  const filteredData = data.filter(item =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+
+
   const handle = (term) => {
   };
   const handleScroll = () => {
@@ -86,14 +101,45 @@ export default function Header() {
     };
   }, []);
 
+
   const handleLogout = () => {
+    // Xóa token và user từ cookies và local storage
     cookies.remove("auth-token-nghiep");
     localStorage.removeItem("user");
+
+    // Đặt lại dữ liệu giỏ hàng trong local storage về trạng thái rỗng
+    const cartData = {
+      items: [],
+      isEmpty: true,
+      totalItems: 0,
+      totalUniqueItems: 0,
+      cartTotal: 0,
+      metadata: {},
+    };
+    localStorage.setItem('react-use-cart', JSON.stringify(cartData));
+
+    // Reload trang và đặt lại trạng thái authentication
     window.location.reload();
     setIsAuth(false);
   };
 
+  const formatPrice = (price) => {
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' đ';
+  };
 
+  if (load) {
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '300px' }}>
+        <Skeleton active />
+      </div>
+    )
+  }
+  const filteredData = data2.filter((item) => {
+    console.log("data2: ", item.name);
+    return item.name.toLowerCase().includes(searchTerm.toLowerCase());
+  });
+  var newPrice = 0;
+  console.log(12331, data2);
   return (
     <div>
       <div className={`${styles.First_Navbar} animate__animated animate__fadeInDown`}>
@@ -117,13 +163,18 @@ export default function Header() {
               <div className={`${styles.productSearch} Header_productSearch`}>
                 {filteredData.map(item => (
                   <div key={item.id}>
-                    <a className='product' href="">
-                      <img src={item.image.src} alt={item.image.alt} />
-                      <span className={styles.inforSearch}>
-                        <span className={styles.name}>{item.name}</span>
-                        <span className={styles.price}> {item.price}   </span>
-                      </span>
-                    </a>
+                    <Link to={`/details/${item.id}`}>
+                      <div style={{ display: 'none' }}>
+                        {newPrice = item.price - (item.price * item.discount / 100)}
+                      </div>
+                      <a className='product'>
+                        <img src={item.product_images?.[0].image_url} alt="khóc" />
+                        <span className={styles.inforSearch}>
+                          <span className={styles.name}>{item.name}</span>
+                          <span className={styles.price}> {formatPrice(newPrice)}   </span>
+                        </span>
+                      </a>
+                    </Link>
                   </div>
                 ))}
               </div>
@@ -146,28 +197,8 @@ export default function Header() {
             </div>
 
             <div style={{ position: "relative" }}>
-              <div
-                style={{
-                  background: "red",
-                  textAlign: "center",
-                  borderRadius: "50%",
-                  width: 20,
-                  height: 20,
-                  color: "white",
-                  position: "absolute",
-                  top: -14,
-                  right: -8,
-                }}
-              >
-                {/* {cartItems.length || 0} */}
-                0
-              </div>
-              <div>
-                <button className="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
-                  <ShoppingCartOutlined className='fs-2' />
-                </button>
-                <CartOffcanvas />
-              </div>
+              <CartOffcanvas />
+
             </div>
           </div>
         </div>

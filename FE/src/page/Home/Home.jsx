@@ -55,6 +55,15 @@ export default function Home() {
                     <Carousels></Carousels>
                     <Banner></Banner>
                     <CatSlider></CatSlider>
+                    <p>Hiển thị danh sách mặt hàng điện thoại</p>
+                    <p>Hiển thị danh sách mặt hàng điện thoại</p>
+                    <p>Hiển thị danh sách mặt hàng điện thoại</p>
+                    <p>Hiển thị danh sách mặt hàng điện thoại</p>
+                    <CatSlider></CatSlider>
+                    <p>Hiển thị danh sách mặt hàng laptop</p>
+                    <p>Hiển thị danh sách mặt hàng laptop</p>
+                    <p>Hiển thị danh sách mặt hàng laptop</p>
+                    <p>Hiển thị danh sách mặt hàng laptop</p>
                     {/* {products.map((product, index) => (
                         <div key={index} className="col-md-3">
                             <Card product={product} />
