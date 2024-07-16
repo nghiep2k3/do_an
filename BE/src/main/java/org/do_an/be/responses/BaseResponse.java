@@ -1,4 +1,4 @@
-package com.project.shopapp.responses;
+package org.do_an.be.responses;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;

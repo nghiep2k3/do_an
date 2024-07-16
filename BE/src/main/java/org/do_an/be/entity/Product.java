@@ -1,11 +1,14 @@
 package org.do_an.be.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -40,7 +43,7 @@ public class Product extends BaseEntity {
     @Column(name = "price")
     private Float price;
 
-    @Column(name = "discount_id")
+    @Column(name = "discount")
     private Integer discountId;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
@@ -54,5 +57,9 @@ public class Product extends BaseEntity {
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
     private List<ProductImage> productImages;
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ProductDetail> productDetails;
+
 
 }

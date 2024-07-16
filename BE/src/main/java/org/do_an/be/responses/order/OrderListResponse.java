@@ -12,6 +12,6 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 public class OrderListResponse {
-    private List<com.project.shopapp.responses.order.OrderResponse> orders;
+    private List<OrderResponse> orders;
     private int totalPages;
 }

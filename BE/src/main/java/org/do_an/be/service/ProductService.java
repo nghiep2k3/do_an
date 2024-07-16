@@ -11,13 +11,17 @@ import org.do_an.be.exception.InvalidParamException;
 import org.do_an.be.repository.CategoryRepository;
 import org.do_an.be.repository.ProductImageRepository;
 import org.do_an.be.repository.ProductRepository;
+import org.do_an.be.responses.product.ProductListResponse;
 import org.do_an.be.responses.product.ProductResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class ProductService {
@@ -59,6 +63,12 @@ public class ProductService {
         productsPage = productRepository.searchProducts(categoryId, keyword, pageRequest);
         return productsPage.map(ProductResponse::fromProduct);
     }
+    public List<ProductResponse> getAllProducts() {
+        List<Product> allProducts = productRepository.findAll();
+        return allProducts.stream()
+                .map(ProductResponse::fromProduct)
+                .collect(Collectors.toList());
+    }
     @Transactional
     public Product updateProduct(
             long id,
@@ -90,7 +100,9 @@ public class ProductService {
         }
         return null;
     }
-
+    public boolean existsByName(String name) {
+        return productRepository.existsByName(name);
+    }
     @Transactional
     public ProductImage createProductImage(
             Integer productId,
@@ -114,5 +126,10 @@ public class ProductService {
 
         productRepository.save(existingProduct);
         return productImageRepository.save(newProductImage);
+    }
+    @Transactional
+    public void deleteProduct(Integer id) {
+        Optional<Product> optionalProduct = productRepository.findById(id);
+        optionalProduct.ifPresent(productRepository::delete);
     }
 }

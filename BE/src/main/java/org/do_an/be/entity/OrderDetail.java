@@ -1,31 +1,40 @@
 package org.do_an.be.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-import java.math.BigDecimal;
-import java.time.Instant;
-
-@Getter
-@Setter
 @Entity
 @Table(name = "order_details")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class OrderDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Integer id;
+    private Long id;
 
-    @Column(name = "user_id")
-    private String userId;
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    @JsonBackReference
+    private Order order;
 
-    @Column(name = "total", precision = 10)
-    private BigDecimal total;
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
 
-    @Column(name = "payment_id")
-    private Integer paymentId;
+    @Column(name = "price", nullable = false)
+    private Float price;
 
+    @Column(name = "number_of_products", nullable = false)
+    private int numberOfProducts;
 
+    @Column(name = "total_money", nullable = false)
+    private Float totalMoney;
+
+    @Column(name = "color")
+    private String color;
 
 }
