@@ -25,6 +25,10 @@ export default function Detail() {
     window.scroll(0, 0)
   }, []);
 
+  // useEffect(() => {
+  //   window.location.reload();
+  // }, [id]);
+
   // call api với usePrams
   useEffect(() => {
     const fetchData = async () => {
@@ -74,7 +78,7 @@ export default function Detail() {
                 <Image src="https://laptop88.vn/media/product/9008_loq_15iax9i___2__.jpg" alt="" preview={false} />
                 <Row style={{ paddingTop: '10px' }}>
                   <WrapperStyleColImage span={5}>
-                    <WrapperStyleImageSmall src="https://laptop88.vn/media/product/9008_loq_15iax9i___2__.jpg" alt="" preview={false} />
+                    <WrapperStyleImageSmall src="https://d1hjkbq40fs2x4.cloudfront.net/2016-01-31/files/1045-2.jpg" alt="" preview={false} />
                   </WrapperStyleColImage>
                   <WrapperStyleColImage span={5}>
                     <WrapperStyleImageSmall src="https://laptop88.vn/media/product/9008_loq_15iax9i___2__.jpg" alt="" preview={false} />
