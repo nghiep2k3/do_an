@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import styles from './Admin.module.css';
 import { CheckSquareOutlined, DeleteOutlined, DownloadOutlined, EditOutlined, EuroCircleOutlined, FilterOutlined, LogoutOutlined, MenuUnfoldOutlined, MessageOutlined, NotificationOutlined, PieChartOutlined, PlusOutlined, RightOutlined, SearchOutlined, SettingOutlined, ShoppingOutlined, SmileOutlined, TeamOutlined, UsergroupDeleteOutlined, WindowsOutlined } from '@ant-design/icons';
 import PieChart from '../../components/PieChart/PieChart';
-import { Tag, Space, Modal, Image, Upload, Button, Form, Input, InputNumber, Select, message, Table } from 'antd';
+import {Tag, Space, Modal, Image, Upload, Button, Form, Input, InputNumber, Select, message, Table } from 'antd';
 import axios from 'axios';
 import Mystore from '../Mystore/Mystore';
 
 const { Option } = Select;
 
 const Admin = () => {
+    const [form] = Form.useForm();
     const [activeSection, setActiveSection] = useState('Dashboard');
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
@@ -55,6 +56,7 @@ const Admin = () => {
                 },
             });
             message.success('Product added successfully!');
+            form.resetFields(); 
             setFileList([]);
         } catch (error) {
             message.error('Failed to add product.');
@@ -303,7 +305,7 @@ const Admin = () => {
                                         Thêm sản phẩm
                                     </Button>
                                     <Modal title="Thêm sản phẩm" open={isModalOpen} onCancel={handleCancel} onOk={handleSubmit}  footer={null}>
-                                        <Form layout="vertical" onFinish={handleSubmit}>
+                                        <Form layout="vertical"  form={form} onFinish={handleSubmit}>
                                             <Form.Item name="name" label="Product Name" rules={[{ required: true, message: 'Please input the product name!' }]}>
                                                 <Input />
                                             </Form.Item>

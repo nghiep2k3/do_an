@@ -102,10 +102,11 @@ export default function Header() {
   }, []);
 
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     // Xóa token và user từ cookies và local storage
     cookies.remove("auth-token-nghiep");
     localStorage.removeItem("user");
+    localStorage.removeItem("role");
 
     // Đặt lại dữ liệu giỏ hàng trong local storage về trạng thái rỗng
     const cartData = {
@@ -116,7 +117,7 @@ export default function Header() {
       cartTotal: 0,
       metadata: {},
     };
-    localStorage.setItem('react-use-cart', JSON.stringify(cartData));
+    await localStorage.setItem('react-use-cart', JSON.stringify(cartData));
 
     // Reload trang và đặt lại trạng thái authentication
     window.location.reload();
@@ -165,18 +166,18 @@ export default function Header() {
               <div className={`${styles.productSearch} Header_productSearch`}>
                 {filteredData.map(item => (
                   <div key={item.id}>
-                    <Link to={`/details/${item.id}`}>
+                    <a href={`/details/${item.id}`}>
                       <div style={{ display: 'none' }}>
                         {newPrice = item.price - (item.price * item.discount / 100)}
                       </div>
                       <a className='product'>
-                        <img src={item.product_images?.[0].image_url} alt="khóc" />
+                        <img src={item.product_images[0]?.image_url} alt="khóc" />
                         <span className={styles.inforSearch}>
                           <span className={styles.name}>{item.name}</span>
                           <span className={styles.price}> {formatPrice(newPrice)}   </span>
                         </span>
                       </a>
-                    </Link>
+                    </a>
                   </div>
                 ))}
               </div>
