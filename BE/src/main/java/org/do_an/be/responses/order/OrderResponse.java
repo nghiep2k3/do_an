@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class OrderResponse {
-    private Long id;
+    private Integer id;
 
     @JsonProperty("user_id")
     private Integer userId;
@@ -24,8 +24,8 @@ public class OrderResponse {
     @JsonProperty("fullname")
     private String fullName;
 
-    @JsonProperty("phone_number")
-    private String phoneNumber;
+    @JsonProperty("telephone")
+    private String telephone;
 
     @JsonProperty("email")
     private String email;
@@ -72,7 +72,7 @@ public class OrderResponse {
                 .id(order.getId())
                 .userId(order.getUser().getId())
                 .fullName(order.getFullName())
-                .phoneNumber(order.getPhoneNumber())
+                .telephone(order.getTelephone())
                 .email(order.getEmail())
                 .address(order.getAddress())
                 .note(order.getNote())

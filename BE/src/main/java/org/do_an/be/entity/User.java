@@ -39,6 +39,10 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles;
 
+//    @ManyToOne
+//    @JoinColumn(name = "role_id")
+//    private Role role;
+
     @Column(name = "first_name")
     private String firstName;
 
@@ -48,7 +52,7 @@ public class User implements UserDetails {
     @Column(name = "telephone")
     private String telephone;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address", nullable = true)
     private UserAddress address;
 

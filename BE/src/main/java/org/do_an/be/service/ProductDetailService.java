@@ -1,7 +1,9 @@
 package org.do_an.be.service;
 
 import lombok.RequiredArgsConstructor;
+import org.do_an.be.dtos.ProductDTO;
 import org.do_an.be.dtos.ProductDetailDTO;
+import org.do_an.be.entity.Category;
 import org.do_an.be.entity.Product;
 import org.do_an.be.entity.ProductDetail;
 import org.do_an.be.exception.DataNotFoundException;
@@ -35,4 +37,32 @@ public class ProductDetailService {
                 .build();
         return productDetailRepository.save(newProductDetail);
     }
-}
+    @Transactional
+    public ProductDetail updateProductDetail(Integer id, ProductDetailDTO productDetailDTO) throws DataNotFoundException {
+        ProductDetail existingProductDetail = productDetailRepository.findByProductId(id);
+        if (existingProductDetail != null) {
+            // Copy properties from DTO to ProductDetail entity
+            if (productDetailDTO.getRam() != null) {
+                existingProductDetail.setRam(productDetailDTO.getRam());
+            }
+            if (productDetailDTO.getCpu() != null) {
+                existingProductDetail.setCpu(productDetailDTO.getCpu());
+            }
+            if (productDetailDTO.getDisplay() != null) {
+                existingProductDetail.setDisplay(productDetailDTO.getDisplay());
+            }
+            if (productDetailDTO.getVga() != null) {
+                existingProductDetail.setVga(productDetailDTO.getVga());
+            }
+            if (productDetailDTO.getDrive() != null) {
+                existingProductDetail.setDrive(productDetailDTO.getDrive());
+            }
+
+            // Save updated product detail
+            return productDetailRepository.save(existingProductDetail);
+        } else {
+            createProduct(productDetailDTO,id);
+            return null;
+        }
+}}
+
