@@ -17,6 +17,7 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 // import { CartProvider } from "./CartContext";
 import { CartProvider } from "react-use-cart";
 import Profile from "./page/Profile/Profile";
+import Laptop from "./page/Laptop/Laptop";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -29,7 +30,7 @@ root.render(
             <Route path="dell" />
             <Route path="details/:id" element={<Detail />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="xiaomi" />
+            <Route path="/laptop" element={<Laptop />} />
           </Route>
           <Route path="/login" element={<Login />} />
           <Route path="/test" element={<Test />} />

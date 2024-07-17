@@ -101,3 +101,8 @@ body {
 	display: flex;
 	justify-content: center;
 }
+.ant-tabs-tab {
+	width: 140px;
+    font-size: 15px;
+    justify-content: center;
+}

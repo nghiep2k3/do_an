@@ -43,7 +43,7 @@ const Admin = () => {
         if (fileList.length > 0) {
             formData.append('files', fileList[0].originFileObj);
         }
-        
+
         // for (let pair of formData.entries()) {
         //     console.log(pair[0]+ ', ' + pair[1]); 
         //   }
@@ -87,7 +87,7 @@ const Admin = () => {
         </Button>
     );
 
-    
+
 
     const [products, setProducts] = useState([
         { id: 1, name: 'Product 1', date: '01-01-2024', status: 'Available' },
@@ -150,7 +150,7 @@ const Admin = () => {
                         </a>
                     </li>
                     <li>
-                        <a href="#" className="logout">
+                        <a href="/" className="logout">
                             <LogoutOutlined />
                             <span className={styles.text}>Đăng xuất</span>
                         </a>
@@ -302,7 +302,7 @@ const Admin = () => {
                                     <Button type="primary" onClick={showModal}>
                                         Thêm sản phẩm
                                     </Button>
-                                    <Modal title="Thêm sản phẩm" open={isModalOpen} onCancel={handleCancel} onOk={handleSubmit}  footer={null}>
+                                    <Modal title="Thêm sản phẩm" open={isModalOpen} onCancel={handleCancel} onOk={handleSubmit} footer={null}>
                                         <Form layout="vertical" onFinish={handleSubmit}>
                                             <Form.Item name="name" label="Product Name" rules={[{ required: true, message: 'Please input the product name!' }]}>
                                                 <Input />
@@ -364,7 +364,7 @@ const Admin = () => {
                                         <SearchOutlined />
                                         <FilterOutlined />
                                     </div>
-                                    <Mystore/>
+                                    <Mystore />
                                 </div>
                             </div>
                         </div>

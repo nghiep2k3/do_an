@@ -40,4 +40,11 @@ code {
   border: 2px solid green !important;
 
 }
-
+.ant-tabs-tab-btn {
+	width: 140px !important;
+    font-size: 15px !important;
+    justify-content: center !important;
+}
+.ant-tabs {
+  margin-left: 48px !important;
+}
