@@ -26,10 +26,10 @@ public class OrderWithDetailsDTO {
 
     private String email;
 
-    @JsonProperty("phone_number")
+    @JsonProperty("telephone")
     @NotBlank(message = "Phone number is required")
     @Size(min = 5, message = "Phone number must be at least 5 characters")
-    private String phoneNumber;
+    private String telephone;
 
     private String address;
 

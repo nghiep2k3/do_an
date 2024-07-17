@@ -52,30 +52,38 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
     private final LocalizationUtils localizationUtils;
-
-    @GetMapping("/")
-    public String hello(){
-            return "User level access";
-    }
-
-    @GetMapping("/hello")
-    public String hello1(){
-        return "User level access";
-    }
     @PostMapping("/signin")
-    public ResponseEntity<String> authenticateUser(@RequestBody UserLoginDTO loginDto) {
+    public ResponseEntity<ResponseObject> authenticateUser(@RequestBody UserLoginDTO loginDto) {
+        Optional<User> optionalUser = Optional.empty();
         try {
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     loginDto.getUsernameOrEmail(), loginDto.getPassword()));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            return ResponseEntity.ok("True");
+
+            optionalUser = userRepository.findByUsernameOrEmail(loginDto.getUsernameOrEmail(),loginDto.getUsernameOrEmail());
+            System.out.println(optionalUser);
+            UserResponse userResponse= UserResponse.fromUser(optionalUser.get());
+            return ResponseEntity.ok(
+                    ResponseObject.builder()
+                            .message("Success")
+                            .data(userResponse)
+                            .status(HttpStatus.OK)
+                            .build());
         } catch (AuthenticationServiceException e) {
             // Handle specific authentication service exceptions
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Authentication error: " + e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ResponseObject.builder()
+                            .message("Authentication error: " + e.getMessage())
+                            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                            .build());
         } catch (org.springframework.security.core.AuthenticationException e) {
             // Handle generic authentication exceptions
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Failed");
+            return ResponseEntity.badRequest().body(
+                    ResponseObject.builder()
+                            .message("Failed")
+                            .status(HttpStatus.UNAUTHORIZED)
+                            .build());
         }
 
     }
@@ -107,7 +115,7 @@ public class UserController {
         user.setEmail(signUpDto.getEmail());
         user.setPassword(passwordEncoder.encode(signUpDto.getPassword()));
         user.setTelephone(signUpDto.getTelephone());
-        Role roles = roleRepository.findByName("ROLE_ADMIN").get();
+        Role roles = roleRepository.findRoleById(2);
         user.setRoles(Collections.singleton(roles));
         UserAddress userAddress = new UserAddress();
         addressRepository.save(userAddress);
@@ -118,5 +126,15 @@ public class UserController {
 
     }
 
+    @GetMapping("/profile/{id}")
+    public ResponseEntity<ResponseObject> getProfiles(@PathVariable int id){
+        Optional<User> user = userRepository.findById(id);
+        UserResponse userResponse = UserResponse.fromUser(user.get());
+        return ResponseEntity.ok(ResponseObject.builder()
+                .message("Profile user id = %d ")
+                .data(userResponse)
+                .status(HttpStatus.OK)
+                .build());
+    }
 
 }

@@ -1,6 +1,7 @@
 package org.do_an.be.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.do_an.be.dtos.CartItemDTO;
 import org.do_an.be.dtos.OrderDTO;
 import org.do_an.be.dtos.OrderDetailDTO;
@@ -24,6 +25,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrderService {
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
@@ -34,18 +36,18 @@ public class OrderService {
 
     @Transactional
     public Order createOrder(OrderDTO orderDTO) throws Exception {
-        //tìm xem user'id có tồn tại ko
         User user = userRepository
                 .findById(orderDTO.getUserId())
-                .orElseThrow(() -> new DataNotFoundException("Cannot find user with id: "+orderDTO.getUserId()));
+                .orElseThrow(() -> new DataNotFoundException("Cannot find user with id: " + orderDTO.getUserId()));
         //convert orderDTO => Order
         //dùng thư viện Model Mapper
         // Tạo một luồng bảng ánh xạ riêng để kiểm soát việc ánh xạ
-        modelMapper.typeMap(OrderDTO.class, Order.class)
-                .addMappings(mapper -> mapper.skip(Order::setId));
+//        modelMapper.typeMap(OrderDTO.class, Order.class)
+//                .addMappings(mapper -> mapper.skip(Order::setId));
         // Cập nhật các trường của đơn hàng từ orderDTO
         Order order = new Order();
         modelMapper.map(orderDTO, order);
+        order.setId(null);
         order.setUser(user);
         order.setOrderDate(LocalDateTime.now());//lấy thời điểm hiện tại
         order.setStatus(OrderStatus.PENDING);
@@ -56,33 +58,26 @@ public class OrderService {
             throw new DataNotFoundException("Date must be at least today !");
         }
         order.setShippingDate(shippingDate);
-        //EAV-Entity-Attribute-Value model
         order.setTotalMoney(orderDTO.getTotalMoney());
         // Tạo danh sách các đối tượng OrderDetail từ cartItems
         List<OrderDetail> orderDetails = new ArrayList<>();
         for (CartItemDTO cartItemDTO : orderDTO.getCartItems()) {
-            // Tạo một đối tượng OrderDetail từ CartItemDTO
             OrderDetail orderDetail = new OrderDetail();
             orderDetail.setOrder(order);
-
             // Lấy thông tin sản phẩm từ cartItemDTO
             Integer productId = cartItemDTO.getProductId();
             int quantity = cartItemDTO.getQuantity();
-
-            // Tìm thông tin sản phẩm từ cơ sở dữ liệu (hoặc sử dụng cache nếu cần)
             Product product = productRepository.findById(productId)
                     .orElseThrow(() -> new DataNotFoundException("Product not found with id: " + productId));
-
             // Đặt thông tin cho OrderDetail
             orderDetail.setProduct(product);
             orderDetail.setNumberOfProducts(quantity);
             // Các trường khác của OrderDetail nếu cần
             orderDetail.setPrice(product.getPrice());
-
+            orderDetail.setTotalMoney(product.getPrice() * quantity);
             // Thêm OrderDetail vào danh sách
             orderDetails.add(orderDetail);
         }
-
         //coupon
 //        String couponCode = orderDTO.getCouponCode();
 //        if (!couponCode.isEmpty()) {
@@ -98,10 +93,16 @@ public class OrderService {
 //            order.setCoupon(null);
 //        }
         // Lưu danh sách OrderDetail vào cơ sở dữ liệu
-        orderDetailRepository.saveAll(orderDetails);
+        log.error("order: {}", order);
+
+        log.error("orderd: {}", orderDetails);
+        order.setOrderDetails(orderDetails);
         orderRepository.save(order);
+        //orderDetailRepository.saveAll(orderDetails);
+
         return order;
     }
+
     @Transactional
     public Order updateOrderWithDetails(OrderWithDetailsDTO orderWithDetailsDTO) {
         modelMapper.typeMap(OrderWithDetailsDTO.class, Order.class)
@@ -123,6 +124,7 @@ public class OrderService {
 
         return savedOrder;
     }
+
     public Order getOrderById(Integer orderId) {
         Order selectedOrder = orderRepository.findById(orderId).orElse(null);
         return selectedOrder;
@@ -157,7 +159,8 @@ public class OrderService {
         }
 
         if (orderDTO.getTelephone() != null && !orderDTO.getTelephone().trim().isEmpty()) {
-            order.setPhoneNumber(orderDTO.getTelephone().trim());
+            order.setTelephone(orderDTO.getTelephone().trim());
+
         }
 
         if (orderDTO.getStatus() != null && !orderDTO.getStatus().trim().isEmpty()) {
@@ -195,15 +198,17 @@ public class OrderService {
         order.setUser(existingUser);
         return orderRepository.save(order);
     }
+
     @Transactional
     public void deleteOrder(Integer orderId) {
         Order order = orderRepository.findById(orderId).orElse(null);
         //no hard-delete, => please soft-delete
-        if(order != null) {
+        if (order != null) {
             //order.setActive(false);
             orderRepository.delete(order);
         }
     }
+
     public List<OrderResponse> findByUserId(Long userId) {
         List<Order> orders = orderRepository.findByUserId(userId);
         return orders.stream().map(order -> OrderResponse.fromOrder(order)).toList();

@@ -13,13 +13,15 @@ import java.util.List;
 @Table(name = "orders")
 @Getter
 @Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "id")
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -31,8 +33,8 @@ public class Order {
     @Column(name = "email", length = 100)
     private String email;
 
-    @Column(name = "phone_number",nullable = false, length = 100)
-    private String phoneNumber;
+    @Column(name = "telephone",nullable = false, length = 100)
+    private String telephone;
 
     @Column(name = "address", length = 100)
     private String address;
@@ -66,8 +68,9 @@ public class Order {
 
 
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
+    @ToString.Exclude
     private List<OrderDetail> orderDetails;
 
 }
