@@ -339,4 +339,17 @@ public class ProductController {
                 .status(HttpStatus.OK)
                 .build());
     }
+    @PutMapping( "/{id}")
+    //@SecurityRequirement(name="bearer-key")
+    public ResponseEntity<ResponseObject> updateProduct(
+            @PathVariable Integer id,
+            @ModelAttribute ProductDTO productDTO
+            , @ModelAttribute ProductDetailDTO productDetailDTO) throws Exception {
+        Product updatedProduct = productService.updateProduct(id, productDTO,productDetailDTO);
+        return ResponseEntity.ok(ResponseObject.builder()
+                .data(updatedProduct)
+                .message("Update product successfully")
+                .status(HttpStatus.OK)
+                .build());
+    }
 }

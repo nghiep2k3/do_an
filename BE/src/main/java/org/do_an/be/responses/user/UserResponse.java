@@ -4,36 +4,59 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.do_an.be.entity.Role;
 import org.do_an.be.entity.User;
+import org.do_an.be.entity.UserAddress;
+import org.do_an.be.repository.RoleRepository;
+import org.do_an.be.repository.UserRepository;
 
 import java.util.Date;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
+
 @Builder
 public class UserResponse {
+
     @JsonProperty("id")
     private Integer id;
 
     private String telephone;
 
+    @JsonProperty("first_name")
+    private String firstName;
+
+    @JsonProperty("last_name")
+    private String lastName;
+
     @JsonProperty("address")
-    private String address;
+    private UserAddress address;
+    private String email;
 
     @JsonProperty("profile_image")
     private String profileImage;
 
-    @JsonProperty("is_active")
-    private boolean active;
 
-    @JsonProperty("role")
-    private Role role;
+
+    @JsonProperty("roles")
+    private Set<String> roles;
     public static UserResponse fromUser(User user) {
+
+        if (user.getRoles() == null || user.getRoles().isEmpty()) {
+            System.out.println("User has no roles assigned.");
+        } else {
+            System.out.println("User Roles: " + user.getRoles().stream().map(Role::getName).collect(Collectors.toSet()));
+        }
         return UserResponse.builder()
                 .id(user.getId())
                 .telephone(user.getTelephone())
                 .profileImage(user.getProfileImage())
+                .roles(user.getRoles().stream().map(Role::getName).collect(Collectors.toSet()))
+                .email(user.getEmail())
+                .address(user.getAddress())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
                 .build();
     }
 }

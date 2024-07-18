@@ -15,7 +15,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Builder
 public class ProductDetailDTO {
-    Integer id;
+
     Integer ram;
     @Size(max = 255)
     String cpu;

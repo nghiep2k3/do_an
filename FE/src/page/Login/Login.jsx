@@ -39,7 +39,7 @@ function Login() {
         try {
             const response = await axios.post('https://trandai03.online/api/auth/signup', formData);
             console.log(22222, response.data);
-            navigate("/xiaomi");
+            navigate("/");
         } catch (error) {
             if (error.response) {
                 // Lỗi nhận từ phía máy chủ

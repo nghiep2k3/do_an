@@ -2,6 +2,7 @@ package org.do_an.be.service;
 
 import lombok.RequiredArgsConstructor;
 import org.do_an.be.dtos.ProductDTO;
+import org.do_an.be.dtos.ProductDetailDTO;
 import org.do_an.be.dtos.ProductImageDTO;
 import org.do_an.be.entity.Category;
 import org.do_an.be.entity.Product;
@@ -9,6 +10,7 @@ import org.do_an.be.entity.ProductImage;
 import org.do_an.be.exception.DataNotFoundException;
 import org.do_an.be.exception.InvalidParamException;
 import org.do_an.be.repository.CategoryRepository;
+import org.do_an.be.repository.ProductDetailRepository;
 import org.do_an.be.repository.ProductImageRepository;
 import org.do_an.be.repository.ProductRepository;
 import org.do_an.be.responses.product.ProductListResponse;
@@ -28,7 +30,8 @@ public class ProductService {
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
     private final ProductImageRepository productImageRepository;
-
+    private final ProductDetailRepository productDetailRepository;
+    private final ProductDetailService productDetailService;
     @Transactional
     public Product createProduct(ProductDTO productDTO) throws DataNotFoundException {
         Category existingCategory = categoryRepository
@@ -71,8 +74,9 @@ public class ProductService {
     }
     @Transactional
     public Product updateProduct(
-            long id,
-            ProductDTO productDTO
+            Integer id,
+            ProductDTO productDTO,
+            ProductDetailDTO productDetailDTO
     )
             throws Exception {
         Product existingProduct = getProductById(id);
@@ -95,6 +99,16 @@ public class ProductService {
             if(productDTO.getDescription() != null &&
                     !productDTO.getDescription().isEmpty()) {
                 existingProduct.setDescription(productDTO.getDescription());
+            }
+            if(productDTO.getSku() != null &&
+                    !productDTO.getSku().isEmpty()) {
+                existingProduct.setSku(productDTO.getSku());
+            }
+            if(productDTO.getInventory() >= 0) {
+                existingProduct.setInventory(productDTO.getInventory());
+            }
+            if(productDetailDTO.getRam()!=null){
+                productDetailService.updateProductDetail(id,productDetailDTO);
             }
             return productRepository.save(existingProduct);
         }

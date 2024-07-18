@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { Tag, Space, Modal, Image, Upload, Button, Form, Input, InputNumber, Select, message, Table } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import axios from 'axios';
 
+const { confirm } = Modal;
 
 export default function Mystore() {
     const [items, setItems] = useState(null);
@@ -26,20 +27,6 @@ export default function Mystore() {
             key: 'price',
             align: 'center',
         },
-        // {
-        //     title: 'Status',
-        //     key: 'status',
-        //     dataIndex: 'status',
-        //     align: 'center',
-        //     render: (status) => {
-        //         let color = status === 'Available' ? 'green' : 'red';
-        //         return (
-        //             <Tag color={color} key={status}>
-        //                 {status?.toUpperCase()}
-        //             </Tag>
-        //         );
-        //     },
-        // },
         {
             title: 'Hãng',
             dataIndex: 'sku',
@@ -53,68 +40,9 @@ export default function Mystore() {
             render: (_, record) => (
                 <Space size="middle">
                     <EditOutlined onClick={() => handleEditProduct(record.id)} />
-                    <DeleteOutlined onClick={() => handleDeleteProduct(record.id)} />
-                    {/* <a>Invite {record.name}</a>
-                    <a>Delete</a> */}
+                    <DeleteOutlined onClick={() => showDeleteConfirm(record.id)} />
                 </Space>
             ),
-        },
-    ];
-
-    const data = [
-        {
-            key: '1',
-            name: 'Nguyễn Thiện Nghiệp',
-            createId: "24-11-2003",
-            age: 32,
-            address: 'Duyên hải - Hưng hà - Thái bình',
-            tags: ['nice', 'developer'],
-            status: 'Available'
-        },
-        {
-            key: '2',
-            name: 'Mai Hoàng Kim Ngân',
-            createId: "23-07-2003",
-            age: 42,
-            address: 'Bắc sơn - Hưng hà - Thái bình',
-            tags: ['loser'],
-            status: 'Out of Stock'
-        },
-        {
-            key: '3',
-            name: 'Joe Black',
-            createId: "24-11-2003",
-            age: 32,
-            address: 'Duyên hải - Hưng hà - Thái bình',
-            tags: ['cool', 'teacher'],
-            status: 'Available'
-        },
-        {
-            key: '4',
-            name: 'Joe Black',
-            createId: "24-11-2003",
-            age: 32,
-            address: 'Duyên hải - Hưng hà - Thái bình',
-            tags: ['cool', 'teacher'],
-            status: 'Available'
-        },
-        {
-            key: '5',
-            name: 'Joe Black',
-            createId: "24-11-2003",
-            age: 32,
-            address: 'Duyên hải - Hưng hà - Thái bình',
-            tags: ['cool', 'teacher'],
-            status: 'Available'
-        },
-        {
-            key: '6',
-            name: 'Joe Black',
-            createId: "24-11-2003",
-            age: 32,
-            address: 'Duyên hải - Hưng hà - Thái bình',
-            tags: ['cool', 'teacher'],
-            status: 'Available'
         },
     ];
 
@@ -123,8 +51,6 @@ export default function Mystore() {
             try {
                 const response = await axios.get("https://trandai03.online/api/products/all");
                 setItems(response.data.data.products);
-                // setLoad(false);
-                // console.log(11111, response.data.data.products?.[0].name);
             } catch (error) {
                 console.error('Có lỗi xảy ra:', error);
             }
@@ -137,15 +63,36 @@ export default function Mystore() {
         alert(`Edit Product ${id}`);
     };
 
-    console.log(items);
-    console.log(data);
-    const handleDeleteProduct = (id) => {
-        alert(`Delete Product ${id}`);
-        // setProducts(products.filter(product => product.id !== id));
+    const handleDeleteProduct = async (id) => {
+        try {
+            await axios.delete(`https://trandai03.online/api/products/${id}`);
+            message.success("Xóa thành công");
+            setItems(items.filter(item => item.id !== id));
+        } catch (error) {
+            console.error('There was an error deleting the user!', error);
+            message.error('Có lỗi xảy ra khi xóa!');
+        }
     };
+
+    const showDeleteConfirm = (id) => {
+        confirm({
+            title: 'Bạn có chắc chắn muốn xóa sản phẩm này không?',
+            content: 'Hành động này không thể hoàn tác.',
+            okText: 'Xóa',
+            okType: 'danger',
+            cancelText: 'Hủy',
+            onOk() {
+                handleDeleteProduct(id);
+            },
+            onCancel() {
+                console.log('Hủy hành động xóa');
+            },
+        });
+    };
+
     return (
         <div>
             <Table columns={columns} total={50} pagination={{ pageSize: 5 }} dataSource={items} />
         </div>
-    )
+    );
 }
