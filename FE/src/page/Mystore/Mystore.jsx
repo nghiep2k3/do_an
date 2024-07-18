@@ -49,7 +49,7 @@ export default function Mystore() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("https://trandai03.online/api/products/all");
+                const response = await axios.get("https://api.trandai03.online/api/products/all");
                 setItems(response.data.data.products);
             } catch (error) {
                 console.error('Có lỗi xảy ra:', error);
@@ -65,7 +65,7 @@ export default function Mystore() {
 
     const handleDeleteProduct = async (id) => {
         try {
-            await axios.delete(`https://trandai03.online/api/products/${id}`);
+            await axios.delete(`https://api.trandai03.online/api/products/${id}`);
             message.success("Xóa thành công");
             setItems(items.filter(item => item.id !== id));
         } catch (error) {

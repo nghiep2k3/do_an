@@ -208,6 +208,7 @@ const CartOffcanvas = () => {
               </>
             )}
           </div>
+          
           <div className="d-flex justify-content-between pb-2 px-2">
             <a
               href="/payments"

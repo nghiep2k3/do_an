@@ -47,7 +47,7 @@ export default function Test() {
     }
 
     try {
-      const response = await axios.post('https://trandai03.online/api/products', formData, {
+      const response = await axios.post('https://api.trandai03.online/api/products', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

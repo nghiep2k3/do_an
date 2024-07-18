@@ -39,18 +39,19 @@ const Admin = () => {
         formData.append('name', values.name);
         formData.append('price', values.price);
         formData.append('categoryId', values.categoryId);
+        formData.append('description', values.description);
         formData.append('sku', values.sku);
         formData.append('inventory', values.inventory);
         if (fileList.length > 0) {
             formData.append('files', fileList[0].originFileObj);
         }
         
-        // for (let pair of formData.entries()) {
-        //     console.log(pair[0]+ ', ' + pair[1]); 
-        //   }
+        for (let pair of formData.entries()) {
+            console.log(pair[0]+ ', ' + pair[1]); 
+          }
 
         try {
-            const response = await axios.post('https://trandai03.online/api/products', formData, {
+            const response = await axios.post('https://api.trandai03.online/api/products', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -314,10 +315,13 @@ const Admin = () => {
                                             </Form.Item>
                                             <Form.Item name="categoryId" label="Category" rules={[{ required: true, message: 'Please select a category!' }]}>
                                                 <Select placeholder="Select a category">
-                                                    <Option value="1">Category 1</Option>
+                                                    <Option value="1">Phụ kiện</Option>
                                                     <Option value="2">Laptop</Option>
                                                     <Option value="3">Điện thoại</Option>
                                                 </Select>
+                                            </Form.Item>
+                                            <Form.Item name="description" label="Description" rules={[{ required: true, message: 'Please input the description!' }]}>
+                                                <Input />
                                             </Form.Item>
                                             <Form.Item name="sku" label="SKU" rules={[{ required: true, message: 'Please input the SKU!' }]}>
                                                 <Input />

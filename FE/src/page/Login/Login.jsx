@@ -37,8 +37,10 @@ function Login() {
 
         console.log(2222, formData);
         try {
-            const response = await axios.post('https://trandai03.online/api/auth/signup', formData);
+            const response = await axios.post('https://api.trandai03.online/api/auth/signup', formData);
             console.log(22222, response.data);
+            const username = email.split('@')[0];
+            localStorage.setItem('user', username);
             navigate("/");
         } catch (error) {
             if (error.response) {
@@ -60,7 +62,7 @@ function Login() {
         };
 
         try {
-            const response = await axios.post('https://trandai03.online/api/auth/signin', loginData);
+            const response = await axios.post('https://api.trandai03.online/api/auth/signin', loginData);
             console.log(22222, response.data);
             const username = email.split('@')[0];
             localStorage.setItem('user', username);
