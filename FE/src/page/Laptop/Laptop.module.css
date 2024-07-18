@@ -4,3 +4,15 @@
     margin-right: auto;
     margin-left : auto;
 }
+.itemTT {
+    text-align: center;
+    /* background: #fff; */
+    width: 100%;
+    height: 500px;
+}
+.itemTT img {
+    width: 200px;
+}
+.oldPrice {
+    text-decoration: line-through;
+}

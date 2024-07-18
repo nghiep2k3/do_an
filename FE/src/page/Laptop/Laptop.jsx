@@ -5,10 +5,10 @@ import Slider from 'react-slick';
 import styles from './Laptop.module.css';
 export default function Laptop() {
   const items = [
-    { id: 1, name: 'Laptop 1', img: 'path_to_image_1' },
-    { id: 2, name: 'Laptop 2', img: 'path_to_image_2' },
-    { id: 3, name: 'Laptop 3', img: 'path_to_image_3' },
-    { id: 4, name: 'Laptop 4', img: 'path_to_image_4' },
+    { id: 1, name: 'Laptop 1', img: 'https://laptop88.vn/media/product/8634_thi___t_k____ch__a_c___t__n__5_.jpg' },
+    { id: 2, name: 'Laptop 2', img: 'https://laptop88.vn/media/product/120_8634_acer_nitro_5_led_______900x900_1.jpg' },
+    { id: 3, name: 'Laptop 3', img: 'https://laptop88.vn/media/product/120_8634_acer_nitro_5_led_______900x900_1.jpg' },
+    { id: 4, name: 'Laptop 4', img: 'https://laptop88.vn/media/product/120_8634_acer_nitro_5_led_______900x900_1.jpg' },
   ];
   const settings = {
     dots: false,
@@ -44,12 +44,15 @@ export default function Laptop() {
   };
   return (
     <div>
-      <div className={styles}></div>
+      <div className={styles.container}></div>
       <Slider {...settings}>
         {items.map(item => (
-          <div key={item.id}>
+          <div className={styles.itemTT} key={item.id}>
             <img src={item.img} alt={item.name} />
             <h3>{item.name}</h3>
+            <span className={styles.oldPrice}>899.000đ</span>
+            <span>giảm 37%</span>
+            <h3>478.000đ</h3>
           </div>
         ))}
       </Slider>

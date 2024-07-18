@@ -13,7 +13,7 @@ export default function CatSlider() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("https://trandai03.online/api/products?category_id=3");
+                const response = await axios.get("https://api.trandai03.online/api/products?category_id=3");
                 setData(response.data.data.products);
             } catch (error) {
                 console.error('Có lỗi xảy ra:', error);

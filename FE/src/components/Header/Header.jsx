@@ -57,7 +57,7 @@ export default function Header() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("https://trandai03.online/api/products/all");
+        const response = await axios.get("https://api.trandai03.online/api/products/all");
         setData2(response.data.data.products);
         setLoad(false);
         console.log(11111, response.data.data.products?.[0].name);

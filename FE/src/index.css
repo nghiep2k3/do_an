@@ -58,3 +58,6 @@ code {
   width: 400px;
   height: 400px;
 }
+.slick-slide img {
+  width: 200px;
+}

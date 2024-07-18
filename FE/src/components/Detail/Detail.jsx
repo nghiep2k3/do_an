@@ -38,7 +38,7 @@ export default function Detail() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`https://trandai03.online/api/products/detail?productId=${id}`);
+        const response = await axios.get(`https://api.trandai03.online/api/products/detail?productId=${id}`);
         setData(response.data.data);
       } catch (error) {
         console.error('Có lỗi xảy ra:', error);
@@ -59,7 +59,7 @@ export default function Detail() {
   if (!data) {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <p>{`LOADING: https://trandai03.online/api/detail?productId=${id}`}</p>
+        <p>{`LOADING: https://api.trandai03.online/api/detail?productId=${id}`}</p>
         {/* Loading... */}
       </div>
     )
