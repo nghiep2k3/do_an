@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Header from '../../components/Header/Header'
 import styles from './Detail.module.css';
-import { Col, Image, Row, Alert, Flex, Spin } from 'antd';
+import { Col, Image, Row, Alert, Flex, Spin, Rate } from 'antd';
 import { StarOutlined, StarFilled, StarTwoTone, GiftFilled, CheckOutlined, PhoneOutlined, HomeOutlined, PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import { WrapperStyleColImage, WrapperStyleImageSmall, WrapperStyleTextSell } from './style';
 import getFontSizes from 'antd/es/theme/themes/shared/genFontSizes';
@@ -14,6 +14,11 @@ export default function Detail() {
   const [quantity, setQuantity] = useState(1);
   const stock = 6;
   const minQuantity = 1;
+  const [mainImage, setMainImage] = useState('https://laptop88.vn/media/product/9008_loq_15iax9i___2__.jpg');
+  const imageUrls = [];
+  const handleImageClick = (url) => {
+    setMainImage(url);
+  };
   const handleDecrement = (e) => {
     e.preventDefault();
     if (quantity > minQuantity) {
@@ -24,6 +29,10 @@ export default function Detail() {
   useEffect(() => {
     window.scroll(0, 0)
   }, []);
+
+  // useEffect(() => {
+  //   window.location.reload();
+  // }, [id]);
 
   // call api với usePrams
   useEffect(() => {
@@ -55,36 +64,33 @@ export default function Detail() {
       </div>
     )
   }
+  const formatPrice = (price) => {
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' đ';
+  };
+  for (let i = 0; i < data.product_images.length; i++) {
+    imageUrls.push(data.product_images[i].image_url);
+  }
+  const newPrice = data.price - (data.price * data.discount / 100);
   return (
     <>
       <div className={styles.main}>
-        <div className={styles.productDetaiTitle}>
-          <p>Id: {data.id}</p>
-          <p>Tên sản phẩm: {data.name}</p>
-          <p>Giá: {data.price}</p>
-          <p>Mô tả: {data.description}</p>
-          <p>Hãng: {data.sku}</p>
-          <h1>{data.name}</h1>
-        </div>
-
         <div className={styles.Container}>
+          <h4>{data.name}</h4>
           <div style={{ marginTop: '10px', display: 'flex', background: '#fff', borderRadius: '1.3em' }}>
             <Row style={{ padding: '16px', }}>
               <Col span={10}>
-                <Image src="https://laptop88.vn/media/product/9008_loq_15iax9i___2__.jpg" alt="" preview={false} />
+                <Image src={mainImage} alt="" />
                 <Row style={{ paddingTop: '10px' }}>
-                  <WrapperStyleColImage span={5}>
-                    <WrapperStyleImageSmall src="https://laptop88.vn/media/product/9008_loq_15iax9i___2__.jpg" alt="" preview={false} />
-                  </WrapperStyleColImage>
-                  <WrapperStyleColImage span={5}>
-                    <WrapperStyleImageSmall src="https://laptop88.vn/media/product/9008_loq_15iax9i___2__.jpg" alt="" preview={false} />
-                  </WrapperStyleColImage>
-                  <WrapperStyleColImage span={5}>
-                    <WrapperStyleImageSmall src="https://laptop88.vn/media/product/9008_loq_15iax9i___2__.jpg" alt="" preview={false} />
-                  </WrapperStyleColImage>
-                  <WrapperStyleColImage span={5}>
-                    <WrapperStyleImageSmall src="https://laptop88.vn/media/product/9008_loq_15iax9i___2__.jpg" alt="" preview={false} />
-                  </WrapperStyleColImage>
+                  {imageUrls.map((url, index) => (
+                    <WrapperStyleColImage span={5} key={index}>
+                      <WrapperStyleImageSmall
+                        src={url}
+                        alt={`Small ${index}`}
+                        preview={false}
+                        onClick={() => handleImageClick(url)}
+                      />
+                    </WrapperStyleColImage>
+                  ))}
                 </Row>
                 <div className={styles.offerDetail}>
                   <div className={styles.title}>
@@ -126,10 +132,10 @@ export default function Detail() {
               <div className={styles.mainProductMid}>
                 <div className={styles.boxDeal}>
                   <div className={styles.priceDealLeft}>
-                    <div className={styles.price}>16.290.000 đ</div>
+                    <div className={styles.price}>{formatPrice(newPrice)}</div>
                     <div className={styles.mainPrice}>
-                      <del className={styles.oldPrice}> 25.990.000 đ</del>
-                      <div className={styles.saleofPrice}>-60%</div>
+                      <del className={styles.oldPrice}> {formatPrice(data.price)}</del>
+                      <div className={styles.saleofPrice}>{data.discount}%</div>
                     </div>
                   </div>
                   <div className={styles.dealRight}>
@@ -152,11 +158,7 @@ export default function Detail() {
                     </div>
                   </div>
                 </div>
-                <StarFilled style={{ fontSize: '12px', color: 'rgb(253,216,54)' }} />
-                <StarFilled style={{ fontSize: '12px', color: 'rgb(253,216,54)' }} />
-                <StarFilled style={{ fontSize: '12px', color: 'rgb(253,216,54)' }} />
-                <StarFilled style={{ fontSize: '12px', color: 'rgb(253,216,54)' }} />
-                <StarFilled style={{ fontSize: '12px', color: 'rgb(253,216,54)' }} />
+                <Rate style={{ fontSize: '15px', margin: '10px 0' }} allowHalf defaultValue={2.5} />
                 <div className={styles.productStatus}>
                   <div className={styles.item}>
                     <a className={styles.nameCate} href="#">New 100%</a>
@@ -234,32 +236,6 @@ export default function Detail() {
                 </div>
               </div>
               <div className={styles.mainProductRight}>
-                <div className={styles.productStore}>
-                  <h3 className={styles.titleHome}> <HomeOutlined />
-                    Địa chỉ kho hàng</h3>
-                  <div style={{ display: 'block' }}>
-                    <div className={styles.contentFilterStore}>
-                      <select onChange="lay_danh_sach_cua_hang_theo_tinh(this.value)">
-                        <option value="0">Tỉnh/Thành</option>
-                        <option value="1">Hà Nội</option>
-                        <option value="2">TP.Hồ Chí Minh</option>
-                      </select>
-                    </div>
-
-                    <div className={styles.note}>Có <span style={{ fontWeight: '700', color: 'red' }}>1</span> cửa hàng có sẵn sản phẩm này</div>
-                    <div className={styles.contentStoreList}>
-                      <div className={styles.itemAddress}>
-                        <a className={styles.itemPhone} href="">
-                          <PhoneOutlined /> 0904583588
-                        </a>
-                        <a className={styles.itemMap} href="">
-                          <HomeOutlined /> 125 Trần Đại Nghĩa, Hai Bà Trưng, Hà Nội (showroom)
-                        </a>
-                      </div>
-                    </div>
-                    <a href="" className={styles.btnAddtoCart}>ADD TO CART</a>
-                  </div>
-                </div>
                 <div className={styles.productWarranty}>
                   <h3 className={styles.titleWarranty}>Thông tin bảo hành</h3>
                   <div className={styles.content}>
@@ -401,6 +377,7 @@ export default function Detail() {
             <div className={styles.contentDesc}>
               <h3 className={styles.titleDesc}>
                 <span>Đặc điểm nổi bật</span>
+                <p className={styles.descMain}>{data.description}</p>
               </h3>
             </div>
             <Col span={8}>

@@ -12,7 +12,7 @@ import {
     TreeSelect,
 } from 'antd';
 import { LogoutOutlined, SettingOutlined, ShoppingOutlined, WindowsOutlined } from '@ant-design/icons';
-
+import { Divider, List, Typography } from 'antd';
 const { RangePicker } = DatePicker;
 
 const formItemLayout = {
@@ -28,36 +28,73 @@ const formItemLayout = {
 const onChange = (key) => {
     console.log(key);
 };
+const data = [
+    'Racing car sprays burning fuel into crowd.',
+    'Japanese princess to wed commoner.',
+    'Australian walks 100km after outback crash.',
+    'Man charged over missing wedding girl.',
+    'Los Angeles battles huge wildfires.',
+];
 const items = [
     {
         key: '1',
         label: 'Tất cả',
-        children: 'Content of Tab Pane 1',
+        children: <List
+            size="small"
+            bordered
+            dataSource={data}
+            renderItem={(item) => <List.Item>{item}</List.Item>}
+        />,
     },
     {
         key: '2',
         label: 'Chờ xác nhận',
-        children: 'Content of Tab Pane 2',
+        children: <List
+            size="small"
+            bordered
+            dataSource={data}
+            renderItem={(item) => <List.Item>{item}</List.Item>}
+        />,
     },
     {
         key: '3',
         label: 'Chờ lấy hàng',
-        children: 'Content of Tab Pane 3',
+        children: <List
+            size="small"
+            bordered
+            dataSource={data}
+            renderItem={(item) => <List.Item>{item}</List.Item>}
+        />,
     },
     {
         key: '4',
         label: 'Đang giao',
-        children: 'Content of Tab Pane 3',
+        children: <List
+            size="small"
+            bordered
+            dataSource={data}
+            renderItem={(item) => <List.Item>{item}</List.Item>}
+        />,
     },
     {
         key: '5',
         label: 'Đã giao',
-        children: 'Content of Tab Pane 3',
+        children: <List
+            size="small"
+            bordered
+            dataSource={data}
+            renderItem={(item) => <List.Item>{item}</List.Item>}
+        />,
     },
     {
         key: '6',
         label: 'Đã hủy',
-        children: 'Content of Tab Pane 3',
+        children: <List
+            size="small"
+            bordered
+            dataSource={data}
+            renderItem={(item) => <List.Item>{item}</List.Item>}
+        />,
     },
 ];
 const Profile = () => {

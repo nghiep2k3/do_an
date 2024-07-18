@@ -310,11 +310,12 @@
     text-align: center;
 }
 .btnAddCart {
+    margin-top: 20px;
     align-items: center;
     display: flex;
     flex-wrap: wrap;
     -webkit-box-align: center !important;
-    margin-right: -10px;
+    /* margin-right: -10px; */
 }
 .btnAdd {
     width: calc(100% / 2 - 10px);
@@ -558,4 +559,9 @@ margin: 15px 15px 0 15px;
     border-bottom: 1px solid #ff9300;
     padding-bottom: 10px;
     padding-left: 15px;
+}
+.descMain {
+    margin-left: 20px;
+    margin-top: 20px;
+    font-size: 20px;
 }

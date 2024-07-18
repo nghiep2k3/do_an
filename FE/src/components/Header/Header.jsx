@@ -214,7 +214,7 @@ export default function Header() {
               onMouseEnter={() => toggleSubNav('laptop', true)}
               onMouseLeave={() => toggleSubNav('laptop', false)}
             >
-              <Link to='/Laptop'>Laptop</Link>
+              <Link to='/laptop'>Laptop</Link>
               {showSubNav.laptop && (
                 <div className={styles.sub_nav}>
                   <div className={styles.sub_nav_item}><Link to='/macbook'>MacBook</Link></div>

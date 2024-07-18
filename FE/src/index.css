@@ -48,3 +48,13 @@ code {
 .ant-tabs {
   margin-left: 48px !important;
 }
+.ant-image-img {
+  padding-right: 10px;
+}
+.ant-image {
+  width: 100%;
+} 
+.ant-image-mask {
+  width: 400px;
+  height: 400px;
+}
