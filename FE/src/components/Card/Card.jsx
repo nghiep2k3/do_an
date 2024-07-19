@@ -5,13 +5,14 @@ import { database } from "../../firebase";
 import { getDatabase, ref, child, get, set } from "firebase/database";
 import { v4 as uuidv4 } from 'uuid';
 import { message } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 
 const formatPrice = (price) => {
   return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' đ';
 };
 
 export default function Card({ product }) {
+  const navigate = useNavigate();
   const id = uuidv4();
   const userData = localStorage.getItem('user');
   const { addItem } = useCart();
@@ -25,6 +26,10 @@ export default function Card({ product }) {
   console.log("itemId: ", product.id);
 
   const handleAddItem = async () => {
+    if(userData == null){
+      navigate("/login");
+    }
+
     // console.log("product", product);
     const save_cart = product;
     // xử lý trên firebase
