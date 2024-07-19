@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './Profile.module.css';
 import { Tabs } from 'antd';
+import axios from 'axios';
+
 import {
     Button,
     Cascader,
@@ -13,99 +15,122 @@ import {
 } from 'antd';
 import { LogoutOutlined, SettingOutlined, ShoppingOutlined, WindowsOutlined } from '@ant-design/icons';
 import { Divider, List, Typography } from 'antd';
-const { RangePicker } = DatePicker;
-
-const formItemLayout = {
-    labelCol: {
-        xs: { span: 24 },
-        sm: { span: 6 },
-    },
-    wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 14 },
-    },
-};
-const onChange = (key) => {
-    console.log(key);
-};
-const data = [
-    'Racing car sprays burning fuel into crowd.',
-    'Japanese princess to wed commoner.',
-    'Australian walks 100km after outback crash.',
-    'Man charged over missing wedding girl.',
-    'Los Angeles battles huge wildfires.',
-];
-const items = [
-    {
-        key: '1',
-        label: 'Tất cả',
-        children: <List
-            size="small"
-            bordered
-            dataSource={data}
-            renderItem={(item) => <List.Item>{item}</List.Item>}
-        />,
-    },
-    {
-        key: '2',
-        label: 'Chờ xác nhận',
-        children: <List
-            size="small"
-            bordered
-            dataSource={data}
-            renderItem={(item) => <List.Item>{item}</List.Item>}
-        />,
-    },
-    {
-        key: '3',
-        label: 'Chờ lấy hàng',
-        children: <List
-            size="small"
-            bordered
-            dataSource={data}
-            renderItem={(item) => <List.Item>{item}</List.Item>}
-        />,
-    },
-    {
-        key: '4',
-        label: 'Đang giao',
-        children: <List
-            size="small"
-            bordered
-            dataSource={data}
-            renderItem={(item) => <List.Item>{item}</List.Item>}
-        />,
-    },
-    {
-        key: '5',
-        label: 'Đã giao',
-        children: <List
-            size="small"
-            bordered
-            dataSource={data}
-            renderItem={(item) => <List.Item>{item}</List.Item>}
-        />,
-    },
-    {
-        key: '6',
-        label: 'Đã hủy',
-        children: <List
-            size="small"
-            bordered
-            dataSource={data}
-            renderItem={(item) => <List.Item>{item}</List.Item>}
-        />,
-    },
-];
 const Profile = () => {
     const [activeSection, setActiveSection] = useState('Dashboard');
+    const { RangePicker } = DatePicker;
+    const [data2, setData] = useState(null);
+
+    const formItemLayout = {
+        labelCol: {
+            xs: { span: 24 },
+            sm: { span: 6 },
+        },
+        wrapperCol: {
+            xs: { span: 24 },
+            sm: { span: 14 },
+        },
+    };
+    const onChange = (key) => {
+        console.log(key);
+    };
+    const data = [
+        'Racing car sprays burning fuel into crowd.',
+        'Japanese princess to wed commoner.',
+        'Australian walks 100km after outback crash.',
+        'Man charged over missing wedding girl.',
+        'Los Angeles battles huge wildfires.',
+    ];
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get("https://api.trandai03.online/api/auth/profile/8");
+                setData(response.data.data);
+                console.log(333, response.data.data);
+            } catch (error) {
+                console.error('Có lỗi xảy ra:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
+    if (!data2) {
+        return (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '300px' }}>
+                Loading
+            </div>
+        )
+    }
+    const items = [
+        {
+            key: '1',
+            label: 'Tất cả',
+            children: <List
+                size="small"
+                bordered
+                dataSource={data}
+                renderItem={(item) => <List.Item>{item}</List.Item>}
+            />,
+        },
+        {
+            key: '2',
+            label: 'Chờ xác nhận',
+            children: <List
+                size="small"
+                bordered
+                dataSource={data}
+                renderItem={(item) => <List.Item>{item}</List.Item>}
+            />,
+        },
+        {
+            key: '3',
+            label: 'Chờ lấy hàng',
+            children: <List
+                size="small"
+                bordered
+                dataSource={data}
+                renderItem={(item) => <List.Item>{item}</List.Item>}
+            />,
+        },
+        {
+            key: '4',
+            label: 'Đang giao',
+            children: <List
+                size="small"
+                bordered
+                dataSource={data}
+                renderItem={(item) => <List.Item>{item}</List.Item>}
+            />,
+        },
+        {
+            key: '5',
+            label: 'Đã giao',
+            children: <List
+                size="small"
+                bordered
+                dataSource={data}
+                renderItem={(item) => <List.Item>{item}</List.Item>}
+            />,
+        },
+        {
+            key: '6',
+            label: 'Đã hủy',
+            children: <List
+                size="small"
+                bordered
+                dataSource={data}
+                renderItem={(item) => <List.Item>{item}</List.Item>}
+            />,
+        },
+    ];
 
     const handleMenuClick = (section) => {
         setActiveSection(section);
     };
 
     return (
-        <div style={{ display: 'flex' }}>
+        < div style={{ display: 'flex' }
+        }>
             <section className={styles.sidebar}>
                 <a href="#" className={styles.brand}>
                     <span className={styles.text}>Tài khoản của</span>
@@ -144,7 +169,7 @@ const Profile = () => {
                 {activeSection === 'Dashboard' && (
                     <Form {...formItemLayout} variant="filled">
                         <Form.Item label="Họ tên" name="Input" rules={[{ required: true, message: 'Please input!' }]}>
-                            <Input />
+                            <Input defaultValue={data2?.full_name || ''} />
                         </Form.Item>
 
                         <Form.Item
@@ -152,7 +177,7 @@ const Profile = () => {
                             name="InputNumber"
                             rules={[{ required: true, message: 'Please input!' }]}
                         >
-                            <InputNumber style={{ width: '100%' }} />
+                            <InputNumber style={{ width: '100%' }} defaultValue={data2?.telephone || ''} />
                         </Form.Item>
 
                         <Form.Item
@@ -160,7 +185,7 @@ const Profile = () => {
                             name="TextArea"
                             rules={[{ required: true, message: 'Please input!' }]}
                         >
-                            <Input.TextArea />
+                            <Input.TextArea defaultValue={data2?.email || ''} />
                         </Form.Item>
 
                         <Form.Item
@@ -176,7 +201,7 @@ const Profile = () => {
                             name="Cascader"
                             rules={[{ required: true, message: 'Please input!' }]}
                         >
-                            <Cascader />
+                            <Cascader defaultValue={data2?.address.addressLine || ''} />
                         </Form.Item>
 
                         <Form.Item
@@ -184,7 +209,7 @@ const Profile = () => {
                             name="TreeSelect"
                             rules={[{ required: true, message: 'Please input!' }]}
                         >
-                            <TreeSelect />
+                            <TreeSelect defaultValue={data2?.address.city || ''} />
                         </Form.Item>
 
                         <Form.Item
@@ -192,7 +217,7 @@ const Profile = () => {
                             name="TreeSelect"
                             rules={[{ required: true, message: 'Please input!' }]}
                         >
-                            <TreeSelect />
+                            <TreeSelect defaultValue={data2?.address.country || ''} />
                         </Form.Item>
 
                         <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
@@ -209,7 +234,7 @@ const Profile = () => {
                     </div>
                 )}
             </main>
-        </div>
+        </div >
     );
 }
 
