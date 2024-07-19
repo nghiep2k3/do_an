@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styles from './Admin.module.css';
 import { CheckSquareOutlined, DeleteOutlined, DownloadOutlined, EditOutlined, EuroCircleOutlined, FilterOutlined, LogoutOutlined, MenuUnfoldOutlined, MessageOutlined, NotificationOutlined, PieChartOutlined, PlusOutlined, RightOutlined, SearchOutlined, SettingOutlined, ShoppingOutlined, SmileOutlined, TeamOutlined, UsergroupDeleteOutlined, WindowsOutlined } from '@ant-design/icons';
 import PieChart from '../../components/PieChart/PieChart';
-import {Tag, Space, Modal, Image, Upload, Button, Form, Input, InputNumber, Select, message, Table } from 'antd';
+import { Tag, Space, Modal, Image, Upload, Button, Form, Input, InputNumber, Select, message, Table } from 'antd';
 import axios from 'axios';
 import Mystore from '../Mystore/Mystore';
 
@@ -45,10 +45,10 @@ const Admin = () => {
         if (fileList.length > 0) {
             formData.append('files', fileList[0].originFileObj);
         }
-        
-        for (let pair of formData.entries()) {
-            console.log(pair[0]+ ', ' + pair[1]); 
-          }
+
+        // for (let pair of formData.entries()) {
+        //     console.log(pair[0]+ ', ' + pair[1]); 
+        //   }
 
         try {
             const response = await axios.post('https://api.trandai03.online/api/products', formData, {
@@ -57,7 +57,7 @@ const Admin = () => {
                 },
             });
             message.success('Product added successfully!');
-            form.resetFields(); 
+            form.resetFields();
             setFileList([]);
         } catch (error) {
             message.error('Failed to add product.');
@@ -90,7 +90,7 @@ const Admin = () => {
         </Button>
     );
 
-    
+
 
     const [products, setProducts] = useState([
         { id: 1, name: 'Product 1', date: '01-01-2024', status: 'Available' },
@@ -153,7 +153,7 @@ const Admin = () => {
                         </a>
                     </li>
                     <li>
-                        <a href="#" className="logout">
+                        <a href="/" className="logout">
                             <LogoutOutlined />
                             <span className={styles.text}>Đăng xuất</span>
                         </a>
@@ -305,8 +305,8 @@ const Admin = () => {
                                     <Button type="primary" onClick={showModal}>
                                         Thêm sản phẩm
                                     </Button>
-                                    <Modal title="Thêm sản phẩm" open={isModalOpen} onCancel={handleCancel} onOk={handleSubmit}  footer={null}>
-                                        <Form layout="vertical"  form={form} onFinish={handleSubmit}>
+                                    <Modal title="Thêm sản phẩm" open={isModalOpen} onCancel={handleCancel} onOk={handleSubmit} footer={null}>
+                                        <Form layout="vertical" form={form} onFinish={handleSubmit}>
                                             <Form.Item name="name" label="Product Name" rules={[{ required: true, message: 'Please input the product name!' }]}>
                                                 <Input />
                                             </Form.Item>
@@ -370,7 +370,7 @@ const Admin = () => {
                                         <SearchOutlined />
                                         <FilterOutlined />
                                     </div>
-                                    <Mystore/>
+                                    <Mystore />
                                 </div>
                             </div>
                         </div>

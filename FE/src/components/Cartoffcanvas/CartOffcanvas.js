@@ -149,7 +149,7 @@ const CartOffcanvas = () => {
                         style={{ width: "50px", marginRight: "10px" }}
                       />
                       <div>
-                        <div>{item.name}</div>
+                        <div style={{width: 150}}>{item.name}</div>
                         <div>
                           {item.quantity} x {formatPrice(item.price)}
                         </div>

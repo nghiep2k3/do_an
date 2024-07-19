@@ -1,19 +1,68 @@
 import React, { useEffect, useState } from 'react'
 import Header from '../../components/Header/Header'
 import styles from './Detail.module.css';
-import { Col, Image, Row, Alert, Flex, Spin } from 'antd';
+import { Col, Image, Row, Alert, Flex, Spin, Rate, message } from 'antd';
 import { StarOutlined, StarFilled, StarTwoTone, GiftFilled, CheckOutlined, PhoneOutlined, HomeOutlined, PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import { WrapperStyleColImage, WrapperStyleImageSmall, WrapperStyleTextSell } from './style';
 import getFontSizes from 'antd/es/theme/themes/shared/genFontSizes';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
+import Card from '../Card/Card';
+import Famous from '../../page/Famous/Famous';
+import { getDatabase, ref, child, get, set } from "firebase/database";
+import { useCart } from 'react-use-cart';
+import { database } from "../../firebase";
+
 
 export default function Detail() {
+  const { addItem } = useCart();
+  const userData = localStorage.getItem('user');
   const { id } = useParams();
+  const id2 = uuidv4();
   const [data, setData] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const stock = 6;
   const minQuantity = 1;
+  const [mainImage, setMainImage] = useState('https://img.idesign.vn/2018/10/23/id-loading-1.gif');
+  const imageUrls = [];
+
+
+  const oldPrice = data?.price ? parseInt(data.price) : 0;
+  const discount = data?.discount || 0;
+  const newPrice2 = oldPrice - (oldPrice * discount / 100);
+
+  const handleAddItem = async () => {
+    const save_cart = data;
+
+    // Xử lý trên Firebase
+    await set(ref(database, `user_cart/${userData}/${id2}`), save_cart);
+    message.success("Đã thêm vào giỏ hàng");
+
+    const productWithPrice = { ...save_cart, price: newPrice2 };
+
+    // Lấy dữ liệu giỏ hàng từ localStorage
+    const cartData = JSON.parse(localStorage.getItem('react-use-cart')) || { items: [] };
+
+    // Thêm sản phẩm mới vào giỏ hàng
+    cartData.items.push(productWithPrice);
+
+    // Cập nhật lại thông tin giỏ hàng
+    cartData.totalItems = cartData.items.length;
+    cartData.totalUniqueItems = new Set(cartData.items.map(item => item.id)).size;
+    cartData.cartTotal = cartData.items.reduce((total, item) => total + item.price * item.quantity, 0);
+
+    // Lưu lại vào localStorage
+    localStorage.setItem('react-use-cart', JSON.stringify(cartData));
+
+    // Thêm sản phẩm vào giỏ hàng của ứng dụng
+    addItem(productWithPrice);
+  };
+
+
+  const handleImageClick = (url) => {
+    setMainImage(url);
+  };
   const handleDecrement = (e) => {
     e.preventDefault();
     if (quantity > minQuantity) {
@@ -21,13 +70,9 @@ export default function Detail() {
     }
   };
 
-  useEffect(() => {
-    window.scroll(0, 0)
-  }, []);
-
   // useEffect(() => {
-  //   window.location.reload();
-  // }, [id]);
+  //   window.scroll(0, 0)
+  // }, []);
 
   // call api với usePrams
   useEffect(() => {
@@ -35,6 +80,7 @@ export default function Detail() {
       try {
         const response = await axios.get(`https://api.trandai03.online/api/products/detail?productId=${id}`);
         setData(response.data.data);
+        setMainImage(response.data.data.product_images[0].image_url);
       } catch (error) {
         console.error('Có lỗi xảy ra:', error);
       }
@@ -42,6 +88,7 @@ export default function Detail() {
 
     fetchData();
   }, []);
+
 
 
   const handleIncrement = (e) => {
@@ -54,41 +101,38 @@ export default function Detail() {
   if (!data) {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <p>{`LOADING: https://api.trandai03.online/api/detail?productId=${id}`}</p>
-        {/* Loading... */}
+        {/* <p>{`LOADING: https://api.trandai03.online/api/detail?productId=${id}`}</p> */}
+        Loading...
       </div>
     )
   }
+  const formatPrice = (price) => {
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' đ';
+  };
+  for (let i = 0; i < data.product_images.length; i++) {
+    imageUrls.push(data.product_images[i].image_url);
+  }
+  const newPrice = data.price - (data.price * data.discount / 100);
   return (
     <>
       <div className={styles.main}>
-        <div className={styles.productDetaiTitle}>
-          <p>Id: {data.id}</p>
-          <p>Tên sản phẩm: {data.name}</p>
-          <p>Giá: {data.price}</p>
-          <p>Mô tả: {data.description}</p>
-          <p>Hãng: {data.sku}</p>
-          <h1>{data.name}</h1>
-        </div>
-
         <div className={styles.Container}>
+          <h4>{data.name}</h4>
           <div style={{ marginTop: '10px', display: 'flex', background: '#fff', borderRadius: '1.3em' }}>
             <Row style={{ padding: '16px', }}>
               <Col span={10}>
-                <Image src="https://laptop88.vn/media/product/9008_loq_15iax9i___2__.jpg" alt="" preview={false} />
+                <Image src={mainImage} preview={false} alt="" />
                 <Row style={{ paddingTop: '10px' }}>
-                  <WrapperStyleColImage span={5}>
-                    <WrapperStyleImageSmall src="https://d1hjkbq40fs2x4.cloudfront.net/2016-01-31/files/1045-2.jpg" alt="" preview={false} />
-                  </WrapperStyleColImage>
-                  <WrapperStyleColImage span={5}>
-                    <WrapperStyleImageSmall src="https://laptop88.vn/media/product/9008_loq_15iax9i___2__.jpg" alt="" preview={false} />
-                  </WrapperStyleColImage>
-                  <WrapperStyleColImage span={5}>
-                    <WrapperStyleImageSmall src="https://laptop88.vn/media/product/9008_loq_15iax9i___2__.jpg" alt="" preview={false} />
-                  </WrapperStyleColImage>
-                  <WrapperStyleColImage span={5}>
-                    <WrapperStyleImageSmall src="https://laptop88.vn/media/product/9008_loq_15iax9i___2__.jpg" alt="" preview={false} />
-                  </WrapperStyleColImage>
+                  {imageUrls.map((url, index) => (
+                    <WrapperStyleColImage span={5} key={index}>
+                      <WrapperStyleImageSmall
+                        src={url}
+                        alt={`Small ${index}`}
+                        preview={false}
+                        onClick={() => handleImageClick(url)}
+                      />
+                    </WrapperStyleColImage>
+                  ))}
                 </Row>
                 <div className={styles.offerDetail}>
                   <div className={styles.title}>
@@ -130,10 +174,10 @@ export default function Detail() {
               <div className={styles.mainProductMid}>
                 <div className={styles.boxDeal}>
                   <div className={styles.priceDealLeft}>
-                    <div className={styles.price}>16.290.000 đ</div>
+                    <div className={styles.price}>{formatPrice(newPrice)}</div>
                     <div className={styles.mainPrice}>
-                      <del className={styles.oldPrice}> 25.990.000 đ</del>
-                      <div className={styles.saleofPrice}>-60%</div>
+                      <del className={styles.oldPrice}> {formatPrice(data.price)}</del>
+                      <div className={styles.saleofPrice}>{data.discount}%</div>
                     </div>
                   </div>
                   <div className={styles.dealRight}>
@@ -156,11 +200,7 @@ export default function Detail() {
                     </div>
                   </div>
                 </div>
-                <StarFilled style={{ fontSize: '12px', color: 'rgb(253,216,54)' }} />
-                <StarFilled style={{ fontSize: '12px', color: 'rgb(253,216,54)' }} />
-                <StarFilled style={{ fontSize: '12px', color: 'rgb(253,216,54)' }} />
-                <StarFilled style={{ fontSize: '12px', color: 'rgb(253,216,54)' }} />
-                <StarFilled style={{ fontSize: '12px', color: 'rgb(253,216,54)' }} />
+                <Rate style={{ fontSize: '15px', margin: '10px 0' }} allowHalf defaultValue={2.5} />
                 <div className={styles.productStatus}>
                   <div className={styles.item}>
                     <a className={styles.nameCate} href="#">New 100%</a>
@@ -168,19 +208,36 @@ export default function Detail() {
                   </div>
                 </div>
                 <div className={styles.configHolder}>
-                  <div className={styles.SelectConfig}>
+                  {data?.category_id == 3 ? ("") : (<div className={styles.SelectConfig}>
                     <span className={styles.name}>CPU: </span>
                     <ul>
                       <li className={styles.SelectedValue}>
                         <span>Intel Core i7 1360P</span>
                       </li>
                     </ul>
+                  </div>)}
+                  <div className={styles.SelectConfig}>
+                    <span className={styles.name}>Camara trước: </span>
+                    <ul>
+                      <li className={styles.SelectedValue}>
+                        <span>{data?.product_details[0]?.frontCamera}</span>
+                      </li>
+                    </ul>
                   </div>
+                  <div className={styles.SelectConfig}>
+                    <span className={styles.name}>Camara sau: </span>
+                    <ul>
+                      <li className={styles.SelectedValue}>
+                        <span>{data?.product_details[0]?.behindCamera}</span>
+                      </li>
+                    </ul>
+                  </div>
+
                   <div className={styles.SelectConfig}>
                     <span className={styles.name}>RAM: </span>
                     <ul>
                       <li className={styles.SelectedValue}>
-                        <span>RAM 16GB DDR5</span>
+                        <span>{data?.product_details[0]?.ram} GB</span>
                       </li>
                     </ul>
                   </div>
@@ -188,23 +245,33 @@ export default function Detail() {
                     <span className={styles.name}>Ổ cứng: </span>
                     <ul>
                       <li className={styles.SelectedValue}>
-                        <span>SSD 512GB NVMe</span>
+                        <span>{data?.product_details[0]?.drive}</span>
                       </li>
                     </ul>
                   </div>
-                  <div className={styles.SelectConfig}>
+
+
+                  {data?.category_id == 3 ? ("") : (<div className={styles.SelectConfig}>
                     <span className={styles.name}>Card đồ họa: </span>
                     <ul>
                       <li className={styles.SelectedValue}>
                         <span>Card Intel Iris Xe Graphics</span>
                       </li>
                     </ul>
-                  </div>
+                  </div>)}
                   <div className={styles.SelectConfig}>
                     <span className={styles.name}>Màn hình: </span>
                     <ul>
                       <li className={styles.SelectedValue}>
-                        <span>13.4 Inch Full HD+, Touch</span>
+                        <span>{data?.product_details[0]?.display}</span>
+                      </li>
+                    </ul>
+                  </div>
+                  <div className={styles.SelectConfig}>
+                    <span className={styles.name}>Pin: </span>
+                    <ul>
+                      <li className={styles.SelectedValue}>
+                        <span>5000 mAh</span>
                       </li>
                     </ul>
                   </div>
@@ -233,37 +300,12 @@ export default function Detail() {
                     góp <span className={styles.block}>Thủ tục đơn
                       giản - lãi suất
                       thấp</span></a>
-                  <a href="" className={styles.btnAdd}>Mua ngay
-                    <span className={styles.block}>Giao tận nơi hoặc nhận ở cửa hàng</span></a>
+                  <button onClick={handleAddItem} className={styles.btnAdd}>
+                    Mua ngay
+                    <span className={styles.block}>Giao tận nơi hoặc nhận ở cửa hàng</span></button>
                 </div>
               </div>
               <div className={styles.mainProductRight}>
-                <div className={styles.productStore}>
-                  <h3 className={styles.titleHome}> <HomeOutlined />
-                    Địa chỉ kho hàng</h3>
-                  <div style={{ display: 'block' }}>
-                    <div className={styles.contentFilterStore}>
-                      <select onChange="lay_danh_sach_cua_hang_theo_tinh(this.value)">
-                        <option value="0">Tỉnh/Thành</option>
-                        <option value="1">Hà Nội</option>
-                        <option value="2">TP.Hồ Chí Minh</option>
-                      </select>
-                    </div>
-
-                    <div className={styles.note}>Có <span style={{ fontWeight: '700', color: 'red' }}>1</span> cửa hàng có sẵn sản phẩm này</div>
-                    <div className={styles.contentStoreList}>
-                      <div className={styles.itemAddress}>
-                        <a className={styles.itemPhone} href="">
-                          <PhoneOutlined /> 0904583588
-                        </a>
-                        <a className={styles.itemMap} href="">
-                          <HomeOutlined /> 125 Trần Đại Nghĩa, Hai Bà Trưng, Hà Nội (showroom)
-                        </a>
-                      </div>
-                    </div>
-                    <a href="" className={styles.btnAddtoCart}>ADD TO CART</a>
-                  </div>
-                </div>
                 <div className={styles.productWarranty}>
                   <h3 className={styles.titleWarranty}>Thông tin bảo hành</h3>
                   <div className={styles.content}>
@@ -294,117 +336,19 @@ export default function Detail() {
             </Row>
           </div>
           <div style={{ marginTop: '10px', display: 'flex', flexDirection: 'column', background: '#fff', borderRadius: '1.3em' }}>
-            <div className={styles.combosetTitle}>Sản phẩm thường được mua kèm</div>
-            <div className={styles.combosetContent}>
-              <div className={styles.combosetInfo}>
-                Tổng tiền:
-                <div className={styles.passPrice}>25.990.000đ</div>
-                <div className={styles.Oldprice}>25.990.000đ</div>
-                <a href="" className={styles.Buy_combo}>Mua thêm <span className={styles.Selected}>0</span> sản phẩm</a>
-              </div>
-              <div className={styles.cProItem}>
-                <div className={styles.cProImg}>
-                  <img src="	https://laptop88.vn/media/product/250_9008_loq_15iax9i___2__.jpg" alt="[New 100%] Laptop Lenovo LOQ 15IAX9I 83FQ002LUS - Intel Core i5 12450HX | ARC A530M | 144Hz 100%sRGB"></img>
-                </div>
-                <label className={styles.cProName}>[New 100%] Laptop Lenovo LOQ 15IAX9I 83FQ002LUS - Intel Core i5 12450HX | ARC A530M | 144Hz 100%sRGB</label>
-                <span className={styles.cProPrice}>25.990.000Đ</span>
-
-                <span className={styles.cProOldprice}>25.990.000đ</span>
-
-                <span className={styles.cProDiscount}>(-38%)</span>
-
-              </div>
-              <div className={styles.combosetProductList}>
-                <div className={styles.combosetContainer}>
-                  <div className={styles.cProItem}>
-                    <a className={styles.cProImg} href="/new-100-tai-nghe-jbl-tune-510bt-wireless-bluetooth-on-ear-headphones-1.html" target="_blank"><img src="	https://laptop88.vn/media/product/250_8596_doc_2023_11_09_15_15_40.png"></img>
-                    </a>
-                    <label className={styles.cProName}>
-                      <input type="checkbox" class="js-price js-check-select js-combo-set js-combo-set-select-product" data-price="890000" data-unprice="890000" data-idpk="8596" data-set-id="68" data-group-key="tai-nghe-2023" data-product-id="8596"></input>
-                      <span>[New Outlet] Tai nghe JBL Tune 510BT Wireless Bluetooth On-Ear Headphones</span>
-                    </label>
-                    <span className={styles.cProPrice}>890.000đ</span>
-                    <span className={styles.cProOldPrice}>
-                      1.990.000đ
-                      <span className={styles.cProDiscount}>(-56%)</span>
-                    </span>
-                    <span className={styles.cProDiscount}>(-0%)</span>
-                    <a className={styles.cProChange}>CHỌN SẢN PHẨM KHÁC</a>
-                    <a href="" className={styles.cssCheckbox}></a>
-                  </div>
-                  <div className={styles.cProItem}>
-                    <a className={styles.cProImg} href="/new-100-tai-nghe-jbl-tune-510bt-wireless-bluetooth-on-ear-headphones-1.html" target="_blank"><img src="https://laptop88.vn/media/product/250_8596_doc_2023_11_09_15_15_40.png" alt="[New Outlet] Tai nghe JBL Tune 510BT Wireless Bluetooth On-Ear Headphones"></img>
-                    </a>
-                    <label className={styles.cProName}>
-                      <input type="checkbox" class="js-price js-check-select js-combo-set js-combo-set-select-product" data-price="890000" data-unprice="890000" data-idpk="8596" data-set-id="68" data-group-key="tai-nghe-2023" data-product-id="8596"></input>
-                      <span>[New Outlet] Tai nghe JBL Tune 510BT Wireless Bluetooth On-Ear Headphones</span>
-                    </label>
-                    <span className={styles.cProPrice}>890.000đ</span>
-                    <span className={styles.cProOldPrice}>
-                      1.990.000đ
-                      <span className={styles.cProDiscount}>(-56%)</span>
-                    </span>
-                    <span className={styles.cProDiscount}>(-0%)</span>
-                    <a className={styles.cProChange}>CHỌN SẢN PHẨM KHÁC</a>
-                    <a href="" className={styles.cssCheckbox}></a>
-                  </div>
-                  <div className={styles.cProItem}>
-                    <a className={styles.cProImg} href="/new-100-tai-nghe-jbl-tune-510bt-wireless-bluetooth-on-ear-headphones-1.html" target="_blank"><img src="https://laptop88.vn/media/product/250_8596_doc_2023_11_09_15_15_40.png" alt="[New Outlet] Tai nghe JBL Tune 510BT Wireless Bluetooth On-Ear Headphones"></img>
-                    </a>
-                    <label className={styles.cProName}>
-                      <input type="checkbox" class="js-price js-check-select js-combo-set js-combo-set-select-product" data-price="890000" data-unprice="890000" data-idpk="8596" data-set-id="68" data-group-key="tai-nghe-2023" data-product-id="8596"></input>
-                      <span>[New Outlet] Tai nghe JBL Tune 510BT Wireless Bluetooth On-Ear Headphones</span>
-                    </label>
-                    <span className={styles.cProPrice}>890.000đ</span>
-                    <span className={styles.cProOldPrice}>
-                      1.990.000đ
-                      <span className={styles.cProDiscount}>(-56%)</span>
-                    </span>
-                    <span className={styles.cProDiscount}>(-0%)</span>
-                    <a className={styles.cProChange}>CHỌN SẢN PHẨM KHÁC</a>
-                    <a href="" className={styles.cssCheckbox}></a>
-                  </div>
-                  <div className={styles.cProItem}>
-                    <a className={styles.cProImg} href="/new-100-tai-nghe-jbl-tune-510bt-wireless-bluetooth-on-ear-headphones-1.html" target="_blank"><img src="https://laptop88.vn/media/product/250_8596_doc_2023_11_09_15_15_40.png" alt="[New Outlet] Tai nghe JBL Tune 510BT Wireless Bluetooth On-Ear Headphones"></img>
-                    </a>
-                    <label className={styles.cProName}>
-                      <input type="checkbox" class="js-price js-check-select js-combo-set js-combo-set-select-product" data-price="890000" data-unprice="890000" data-idpk="8596" data-set-id="68" data-group-key="tai-nghe-2023" data-product-id="8596"></input>
-                      <span>[New Outlet] Tai nghe JBL Tune 510BT Wireless Bluetooth On-Ear Headphones</span>
-                    </label>
-                    <span className={styles.cProPrice}>890.000đ</span>
-                    <span className={styles.cProOldPrice}>
-                      1.990.000đ
-                      <span className={styles.cProDiscount}>(-56%)</span>
-                    </span>
-                    <span className={styles.cProDiscount}>(-0%)</span>
-                    <a className={styles.cProChange}>CHỌN SẢN PHẨM KHÁC</a>
-                    <a href="" className={styles.cssCheckbox}></a>
-                  </div>
-                  <div className={styles.cProItem}>
-                    <a className={styles.cProImg} href="/new-100-tai-nghe-jbl-tune-510bt-wireless-bluetooth-on-ear-headphones-1.html" target="_blank"><img src="https://laptop88.vn/media/product/250_8596_doc_2023_11_09_15_15_40.png" alt="[New Outlet] Tai nghe JBL Tune 510BT Wireless Bluetooth On-Ear Headphones"></img>
-                    </a>
-                    <label className={styles.cProName}>
-                      <input type="checkbox" class="js-price js-check-select js-combo-set js-combo-set-select-product" data-price="890000" data-unprice="890000" data-idpk="8596" data-set-id="68" data-group-key="tai-nghe-2023" data-product-id="8596"></input>
-                      <span>[New Outlet] Tai nghe JBL Tune 510BT Wireless Bluetooth On-Ear Headphones</span>
-                    </label>
-                    <span className={styles.cProPrice}>890.000đ</span>
-                    <span className={styles.cProOldPrice}>
-                      1.990.000đ
-                      <span className={styles.cProDiscount}>(-56%)</span>
-                    </span>
-                    <span className={styles.cProDiscount}>(-0%)</span>
-                    <a className={styles.cProChange}>CHỌN SẢN PHẨM KHÁC</a>
-                    <a href="" className={styles.cssCheckbox}></a>
-                  </div>
-                </div>
-              </div>
+            <div className={styles.combosetTitle}>Một số sản phẩm khác</div>
+            {/* <div className={styles.combosetContent}>
               <div className={styles.clear}></div>
-            </div>
+            </div> */}
+            <Famous />
           </div>
+
+
           <div className={styles.contentDescDetail}>
             <div className={styles.contentDesc}>
               <h3 className={styles.titleDesc}>
                 <span>Đặc điểm nổi bật</span>
+                <p className={styles.descMain}>{data.description}</p>
               </h3>
             </div>
             <Col span={8}>
