@@ -192,6 +192,7 @@
 }
 
 .offerDetail {
+    width: 450px;
     border       : 1px solid #ff9300;
     border-radius: 8px;
     margin-top   : 15px;
@@ -310,6 +311,7 @@
     text-align: center;
 }
 .btnAddCart {
+    
     margin-top: 20px;
     align-items: center;
     display: flex;
@@ -318,6 +320,7 @@
     /* margin-right: -10px; */
 }
 .btnAdd {
+    border: none !important;
     width: calc(100% / 2 - 10px);
     margin-right: 10px;
     background: linear-gradient(180deg, #ffba28 0%, #ff9401 79.17%);

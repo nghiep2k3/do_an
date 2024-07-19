@@ -15,6 +15,13 @@ const Admin = () => {
     const [previewImage, setPreviewImage] = useState('');
     const [fileList, setFileList] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [category, setCategory] = useState(0);
+
+    const handleCategoryChange = (value) => {
+        console.log(category);
+        setCategory(value);
+    };
+
 
     const getBase64 = (file) =>
         new Promise((resolve, reject) => {
@@ -39,18 +46,46 @@ const Admin = () => {
         formData.append('name', values.name);
         formData.append('price', values.price);
         formData.append('categoryId', values.categoryId);
+        formData.append('description', values.description);
         formData.append('sku', values.sku);
         formData.append('inventory', values.inventory);
+
+        if (category == 1) {
+            // phụ kiện
+            console.log(1111);
+        } if (category == 2) {
+            // laptop
+            formData.append('ram', values.ram);
+            formData.append('drive', values.drive);
+            formData.append('battery', values.battery);
+            formData.append('display', values.display);
+            formData.append('cpu', values.cpu);
+            formData.append('vga', values.vga);
+
+            console.log(2222);
+        } if (category == 3) {
+            // điện thoại
+            formData.append('ram', values.ram);
+            formData.append('behindCamera', values.behindCamera);
+            formData.append('frontCamera', values.frontCamera);
+            formData.append('drive', values.drive);
+            formData.append('battery', values.battery);
+            formData.append('display', values.display);
+            formData.append('cpu', values.cpu);
+            console.log(3333);
+        }
+        
         if (fileList.length > 0) {
             formData.append('files', fileList[0].originFileObj);
         }
 
-        // for (let pair of formData.entries()) {
-        //     console.log(pair[0]+ ', ' + pair[1]); 
-        //   }
+        console.log("ok");
+        for (let pair of formData.entries()) {
+            console.log(pair[0]+ ', ' + pair[1]); 
+          }
 
         try {
-            const response = await axios.post('https://trandai03.online/api/products', formData, {
+            const response = await axios.post('https://api.trandai03.online/api/products', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -313,15 +348,69 @@ const Admin = () => {
                                                 <InputNumber min={0} style={{ width: '100%' }} />
                                             </Form.Item>
                                             <Form.Item name="categoryId" label="Category" rules={[{ required: true, message: 'Please select a category!' }]}>
-                                                <Select placeholder="Select a category">
-                                                    <Option value="1">Category 1</Option>
+                                                <Select placeholder="Select a category" onChange={handleCategoryChange}>
+                                                    <Option value="1">Phụ kiện</Option>
                                                     <Option value="2">Laptop</Option>
                                                     <Option value="3">Điện thoại</Option>
                                                 </Select>
                                             </Form.Item>
+                                            <Form.Item name="description" label="Description" rules={[{ required: true, message: 'Please input the description!' }]}>
+                                                <Input />
+                                            </Form.Item>
                                             <Form.Item name="sku" label="SKU" rules={[{ required: true, message: 'Please input the SKU!' }]}>
                                                 <Input />
                                             </Form.Item>
+
+                                            {category != 1 && (
+                                                <Form.Item name="ram" label="Ram" rules={[{ required: true, message: 'Please input the SKU!' }]}>
+                                                    <Input />
+                                                </Form.Item>
+                                            )}
+
+                                            {category == 3 && (
+                                                <Form.Item name="behindCamera" label="Camara sau" rules={[{ required: true, message: 'Please input the SKU!' }]}>
+                                                    <Input />
+                                                </Form.Item>
+                                            )}
+
+                                            {category == 3 && (
+                                                <Form.Item name="frontCamera" label="Camara trước" rules={[{ required: true, message: 'Please input the SKU!' }]}>
+                                                    <Input />
+                                                </Form.Item>
+                                            )}
+
+                                            {category != 1 && (
+                                                <Form.Item name="drive" label="Bộ nhớ" rules={[{ required: true, message: 'Please input the SKU!' }]}>
+                                                    <Input />
+                                                </Form.Item>
+                                            )}
+
+                                            {category != 1 && (
+                                                <Form.Item name="battery" label="Pin" rules={[{ required: true, message: 'Please input the SKU!' }]}>
+                                                    <Input />
+                                                </Form.Item>
+                                            )}
+                                            {category != 1 && (
+                                                <Form.Item name="display" label="Màn hình" rules={[{ required: true, message: 'Please input the SKU!' }]}>
+                                                    <Input />
+                                                </Form.Item>
+                                            )}
+                                            {category != 1 && (
+                                                <Form.Item name="cpu" label="Cpu" rules={[{ required: true, message: 'Please input the SKU!' }]}>
+                                                    <Input />
+                                                </Form.Item>
+                                            )}
+
+                                            {/* Form laptop */}
+                                            {category == 2 && (
+                                                <Form.Item name="vga" label="Card đồ họa" rules={[{ required: true, message: 'Please input the Laptop!' }]}>
+                                                    <Input />
+                                                </Form.Item>
+                                            )}
+
+
+
+
                                             <Form.Item name="inventory" label="Inventory" rules={[{ required: true, message: 'Please input the inventory!' }]}>
                                                 <InputNumber min={0} style={{ width: '100%' }} />
                                             </Form.Item>

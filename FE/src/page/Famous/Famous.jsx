@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import Slider from 'react-slick';
-import styles from './CatSlider.module.css';
+import styles from './Famous.module.css';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Card from '../Card/Card';
+import Card from '../../components/Card/Card';
 import { Skeleton } from 'antd';
 import axios from 'axios';
-import ProductCard from '../ProductCardPhone/ProductCardPhone';
 
-export default function CatSlider() {
+export default function Famous() {
     const [data, setData] = useState(null);
 
     useEffect(() => {
@@ -26,6 +25,7 @@ export default function CatSlider() {
 
     const settings = {
         dots: false,
+        arrows: false,
         infinite: true,
         speed: 500,
         slidesToShow: 4,
@@ -74,7 +74,7 @@ export default function CatSlider() {
                     {displayedData.map((x, index) => {
                         return (
                             <div className={`${styles.item} animate__animated animate__fadeInDownBig`} key={index}>
-                                <ProductCard product={x} />
+                                <Card product={x} />
                             </div>
                         )
                     })}

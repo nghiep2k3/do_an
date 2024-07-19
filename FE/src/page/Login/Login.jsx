@@ -37,8 +37,11 @@ function Login() {
 
         console.log(2222, formData);
         try {
-            const response = await axios.post('https://trandai03.online/api/auth/signup', formData);
+            const response = await axios.post('https://api.trandai03.online/api/auth/signup', formData);
             console.log(22222, response.data);
+            const username = email.split('@')[0];
+            localStorage.setItem('user', username);
+            localStorage.setItem('role', "user");
             navigate("/");
         } catch (error) {
             if (error.response) {
@@ -60,10 +63,12 @@ function Login() {
         };
 
         try {
-            const response = await axios.post('https://trandai03.online/api/auth/signin', loginData);
-            console.log(22222, response.data);
+            const response = await axios.post('https://api.trandai03.online/api/auth/signin', loginData);
+            console.log(22222, response.data.data.roles);
+            const temp = response.data.data.roles;
             const username = email.split('@')[0];
             localStorage.setItem('user', username);
+            localStorage.setItem('role', temp);
             navigate("/");
         } catch (error) {
             if (error.response) {
@@ -71,7 +76,6 @@ function Login() {
                 setError(error.response.data);
                 console.error('Có lỗi xảy ra:', error.response.data);
             } else {
-                // Lỗi không liên quan đến máy chủ (VD: không thể kết nối)
                 setError('Không thể kết nối tới máy chủ');
                 console.error('Có lỗi xảy ra:', error.message);
             }
@@ -101,7 +105,8 @@ function Login() {
             cookies.set("auth-token-nghiep", result.user.refreshToken);
             console.log(result.user.displayName);
             localStorage.setItem('user', result.user.displayName);
-            navigate('/xiaomi');
+            localStorage.setItem('role', "user");
+            navigate('/');
         } catch (err) {
             console.error(err);
         }

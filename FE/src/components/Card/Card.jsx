@@ -40,11 +40,11 @@ export default function Card({ product }) {
   return (
     <div className={`${styles.Container_Cart} mt-2 shadow rounded py-3 px-3 rounded border border-2 border-secondary d-flex align-items-center justify-content-center`}>
       <div>
-        <Link to={`/details/${idItem}`}>
+        <a href={`/details/${idItem}`}>
           <div className={styles.Image_Item}>
             <img className='w-100' src={image} alt={name} />
           </div>
-        </Link>
+        </a>
 
         <div className={styles.Content}>
           <div className={`${styles.itemContent} Content_Item text-center fw-bold mt-3`}>{name}</div>

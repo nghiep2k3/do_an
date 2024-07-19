@@ -52,7 +52,7 @@ code {
   padding-right: 10px;
 }
 .ant-image {
-  width: 100%;
+  width: 500px;
 } 
 .ant-image-mask {
   width: 400px;
@@ -60,4 +60,8 @@ code {
 }
 .slick-slide img {
   width: 200px;
+}
+
+.slick-cloned{
+  /* max-width: 300px !important; */
 }
