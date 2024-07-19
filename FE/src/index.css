@@ -61,3 +61,7 @@ code {
 .slick-slide img {
   width: 200px;
 }
+
+.slick-cloned{
+  /* max-width: 300px !important; */
+}

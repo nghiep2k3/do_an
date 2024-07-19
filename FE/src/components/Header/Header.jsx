@@ -85,7 +85,7 @@ export default function Header() {
   const handle = (term) => {
   };
   const handleScroll = () => {
-    if (window.scrollY > 350) {
+    if (window.scrollY > 300) {
       setSticky(true);
     } else {
       if (window.scrollY === 0) {
@@ -144,7 +144,7 @@ export default function Header() {
   return (
     <div>
       <div className={`${styles.First_Navbar} animate__animated animate__fadeInDown`}>
-        {role == "admin" ? (<Link to='/admin'> <div className={styles.Item}><UserOutlined />Quản lý</div></Link>) : ""}
+        {role == "ADMIN" ? (<Link to='/admin'> <div className={styles.Item}><UserOutlined />Quản lý</div></Link>) : ""}
         <Link to='/profile'>
           <div className={styles.Item}><UserOutlined />Tài khoản của tôi</div>
         </Link>

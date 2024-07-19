@@ -6,6 +6,7 @@ import "slick-carousel/slick/slick-theme.css";
 import Card from '../Card/Card';
 import { Skeleton } from 'antd';
 import axios from 'axios';
+import ProductCard from '../ProductCardPhone/ProductCardPhone';
 
 export default function CatSlider() {
     const [data, setData] = useState(null);
@@ -73,7 +74,7 @@ export default function CatSlider() {
                     {displayedData.map((x, index) => {
                         return (
                             <div className={`${styles.item} animate__animated animate__fadeInDownBig`} key={index}>
-                                <Card product={x} />
+                                <ProductCard product={x} />
                             </div>
                         )
                     })}

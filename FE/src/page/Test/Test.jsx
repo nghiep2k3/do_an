@@ -1,154 +1,49 @@
-import React, { useState } from 'react';
-import { PlusOutlined } from '@ant-design/icons';
-import { Modal, Image, Upload, Button, Form, Input, InputNumber, Select, message } from 'antd';
-import axios from 'axios';
-
-const { Option } = Select;
+import React from 'react';
+import ReactDOM from 'react-dom';
+import ProductCard from './ProductCard';
+import './styles.css';
+const products = [
+  {
+    id: 1,
+    image: 'https://synnexfpt.com/wp-content/uploads/2022/06/iphone-13-pro-max-xanh-1.jpg',
+    title: 'Sản phẩm mang phong cách độc đáo thiết kế mới lạ mới người dùng',
+    oldPrice: '500,000',
+    newPrice: '400,000'
+  },
+  {
+    id: 2,
+    image: 'https://vnn-imgs-f.vgcloud.vn/2019/09/11/05/hinh-anh-va-trai-nghiem-dau-tien-ve-iphone-11-11-pro-va-pro-max-1.jpg',
+    title: 'Sản phẩm B',
+    oldPrice: '600,000',
+    newPrice: '450,000'
+  },
+  {
+    id: 3,
+    image: 'https://images.baoangiang.com.vn/image/fckeditor/upload/2020/20200201/images/iphone_11.jpg',
+    title: 'Sản phẩm C',
+    oldPrice: '700,000',
+    newPrice: '500,000'
+  }
+];
 
 export default function Test() {
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState('');
-  const [fileList, setFileList] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-
-  const getBase64 = (file) =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
-
-  const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
-
-  const handlePreview = async (file) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
-    setPreviewImage(file.url || file.preview);
-    setPreviewOpen(true);
+  const handleAddToCart = (product) => {
+    console.log(`${product.title} đã được thêm vào giỏ hàng!`);
   };
-
-  const handleSubmit = async (values) => {
-    const formData = new FormData();
-    formData.append('name', values.name);
-    formData.append('price', values.price);
-    formData.append('categoryId', values.categoryId);
-    formData.append('sku', values.sku);
-    formData.append('inventory', values.inventory);
-    if (fileList.length > 0) {
-      formData.append('files', fileList[0].originFileObj);
-    }
-
-    // Kiểm tra dữ liệu trong formData
-    for (let pair of formData.entries()) {
-      console.log(pair[0]+ ', ' + pair[1]); 
-    }
-
-    try {
-      const response = await axios.post('https://api.trandai03.online/api/products', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      message.success('Product added successfully!');
-      setFileList([]);
-      setIsModalOpen(false);
-    } catch (error) {
-      message.error('Failed to add product.');
-    }
-  };
-
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
-  const uploadButton = (
-    <Button
-      icon={<PlusOutlined />}
-      style={{
-        border: '1px dashed #d9d9d9',
-        width: '104px',
-        height: '104px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
-      Upload
-    </Button>
-  );
 
   return (
-    <div>
-      <h1>Tải hình ảnh và thêm sản phẩm</h1>
-      <div>
-        <Button type="primary" onClick={showModal}>
-          Thêm sản phẩm
-        </Button>
-        <Modal
-          title="Thêm sản phẩm"
-          open={isModalOpen}
-          okText="Thêm"
-          onCancel={handleCancel}
-          footer={null} // Loại bỏ footer để không chặn onFinish
-        >
-          <Form layout="vertical" onFinish={handleSubmit}>
-            <Form.Item name="name" label="Product Name" rules={[{ required: true, message: 'Please input the product name!' }]}>
-              <Input />
-            </Form.Item>
-            <Form.Item name="price" label="Price" rules={[{ required: true, message: 'Please input the price!' }]}>
-              <InputNumber min={0} style={{ width: '100%' }} />
-            </Form.Item>
-            <Form.Item name="categoryId" label="Category" rules={[{ required: true, message: 'Please select a category!' }]}>
-              <Select placeholder="Select a category">
-                <Option value="1">Category 1</Option>
-                <Option value="2">Laptop</Option>
-                <Option value="3">Điện thoại</Option>
-              </Select>
-            </Form.Item>
-            <Form.Item name="sku" label="SKU" rules={[{ required: true, message: 'Please input the SKU!' }]}>
-              <Input />
-            </Form.Item>
-            <Form.Item name="inventory" label="Inventory" rules={[{ required: true, message: 'Please input the inventory!' }]}>
-              <InputNumber min={0} style={{ width: '100%' }} />
-            </Form.Item>
-            <Form.Item label="Upload Image">
-              <Upload
-                action={null}
-                listType="picture-card"
-                fileList={fileList}
-                onPreview={handlePreview}
-                onChange={handleChange}
-              >
-                {fileList.length >= 1 ? null : uploadButton}
-              </Upload>
-              {previewImage && (
-                <Image
-                  wrapperStyle={{
-                    display: 'none',
-                  }}
-                  preview={{
-                    visible: previewOpen,
-                    onVisibleChange: (visible) => setPreviewOpen(visible),
-                  }}
-                  src={previewImage}
-                />
-              )}
-            </Form.Item>
-            <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Thêm
-              </Button>
-            </Form.Item>
-          </Form>
-        </Modal>
-      </div>
+    <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '20px', marginTop: '50px' }}>
+      {products.map(product => (
+        <ProductCard
+          key={product.id}
+          image={product.image}
+          title={product.title}
+          oldPrice={product.oldPrice}
+          newPrice={product.newPrice}
+          onAddToCart={() => handleAddToCart(product)}
+        />
+      ))}
     </div>
   );
-}
+};
+
