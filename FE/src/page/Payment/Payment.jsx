@@ -89,9 +89,9 @@ const Payment = () => {
                 quantity: cartItem ? cartItem.quantity : 0
             };
         });
-        
+
         console.log(55555555555, combinedItems);
-        
+
 
         const data = {
             ...values,
