@@ -49,6 +49,7 @@ const Admin = () => {
         formData.append('description', values.description);
         formData.append('sku', values.sku);
         formData.append('inventory', values.inventory);
+        // formData.append('discount', values.discount);
 
         if (category == 1) {
             // phụ kiện
@@ -74,15 +75,15 @@ const Admin = () => {
             formData.append('cpu', values.cpu);
             console.log(3333);
         }
-        
+
         if (fileList.length > 0) {
             formData.append('files', fileList[0].originFileObj);
         }
 
         console.log("ok");
         for (let pair of formData.entries()) {
-            console.log(pair[0]+ ', ' + pair[1]); 
-          }
+            console.log(pair[0] + ', ' + pair[1]);
+        }
 
         try {
             const response = await axios.post('https://api.trandai03.online/api/products', formData, {
@@ -408,12 +409,13 @@ const Admin = () => {
                                                 </Form.Item>
                                             )}
 
-
-
-
-                                            <Form.Item name="inventory" label="Inventory" rules={[{ required: true, message: 'Please input the inventory!' }]}>
-                                                <InputNumber min={0} style={{ width: '100%' }} />
+                                            <Form.Item name="inventory" label="Kho" rules={[{ required: true, message: 'Please input the Laptop!' }]}>
+                                                <Input />
                                             </Form.Item>
+
+                                            {/* <Form.Item name="discount" label="Discount" rules={[{ required: true, message: 'Please input the discount!' }]}>
+                                                <InputNumber min={0} style={{ width: '100%' }} />
+                                            </Form.Item> */}
                                             <Form.Item label="Upload Image">
                                                 <Upload
                                                     action={null}

@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, Button, Typography, message } from 'antd';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { v4 as uuidv4 } from 'uuid';
 import { useCart } from 'react-use-cart';
 import { database } from "../../firebase";
 import { getDatabase, ref, child, get, set } from "firebase/database";
+import { useNavigate } from 'react-router-dom';
 
 const { Title, Text } = Typography;
 
@@ -13,7 +14,14 @@ const formatPrice = (price) => {
 };
 const ProductCard = ({ product }) => {
     const id = uuidv4();
-    const userData = localStorage.getItem('user');
+    const navigate = useNavigate();
+    const [userData, setUserData] = useState(null);
+    useEffect(() => {
+        const storedUserData = localStorage.getItem('user');
+        if (storedUserData) {
+            setUserData(storedUserData);
+        }
+    }, []);
     const { addItem } = useCart();
     const idItem = product?.id;
     const image = product?.product_images?.[0].image_url || 'chưa có data';
@@ -24,6 +32,11 @@ const ProductCard = ({ product }) => {
     const newPrice = oldPrice - (oldPrice * discount / 100);
 
     const handleAddItem = async () => {
+        if (!userData) {
+            message.warning("Chưa đăng nhập nhau mà đòi thêm");
+            navigate("/login");
+            return;
+          }
         // console.log("product", product);
         const save_cart = product;
         // xử lý trên firebase
