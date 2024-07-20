@@ -5,6 +5,7 @@ import PieChart from '../../components/PieChart/PieChart';
 import { Tag, Space, Modal, Image, Upload, Button, Form, Input, InputNumber, Select, message, Table } from 'antd';
 import axios from 'axios';
 import Mystore from '../Mystore/Mystore';
+import Dashboard from '../Dashboard/Dashboard';
 
 const { Option } = Select;
 
@@ -217,109 +218,7 @@ const Admin = () => {
                 </nav>
                 <main style={{ overflow: "visible" }}>
                     {activeSection === 'Dashboard' && (
-                        <div>
-                            <div className={styles.headTitle}>
-                                <div className={styles.left}>
-                                    <h1>Dashboard</h1>
-                                    <ul className={styles.breadcrumb}>
-                                        <li>
-                                            <a href="#">Dashboard</a>
-                                        </li>
-                                        <li><RightOutlined /></li>
-                                        <li>
-                                            <a className={styles.active} href="#">Home</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <a href="#" className={styles.btnDownload}>
-                                    <DownloadOutlined />
-                                    <span className={styles.text}>Download PDF</span>
-                                </a>
-                            </div>
-                            <ul className={styles.boxInfo}>
-                                <li>
-                                    <CheckSquareOutlined />
-                                    <span className={styles.text}>
-                                        <h3>1020</h3>
-                                        <p>Đơn đặt hàng</p>
-                                    </span>
-                                </li>
-                                <li>
-                                    <UsergroupDeleteOutlined />
-                                    <span className={styles.text}>
-                                        <h3>2834</h3>
-                                        <p>Khách hàng</p>
-                                    </span>
-                                </li>
-                                <li>
-                                    <EuroCircleOutlined />
-                                    <span className={styles.text}>
-                                        <h3>$2543</h3>
-                                        <p>Tổng doanh thu</p>
-                                    </span>
-                                </li>
-                            </ul>
-                            <div className={styles.tableData}>
-                                <div className={styles.order}>
-                                    <div className={styles.head}>
-                                        <h3>Khách hàng thường xuyên</h3>
-                                        <SearchOutlined />
-                                        <FilterOutlined />
-                                    </div>
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>Tên</th>
-                                                <th>Ngày đặt hàng</th>
-                                                <th>Trạng thái</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgZ0m-9V9M6IUnPK1pQiAy0okaK5_bPh0HpA&s" />
-                                                    <p>John Doe</p>
-                                                </td>
-                                                <td>01-01-2024</td>
-                                                <td><span style={{ color: '#000' }} className={styles.status}>Completed</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgZ0m-9V9M6IUnPK1pQiAy0okaK5_bPh0HpA&s" />
-                                                    <p>John Doe</p>
-                                                </td>
-                                                <td>01-01-2024</td>
-                                                <td><span style={{ color: '#000' }} className={styles.status}>Pending</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgZ0m-9V9M6IUnPK1pQiAy0okaK5_bPh0HpA&s" />
-                                                    <p>John Doe</p>
-                                                </td>
-                                                <td>01-01-2024</td>
-                                                <td><span style={{ color: '#000' }} className={styles.status}>Process</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgZ0m-9V9M6IUnPK1pQiAy0okaK5_bPh0HpA&s" />
-                                                    <p>John Doe</p>
-                                                </td>
-                                                <td>01-01-2024</td>
-                                                <td><span style={{ color: '#000' }} className={styles.status}>Pending</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgZ0m-9V9M6IUnPK1pQiAy0okaK5_bPh0HpA&s" />
-                                                    <p>John Doe</p>
-                                                </td>
-                                                <td>01-01-2024</td>
-                                                <td><span style={{ color: '#000' }} className={styles.status}>Completed</span></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
+                        <Dashboard/>
                     )}
                     {activeSection === 'MyStore' && (
                         <div>

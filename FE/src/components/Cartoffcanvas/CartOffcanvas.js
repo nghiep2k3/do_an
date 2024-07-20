@@ -211,7 +211,7 @@ const CartOffcanvas = () => {
           
           <div className="d-flex justify-content-between pb-2 px-2">
             <a
-              href="/payments"
+              href="/myitem"
               className="btn btn-secondary"
               tabIndex="-1"
               role="button"

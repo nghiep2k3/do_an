@@ -21,6 +21,7 @@ import Payment from "./page/Payment/Payment";
 import Laptop from "./page/Laptop/Laptop";
 import Phone from "./page/Phone/Phone";
 import Pk from "./page/Pk/Pk";
+import MyItem from "./page/MyItem/MyItem";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -34,6 +35,7 @@ root.render(
             <Route path="details/:id" element={<Detail />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/payments" element={<Payment />} />
+            <Route path="/myitem" element={<Profile />} />
             <Route path="/laptop" element={<Laptop />} />
             <Route path="/phone" element={<Phone />} />
             <Route path="/accessories" element={<Pk />} />

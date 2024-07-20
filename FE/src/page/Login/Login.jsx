@@ -64,21 +64,19 @@ function Login() {
 
         try {
             const response = await axios.post('https://api.trandai03.online/api/auth/signin', loginData);
-            console.log(22222, response.data.data.roles);
-            const temp = response.data.data.roles;
             const username = email.split('@')[0];
             localStorage.setItem('user', username);
-            localStorage.setItem('role', temp);
+            localStorage.setItem('role', response.data.data.roles);
             localStorage.setItem('userId', response.data.data.id);
             navigate("/");
         } catch (error) {
-            if (error.response) {
+            if (error) {
                 // Lỗi nhận từ phía máy chủ
-                setError(error.response.data);
-                console.error('Có lỗi xảy ra:', error.response.data);
+                setError("Lỗi tài khoản");
+                console.error('Có lỗi xảy ra:');
             } else {
                 setError('Không thể kết nối tới máy chủ');
-                console.error('Có lỗi xảy ra:', error.message);
+                console.error('Có lỗi xảy ra:');
             }
         }
     };
