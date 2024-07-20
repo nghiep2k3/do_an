@@ -218,7 +218,7 @@ export default function Header() {
               {showSubNav.laptop && (
                 <div className={styles.sub_nav}>
                   <div className={styles.sub_nav_item}><Link to='/macbook'>MacBook</Link></div>
-                  <div className={styles.sub_nav_item}><Link to='/dell'>Dell</Link></div>
+                  <div className={styles.sub_nav_item}><Link to='/ldell'>Dell</Link></div>
                   <div className={styles.sub_nav_item}><Link to='/hp'>HP</Link></div>
                 </div>
               )}
