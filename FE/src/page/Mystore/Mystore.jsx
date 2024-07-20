@@ -4,6 +4,9 @@ import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import axios from 'axios';
 
 const { confirm } = Modal;
+const formatPrice = (price) => {
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' đ';
+  };
 
 export default function Mystore() {
     const [items, setItems] = useState([]);
@@ -32,6 +35,7 @@ export default function Mystore() {
             dataIndex: 'price',
             key: 'price',
             align: 'center',
+            render: (x) => <span>{formatPrice(x)}</span>
         },
         {
             title: 'Hãng',
@@ -189,7 +193,7 @@ export default function Mystore() {
             />
             <Modal 
                 title="Chỉnh sửa sản phẩm" 
-                visible={isModalVisible} 
+                open={isModalVisible} 
                 onOk={handleOk} 
                 onCancel={handleCancel}
             >

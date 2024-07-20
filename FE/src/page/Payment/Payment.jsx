@@ -108,6 +108,10 @@ const Payment = () => {
                 message.success("Đặt hàng thành công");
                 form.resetFields();
                 console.log('Order created:', response.data);
+
+
+                // Xóa trên firebase mới được
+                
             })
             .catch(error => {
                 console.error('There was an error creating the order!', error);
@@ -146,7 +150,7 @@ const Payment = () => {
                 </h5>
                 <div style={{ width: 530 }}>
                     {isEmpty ? (
-                        <p>Giỏ hàng đang trống</p>
+                        <p>Không còn mặt hàng nào</p>
                     ) : (
                         <ul className="list-group">
                             {items.map((item) => (
@@ -161,7 +165,9 @@ const Payment = () => {
                                             style={{ width: "50px", marginRight: "10px" }}
                                         />
                                         <div>
-                                            <div>{item.name}</div>
+                                            <div style={{ width: 300, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                                {item.name}
+                                            </div>
                                             <div>
                                                 {item.quantity} x {formatPrice(item.price)}
                                             </div>

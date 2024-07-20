@@ -4,11 +4,12 @@ import React, { useEffect, useState } from 'react';
 
 export default function MyItem() {
     const [dataItem, setDataItem] = useState([]);
+    const userData = localStorage.getItem('userId');
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("https://api.trandai03.online/api/orders/user/3");
+                const response = await axios.get(`https://api.trandai03.online/api/orders/user/${userData}`);
                 setDataItem(response.data.data);
                 console.log(response.data.data);
             } catch (error) {
@@ -19,7 +20,7 @@ export default function MyItem() {
         fetchData();
     }, []);
 
-    if (!dataItem.length) {
+    if (!dataItem) {
         return (
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '300px' }}>
                 Loading...
@@ -53,8 +54,8 @@ export default function MyItem() {
     const renderOrderItem = (order) => (
         <div key={order.id} style={{ borderBottom: '2px solid gray', padding: 15 }}>
             <div>
-                <p>Order ID: {order.id} - {order.fullname}</p>
-                <p>Total: {formatPrice(order.total_money)}</p>
+                <p><strong>Order ID: {order.id}</strong> - Tên: {order.fullname}</p>
+                <p><strong>Total:</strong> {formatPrice(order.total_money)}</p>
                 <p><strong>Trạng thái:</strong> {order.status}</p>
             </div>
             {order.order_details.map(item => (

@@ -17,6 +17,7 @@ import { LogoutOutlined, SettingOutlined, ShoppingOutlined, WindowsOutlined } fr
 import { Divider, List, Typography } from 'antd';
 import MyItem from '../MyItem/MyItem';
 const Profile = () => {
+    const userData = localStorage.getItem('userId');
     const [activeSection, setActiveSection] = useState('Dashboard');
     const { RangePicker } = DatePicker;
     const [data2, setData] = useState(null);
@@ -31,11 +32,11 @@ const Profile = () => {
             sm: { span: 14 },
         },
     };
-    
+
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("https://api.trandai03.online/api/auth/profile/8");
+                const response = await axios.get(`https://api.trandai03.online/api/auth/profile/${userData}`);
                 setData(response.data.data);
                 console.log(333, response.data.data);
             } catch (error) {
@@ -45,14 +46,14 @@ const Profile = () => {
 
         fetchData();
     }, []);
-    if (!data2) {
+    if (!data2 && !userData) {
         return (
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '300px' }}>
                 Loading
             </div>
         )
     }
- 
+
     const handleMenuClick = (section) => {
         setActiveSection(section);
     };
@@ -64,6 +65,7 @@ const Profile = () => {
                 <a href="#" className={styles.brand}>
                     <span className={styles.text}>Tài khoản của</span>
                 </a>
+                {data2?.email}
 
                 <ul className={styles.sideMenu}>
                     <li className={activeSection === 'Dashboard' ? styles.active : ''}>
@@ -114,7 +116,7 @@ const Profile = () => {
                             name="TextArea"
                             rules={[{ required: true, message: 'Please input!' }]}
                         >
-                            <Input.TextArea defaultValue={data2?.email || ''} />
+                            <Input.TextArea defaultValue={data2?.email} />
                         </Form.Item>
 
                         <Form.Item
@@ -157,7 +159,7 @@ const Profile = () => {
                     </Form>
                 )}
                 {activeSection === 'MyStore' && (
-                    <MyItem/>
+                    <MyItem />
                 )}
             </main>
         </div >
