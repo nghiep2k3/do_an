@@ -45,6 +45,9 @@ export default function Laptop() {
         case '>=15000000':
           filtered = filtered.filter(product => product.price >= 15000000);
           break;
+        case 'all':
+          filtered = filtered.filter(product => product.price >= 0);
+          break;
         default:
           break;
       }
@@ -94,6 +97,7 @@ export default function Laptop() {
             style={{ width: '100%' }}
             onChange={handlePriceRangeChange}
           >
+            <Option value="all">Tất cả</Option>
             <Option value="<=15000000">Nhỏ hơn 15,000,000</Option>
             <Option value="13000000-15000000">Trong khoảng 13,000,000 - 15,000,000</Option>
             <Option value=">=15000000">Trên 15,000,000</Option>
