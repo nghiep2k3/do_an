@@ -6,6 +6,7 @@ import Footer from '../../components/Footer/Footer'
 import CardPhone from '../../components/ProductCardPhone/ProductCardPhone';
 import Banner from '../../components/Banner/Banner'
 import ContactBox from '../../components/ContactBox/ContactBox'
+import Laptop from '../../page/Laptop/Laptop'
 
 
 export default function Home() {
@@ -203,11 +204,12 @@ export default function Home() {
           <Banner></Banner>
           <CatSlider></CatSlider>
           <h1 style={{ textAlign: 'center' }}>Điện thoại ưu chuộng</h1>
-          {phoneProducts.map((product, index) => (
+          {/* {phoneProducts.map((product, index) => (
             <div key={index} className="col-md-3">
               <CardPhone product={product} />
             </div>
-          ))}
+          ))} */}
+          <Laptop></Laptop>
           <h1 style={{ textAlign: 'center', marginTop: 50 }}>Máy tính nổi bật</h1>
 
           {sampleProducts.map((product, index) => (

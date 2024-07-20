@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Space, Modal, message, Table, Form, Input, InputNumber } from 'antd';
+import { Space, Modal, message, Table, Form, Input, InputNumber, Row, Col } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import axios from 'axios';
 
@@ -7,8 +7,11 @@ const { confirm } = Modal;
 
 export default function Mystore() {
     const [items, setItems] = useState([]);
+    const [filteredItems, setFilteredItems] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [currentProduct, setCurrentProduct] = useState(null);
+    const [searchName, setSearchName] = useState('');
+    const [filterSku, setFilterSku] = useState('');
 
     const columns = [
         {
@@ -60,6 +63,7 @@ export default function Mystore() {
             try {
                 const response = await axios.get("https://api.trandai03.online/api/products/all");
                 setItems(response.data.data.products);
+                setFilteredItems(response.data.data.products);
             } catch (error) {
                 console.error('Có lỗi xảy ra:', error);
             }
@@ -67,6 +71,24 @@ export default function Mystore() {
 
         fetchData();
     }, []);
+
+    useEffect(() => {
+        const filterData = () => {
+            let filtered = items;
+
+            if (searchName) {
+                filtered = filtered.filter(item => item.name.toLowerCase().includes(searchName.toLowerCase()));
+            }
+
+            if (filterSku) {
+                filtered = filtered.filter(item => item.sku.toLowerCase().includes(filterSku.toLowerCase()));
+            }
+
+            setFilteredItems(filtered);
+        };
+
+        filterData();
+    }, [searchName, filterSku, items]);
 
     const handleEditProduct = (product) => {
         setCurrentProduct(product);
@@ -101,7 +123,6 @@ export default function Mystore() {
     };
 
     const handleOk = async () => {
-        console.log(currentProduct);
         const updatedProduct = {
             name: currentProduct.name,
             price: currentProduct.price,
@@ -112,7 +133,6 @@ export default function Mystore() {
             inventory: currentProduct.inventory,
         };
 
-        console.log(9999, updatedProduct);
         try {
             await axios.put(`https://api.trandai03.online/api/products/${currentProduct.id}`, updatedProduct);
             message.success('Cập nhật thành công');
@@ -145,27 +165,80 @@ export default function Mystore() {
 
     return (
         <div>
-            <Table columns={columns} pagination={{ pageSize: 5 }} dataSource={items} rowKey="id" />
-            <Modal title="Chỉnh sửa sản phẩm" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+            <Row gutter={16}>
+                <Col span={12}>
+                    <Input 
+                        placeholder="Search by name" 
+                        value={searchName} 
+                        onChange={(e) => setSearchName(e.target.value)} 
+                    />
+                </Col>
+                <Col span={12}>
+                    <Input 
+                        placeholder="Filter by SKU" 
+                        value={filterSku} 
+                        onChange={(e) => setFilterSku(e.target.value)} 
+                    />
+                </Col>
+            </Row>
+            <Table 
+                columns={columns} 
+                pagination={{ pageSize: 5 }} 
+                dataSource={filteredItems} 
+                rowKey="id" 
+            />
+            <Modal 
+                title="Chỉnh sửa sản phẩm" 
+                visible={isModalVisible} 
+                onOk={handleOk} 
+                onCancel={handleCancel}
+            >
                 {currentProduct && (
                     <Form layout="vertical">
                         <Form.Item label="Name">
-                            <Input name="name" value={currentProduct.name} onChange={handleInputChange} />
+                            <Input 
+                                name="name" 
+                                value={currentProduct.name} 
+                                onChange={handleInputChange} 
+                            />
                         </Form.Item>
                         <Form.Item label="Price">
-                            <InputNumber name="price" value={currentProduct.price} onChange={(value) => handleNumberChange('price', value)} style={{ width: '100%' }} />
+                            <InputNumber 
+                                name="price" 
+                                value={currentProduct.price} 
+                                onChange={(value) => handleNumberChange('price', value)} 
+                                style={{ width: '100%' }} 
+                            />
                         </Form.Item>
                         <Form.Item label="SKU">
-                            <Input name="sku" value={currentProduct.sku} onChange={handleInputChange} />
+                            <Input 
+                                name="sku" 
+                                value={currentProduct.sku} 
+                                onChange={handleInputChange} 
+                            />
                         </Form.Item>
                         <Form.Item label="Discount">
-                            <InputNumber name="discount" value={currentProduct.discount} onChange={(value) => handleNumberChange('discount', value)} style={{ width: '100%' }} />
+                            <InputNumber 
+                                name="discount" 
+                                value={currentProduct.discount} 
+                                onChange={(value) => handleNumberChange('discount', value)} 
+                                style={{ width: '100%' }} 
+                            />
                         </Form.Item>
                         <Form.Item label="Description">
-                            <Input.TextArea name="description" value={currentProduct.description} onChange={handleInputChange} />
+                            <Input.TextArea 
+                                name="description" 
+                                value={currentProduct.description} 
+                                onChange={handleInputChange} 
+                            />
                         </Form.Item>
                         <Form.Item label="Inventory">
-                            <InputNumber name="inventory" value={currentProduct.inventory} onChange={(value) => handleNumberChange('inventory', value)} style={{ width: '100%' }} />
+                            <InputNumber 
+                                name="inventory" 
+                                value={currentProduct.inventory} 
+                                onChange={(value) => handleNumberChange('inventory', value)} 
+                                style={{ width: '100%' }} 
+                            />
                         </Form.Item>
                     </Form>
                 )}

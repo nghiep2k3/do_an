@@ -28,6 +28,8 @@ import Samsung from "./page/Samsung/Samsung";
 import Xiaomi from "./page/Xiaomi/Xiaomi";
 import Mouse from "./page/Mouse/Mouse";
 import Dell from "./page/Dell/Dell";
+import MyItem from "./page/MyItem/MyItem";
+import Headphone from "./page/headphone/headphone";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -41,6 +43,7 @@ root.render(
             <Route path="details/:id" element={<Detail />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/payments" element={<Payment />} />
+            <Route path="/myitem" element={<Profile />} />
             <Route path="/laptop" element={<Laptop />} />
             <Route path="/phone" element={<Phone />} />
             <Route path="/accessories" element={<Pk />} />
@@ -49,8 +52,9 @@ root.render(
             <Route path="/hp" element={<HP />} />
             <Route path="/ip" element={<Iphone />} />
             <Route path="/samsung" element={<Samsung />} />
-            <Route path="xiaomi" element={<Xiaomi />} />
-            <Route path="mouse" element={<Mouse />} />
+            <Route path="/xiaomi" element={<Xiaomi />} />
+            <Route path="/mouse" element={<Mouse />} />
+            <Route path="/headphone" element={<Headphone />} />
           </Route>
           <Route path="/login" element={<Login />} />
           <Route path="/test" element={<Test />} />

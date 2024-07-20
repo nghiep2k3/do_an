@@ -15,6 +15,7 @@ import {
 } from 'antd';
 import { LogoutOutlined, SettingOutlined, ShoppingOutlined, WindowsOutlined } from '@ant-design/icons';
 import { Divider, List, Typography } from 'antd';
+import MyItem from '../MyItem/MyItem';
 const Profile = () => {
     const [activeSection, setActiveSection] = useState('Dashboard');
     const { RangePicker } = DatePicker;
@@ -30,16 +31,7 @@ const Profile = () => {
             sm: { span: 14 },
         },
     };
-    const onChange = (key) => {
-        console.log(key);
-    };
-    const data = [
-        'Đã nhận'
-    ];
-    const data3 = [
-        'Racing car sprays burning fuel into crowd.',
-    ];
-
+    
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -60,69 +52,7 @@ const Profile = () => {
             </div>
         )
     }
-    const items = [
-        {
-            key: '1',
-            label: 'Tất cả',
-            children: <List
-                size="small"
-                bordered
-                dataSource={data}
-                renderItem={(item) => <List.Item>{item}</List.Item>}
-            />,
-        },
-        {
-            key: '2',
-            label: 'Chờ xác nhận',
-            children: <List
-                size="small"
-                bordered
-                dataSource={data3}
-                renderItem={(item) => <List.Item>{item}</List.Item>}
-            />,
-        },
-        {
-            key: '3',
-            label: 'Chờ lấy hàng',
-            children: <List
-                size="small"
-                bordered
-                dataSource={data}
-                renderItem={(item) => <List.Item>{item}</List.Item>}
-            />,
-        },
-        {
-            key: '4',
-            label: 'Đang giao',
-            children: <List
-                size="small"
-                bordered
-                dataSource={data}
-                renderItem={(item) => <List.Item>{item}</List.Item>}
-            />,
-        },
-        {
-            key: '5',
-            label: 'Đã giao',
-            children: <List
-                size="small"
-                bordered
-                dataSource={data}
-                renderItem={(item) => <List.Item>{item}</List.Item>}
-            />,
-        },
-        {
-            key: '6',
-            label: 'Đã hủy',
-            children: <List
-                size="small"
-                bordered
-                dataSource={data}
-                renderItem={(item) => <List.Item>{item}</List.Item>}
-            />,
-        },
-    ];
-
+ 
     const handleMenuClick = (section) => {
         setActiveSection(section);
     };
@@ -227,10 +157,7 @@ const Profile = () => {
                     </Form>
                 )}
                 {activeSection === 'MyStore' && (
-                    <div>
-                        <h2>Đơn hàng của tôi</h2>
-                        <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
-                    </div>
+                    <MyItem/>
                 )}
             </main>
         </div >
