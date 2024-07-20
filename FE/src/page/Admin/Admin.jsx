@@ -49,7 +49,7 @@ const Admin = () => {
         formData.append('description', values.description);
         formData.append('sku', values.sku);
         formData.append('inventory', values.inventory);
-        // formData.append('discount', values.discount);
+        formData.append('discount', values.discount);
 
         if (category == 1) {
             // phụ kiện
@@ -356,7 +356,7 @@ const Admin = () => {
                                                 </Select>
                                             </Form.Item>
                                             <Form.Item name="description" label="Description" rules={[{ required: true, message: 'Please input the description!' }]}>
-                                                <Input />
+                                                <Input.TextArea />
                                             </Form.Item>
                                             <Form.Item name="sku" label="SKU" rules={[{ required: true, message: 'Please input the SKU!' }]}>
                                                 <Input />
@@ -413,9 +413,9 @@ const Admin = () => {
                                                 <Input />
                                             </Form.Item>
 
-                                            {/* <Form.Item name="discount" label="Discount" rules={[{ required: true, message: 'Please input the discount!' }]}>
+                                            <Form.Item name="discount" label="Discount" rules={[{ required: true, message: 'Please input the discount!' }]}>
                                                 <InputNumber min={0} style={{ width: '100%' }} />
-                                            </Form.Item> */}
+                                            </Form.Item>
                                             <Form.Item label="Upload Image">
                                                 <Upload
                                                     action={null}

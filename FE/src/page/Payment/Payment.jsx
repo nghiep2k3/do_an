@@ -14,6 +14,7 @@ const Payment = () => {
     const [form] = Form.useForm();
     const [cartTotal, setCartTotal] = useState(0);
     const userData = localStorage.getItem("user");
+    const userDataId = localStorage.getItem("userId");
     const {
         isEmpty,
         items,
@@ -95,7 +96,7 @@ const Payment = () => {
 
         const data = {
             ...values,
-            user_id: 8,
+            user_id: userDataId,
             cart_items: combinedItems,
             shipping_date: moment().add(3, 'days').format('YYYY-MM-DD'), // Set shipping date to 3 days from today
         };

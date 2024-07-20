@@ -42,7 +42,7 @@ function Login() {
             const username = email.split('@')[0];
             localStorage.setItem('user', username);
             localStorage.setItem('role', "user");
-            navigate("/");
+            navigate("/login");
         } catch (error) {
             if (error.response) {
                 // Lỗi nhận từ phía máy chủ
@@ -69,6 +69,7 @@ function Login() {
             const username = email.split('@')[0];
             localStorage.setItem('user', username);
             localStorage.setItem('role', temp);
+            localStorage.setItem('userId', response.data.data.id);
             navigate("/");
         } catch (error) {
             if (error.response) {

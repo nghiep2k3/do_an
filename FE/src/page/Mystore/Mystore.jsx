@@ -19,9 +19,9 @@ export default function Mystore() {
             render: (text) => <a>{text}</a>,
         },
         {
-            title: 'Create Item',
-            dataIndex: 'created_at',
-            key: 'created_at',
+            title: 'Số lượng',
+            dataIndex: 'inventory',
+            key: 'inventory',
             align: 'center',
         },
         {
@@ -34,6 +34,12 @@ export default function Mystore() {
             title: 'Hãng',
             dataIndex: 'sku',
             key: 'sku',
+            align: 'center',
+        },
+        {
+            title: 'Create Item',
+            dataIndex: 'created_at',
+            key: 'created_at',
             align: 'center',
         },
         {

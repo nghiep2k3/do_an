@@ -34,11 +34,10 @@ const Profile = () => {
         console.log(key);
     };
     const data = [
+        'Đã nhận'
+    ];
+    const data3 = [
         'Racing car sprays burning fuel into crowd.',
-        'Japanese princess to wed commoner.',
-        'Australian walks 100km after outback crash.',
-        'Man charged over missing wedding girl.',
-        'Los Angeles battles huge wildfires.',
     ];
 
     useEffect(() => {
@@ -78,7 +77,7 @@ const Profile = () => {
             children: <List
                 size="small"
                 bordered
-                dataSource={data}
+                dataSource={data3}
                 renderItem={(item) => <List.Item>{item}</List.Item>}
             />,
         },
