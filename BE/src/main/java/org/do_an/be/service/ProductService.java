@@ -47,6 +47,7 @@ public class ProductService {
                 .sku(productDTO.getSku())
                 .inventory(productDTO.getInventory())
                 .category(existingCategory)
+                .discount(productDTO.getDiscount())
                 .build();
         return productRepository.save(newProduct);
     }
@@ -75,8 +76,8 @@ public class ProductService {
     @Transactional
     public Product updateProduct(
             Integer id,
-            ProductDTO productDTO,
-            ProductDetailDTO productDetailDTO
+            ProductDTO productDTO
+//            , ProductDetailDTO productDetailDTO
     )
             throws Exception {
         Product existingProduct = getProductById(id);
@@ -107,9 +108,12 @@ public class ProductService {
             if(productDTO.getInventory() >= 0) {
                 existingProduct.setInventory(productDTO.getInventory());
             }
-            if(productDetailDTO.getRam()!=null){
-                productDetailService.updateProductDetail(id,productDetailDTO);
+            if(productDTO.getDiscount() >= 0) {
+                existingProduct.setDiscount(productDTO.getDiscount());
             }
+//            if(productDetailDTO!=null){
+//                productDetailService.updateProductDetail(id,productDetailDTO);
+//            }
             return productRepository.save(existingProduct);
         }
         return null;

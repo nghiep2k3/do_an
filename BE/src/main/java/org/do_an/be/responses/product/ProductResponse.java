@@ -51,7 +51,7 @@ public class ProductResponse extends BaseResponse {
         ProductResponse productResponse = ProductResponse.builder()
                 .id(product.getId())
                 .name(product.getName())
-                .discount(product.getDiscountId())
+                .discount(product.getDiscount())
                 .price(product.getPrice())
                 .sku(product.getSku())
                 .inventory(product.getInventory())

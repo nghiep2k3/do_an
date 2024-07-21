@@ -43,11 +43,9 @@ public class User implements UserDetails {
 //    @JoinColumn(name = "role_id")
 //    private Role role;
 
-    @Column(name = "first_name")
-    private String firstName;
+    @Column(name = "full_name")
+    private String fullName;
 
-    @Column(name = "last_name")
-    private String lastName;
 
     @Column(name = "telephone")
     private String telephone;

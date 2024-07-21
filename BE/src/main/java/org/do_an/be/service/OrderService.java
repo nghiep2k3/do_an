@@ -70,6 +70,13 @@ public class OrderService {
             Product product = productRepository.findById(productId)
                     .orElseThrow(() -> new DataNotFoundException("Product not found with id: " + productId));
             // Đặt thông tin cho OrderDetail
+            if (product.getInventory() >= quantity) {
+                product.setInventory(product.getInventory() - quantity);
+                productRepository.save(product);
+
+            } else {
+                throw new RuntimeException("Không đủ số lượng " + product.getName() + " trong kho để đáp ứng đơn hàng.");
+            }
             orderDetail.setProduct(product);
             orderDetail.setNumberOfProducts(quantity);
             // Các trường khác của OrderDetail nếu cần
@@ -96,9 +103,9 @@ public class OrderService {
         log.error("order: {}", order);
 
         log.error("orderd: {}", orderDetails);
-        order.setOrderDetails(orderDetails);
+        //order.setOrderDetails(orderDetails);
         orderRepository.save(order);
-        //orderDetailRepository.saveAll(orderDetails);
+        orderDetailRepository.saveAll(orderDetails);
 
         return order;
     }
@@ -199,6 +206,12 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
+    public Order updateOrderStatus(Integer id, String status) throws DataNotFoundException{
+        Order order = orderRepository.findById(id).orElseThrow(() ->
+                new DataNotFoundException("Cannot find order with id: " + id));
+        order.setStatus(status);
+        return orderRepository.save(order);
+    }
     @Transactional
     public void deleteOrder(Integer orderId) {
         Order order = orderRepository.findById(orderId).orElse(null);
@@ -214,7 +227,10 @@ public class OrderService {
         return orders.stream().map(order -> OrderResponse.fromOrder(order)).toList();
     }
 
-
+    public List<OrderResponse> getAllOrders(Long userId) {
+        List<Order> orders = orderRepository.findAll();
+        return orders.stream().map(order -> OrderResponse.fromOrder(order)).toList();
+    }
     public Page<Order> getOrdersByKeyword(String keyword, Pageable pageable) {
         return orderRepository.findByKeyword(keyword, pageable);
     }

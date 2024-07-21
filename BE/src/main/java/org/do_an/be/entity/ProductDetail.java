@@ -48,4 +48,15 @@ public class ProductDetail {
     @Column(name = "drive", nullable = false)
     private String drive;
 
+    @Size(max = 255)
+    @Column(name = "battery", nullable = false)
+    private String battery;
+
+    @Size(max = 255)
+    @Column(name = "front_camera", nullable = false)
+    private String frontCamera;
+
+    @Size(max = 255)
+    @Column(name = "behind_camera", nullable = false)
+    private String behindCamera;
 }

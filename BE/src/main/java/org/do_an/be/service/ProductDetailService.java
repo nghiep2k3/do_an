@@ -33,6 +33,9 @@ public class ProductDetailService {
                 .ram(productDetailDTO.getRam())
                 .drive(productDetailDTO.getDrive())
                 .display(productDetailDTO.getDisplay())
+                .battery(productDetailDTO.getBattery())
+                .behindCamera(productDetailDTO.getBehindCamera())
+                .frontCamera(productDetailDTO.getFrontCamera())
                 .product(existingProduct)
                 .build();
         return productDetailRepository.save(newProductDetail);
@@ -56,6 +59,15 @@ public class ProductDetailService {
             }
             if (productDetailDTO.getDrive() != null) {
                 existingProductDetail.setDrive(productDetailDTO.getDrive());
+            }
+            if (productDetailDTO.getBattery() != null) {
+                existingProductDetail.setBattery(productDetailDTO.getBattery());
+            }
+            if (productDetailDTO.getBehindCamera() != null) {
+                existingProductDetail.setBehindCamera(productDetailDTO.getBehindCamera());
+            }
+            if (productDetailDTO.getFrontCamera() != null) {
+                existingProductDetail.setFrontCamera(productDetailDTO.getFrontCamera());
             }
 
             // Save updated product detail

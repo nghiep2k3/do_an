@@ -7,8 +7,9 @@ public class ProductDetailResponse extends BaseResponse {
     private String cpu;
     private String vga;
     private String display;
-
     private String drive;
-
+    private String battery;
+    private String frontCamera;
+    private String behindCamera;
 
 }

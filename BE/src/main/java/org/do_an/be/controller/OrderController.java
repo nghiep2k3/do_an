@@ -80,6 +80,7 @@ public class OrderController {
                 orderResponse
         ));
     }
+
     @GetMapping("/get-orders-by-keyword")
     public ResponseEntity<ResponseObject> getOrdersByKeyword(
             @RequestParam(defaultValue = "", required = false) String keyword,
@@ -116,4 +117,27 @@ public class OrderController {
         return ResponseEntity.ok(new ResponseObject("Update order successfully", HttpStatus.OK, order));
     }
 
+    @PutMapping("/status/{id}")
+
+    //PUT http://localhost:8088/api/v1/orders/2
+    //công việc của admin
+    public ResponseEntity<ResponseObject> updateOrderStatus(
+            @Valid @PathVariable Integer id,
+            @Valid @RequestParam String status) throws Exception {
+
+        Order order = orderService.updateOrderStatus(id,status);
+        return ResponseEntity.ok(new ResponseObject("Update order status successfully", HttpStatus.OK, order));
+    }
+
+    @DeleteMapping("/{id}")
+
+    //PUT http://localhost:8088/api/v1/orders/2
+    //công việc của admin
+    public ResponseEntity<ResponseObject> deleteOrder(
+            @Valid @PathVariable Integer id
+           ) throws Exception {
+
+        orderService.deleteOrder(id);
+        return ResponseEntity.ok(new ResponseObject("Delete order successfully", HttpStatus.OK,null));
+    }
 }

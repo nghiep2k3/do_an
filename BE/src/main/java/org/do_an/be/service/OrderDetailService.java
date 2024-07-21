@@ -37,7 +37,7 @@ public class OrderDetailService {
                 .numberOfProducts(orderDetailDTO.getNumberOfProducts())
                 .price(orderDetailDTO.getPrice())
                 .totalMoney(orderDetailDTO.getTotalMoney())
-                .color(orderDetailDTO.getColor())
+//                .color(orderDetailDTO.getColor())
                 .build();
         //lưu vào db
         return orderDetailRepository.save(orderDetail);
@@ -62,7 +62,7 @@ public class OrderDetailService {
         existingOrderDetail.setPrice(orderDetailDTO.getPrice());
         existingOrderDetail.setNumberOfProducts(orderDetailDTO.getNumberOfProducts());
         existingOrderDetail.setTotalMoney(orderDetailDTO.getTotalMoney());
-        existingOrderDetail.setColor(orderDetailDTO.getColor());
+//        existingOrderDetail.setColor(orderDetailDTO.getColor());
         existingOrderDetail.setOrder(existingOrder);
         existingOrderDetail.setProduct(existingProduct);
         return orderDetailRepository.save(existingOrderDetail);
