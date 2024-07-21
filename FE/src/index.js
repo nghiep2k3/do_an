@@ -30,6 +30,7 @@ import Mouse from "./page/Mouse/Mouse";
 import Dell from "./page/Dell/Dell";
 import MyItem from "./page/MyItem/MyItem";
 import Headphone from "./page/headphone/headphone";
+import Keyboard from "./page/Keyboard/Keyboard";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -55,6 +56,7 @@ root.render(
             <Route path="/xiaomi" element={<Xiaomi />} />
             <Route path="/mouse" element={<Mouse />} />
             <Route path="/headphone" element={<Headphone />} />
+            <Route path="/keyboard" element={<Keyboard />} />
           </Route>
           <Route path="/login" element={<Login />} />
           <Route path="/test" element={<Test />} />
