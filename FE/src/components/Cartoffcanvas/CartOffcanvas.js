@@ -32,6 +32,7 @@ const CartOffcanvas = () => {
             }));
 
             // Update cart with new data
+            console.log(99999999, itemsArray);
             setItems(itemsArray);
           }
         }

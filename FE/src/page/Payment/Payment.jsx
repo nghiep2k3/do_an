@@ -132,7 +132,7 @@ const Payment = () => {
             await remove(ref(database, `user_cart/${userData}/${itemId}`));
 
             // Remove item locally
-            removeItem(itemId); // This updates the local state managed by useCart hook
+            removeItem(itemId);
         } catch (error) {
             console.error("Error removing item: ", error);
         }
