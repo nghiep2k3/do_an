@@ -25,4 +25,7 @@ public class ProductDetailDTO {
     String vga;
     @Size(max = 255)
     String drive;
+    private String battery;
+    private String frontCamera;
+    private String behindCamera;
 }

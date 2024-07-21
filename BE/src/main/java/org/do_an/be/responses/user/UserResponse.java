@@ -2,6 +2,7 @@ package org.do_an.be.responses.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.do_an.be.entity.Order;
 import org.do_an.be.entity.Role;
 import org.do_an.be.entity.User;
 import org.do_an.be.entity.UserAddress;
@@ -9,6 +10,7 @@ import org.do_an.be.repository.RoleRepository;
 import org.do_an.be.repository.UserRepository;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -23,12 +25,10 @@ public class UserResponse {
     private Integer id;
 
     private String telephone;
+    private String username;
 
-    @JsonProperty("first_name")
-    private String firstName;
-
-    @JsonProperty("last_name")
-    private String lastName;
+    @JsonProperty("full_name")
+    private String fullName;
 
     @JsonProperty("address")
     private UserAddress address;
@@ -41,6 +41,7 @@ public class UserResponse {
 
     @JsonProperty("roles")
     private Set<String> roles;
+    private List<Order> orders;
     public static UserResponse fromUser(User user) {
 
         if (user.getRoles() == null || user.getRoles().isEmpty()) {
@@ -51,12 +52,13 @@ public class UserResponse {
         return UserResponse.builder()
                 .id(user.getId())
                 .telephone(user.getTelephone())
+                .username(user.getUsername())
                 .profileImage(user.getProfileImage())
                 .roles(user.getRoles().stream().map(Role::getName).collect(Collectors.toSet()))
                 .email(user.getEmail())
                 .address(user.getAddress())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
+                .fullName(user.getFullName())
+
                 .build();
     }
 }

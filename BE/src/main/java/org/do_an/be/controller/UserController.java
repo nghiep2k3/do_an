@@ -131,7 +131,7 @@ public class UserController {
         Optional<User> user = userRepository.findById(id);
         UserResponse userResponse = UserResponse.fromUser(user.get());
         return ResponseEntity.ok(ResponseObject.builder()
-                .message("Profile user id = %d ")
+                .message("Success")
                 .data(userResponse)
                 .status(HttpStatus.OK)
                 .build());

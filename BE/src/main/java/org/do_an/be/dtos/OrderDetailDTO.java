@@ -1,7 +1,9 @@
 package org.do_an.be.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Data
@@ -30,5 +32,6 @@ public class OrderDetailDTO {
     @JsonProperty("total_money")
     private Float totalMoney;
 
-    private String color;
+
+    //private String color;
 }
