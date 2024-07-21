@@ -23,6 +23,7 @@ public class ProductDTO  {
    //private MultipartFile file;
    private String description;
    private Integer inventory;
+   private Integer discount;
 
 
 }

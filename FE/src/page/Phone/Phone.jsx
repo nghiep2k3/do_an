@@ -79,7 +79,6 @@ export default function Phone() {
       </div>
     );
   }
-
   return (
     <div>
       <h1 style={{ textAlign: 'center' }}>Tất cả sản phẩm</h1>

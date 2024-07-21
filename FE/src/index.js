@@ -21,7 +21,16 @@ import Payment from "./page/Payment/Payment";
 import Laptop from "./page/Laptop/Laptop";
 import Phone from "./page/Phone/Phone";
 import Pk from "./page/Pk/Pk";
+import Macbook from "./page/Macbook/Macbook";
+import HP from "./page/HP/HP";
+import Iphone from "./page/Ip/Iphone";
+import Samsung from "./page/Samsung/Samsung";
+import Xiaomi from "./page/Xiaomi/Xiaomi";
+import Mouse from "./page/Mouse/Mouse";
+import Dell from "./page/Dell/Dell";
 import MyItem from "./page/MyItem/MyItem";
+import Headphone from "./page/headphone/headphone";
+import Keyboard from "./page/Keyboard/Keyboard";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -39,8 +48,15 @@ root.render(
             <Route path="/laptop" element={<Laptop />} />
             <Route path="/phone" element={<Phone />} />
             <Route path="/accessories" element={<Pk />} />
-
-            <Route path="xiaomi" />
+            <Route path="/macbook" element={<Macbook />} />
+            <Route path="/ldell" element={<Dell />} />
+            <Route path="/hp" element={<HP />} />
+            <Route path="/ip" element={<Iphone />} />
+            <Route path="/samsung" element={<Samsung />} />
+            <Route path="/xiaomi" element={<Xiaomi />} />
+            <Route path="/mouse" element={<Mouse />} />
+            <Route path="/headphone" element={<Headphone />} />
+            <Route path="/keyboard" element={<Keyboard />} />
           </Route>
           <Route path="/login" element={<Login />} />
           <Route path="/test" element={<Test />} />

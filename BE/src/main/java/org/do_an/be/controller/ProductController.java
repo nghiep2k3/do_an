@@ -343,9 +343,8 @@ public class ProductController {
     //@SecurityRequirement(name="bearer-key")
     public ResponseEntity<ResponseObject> updateProduct(
             @PathVariable Integer id,
-            @ModelAttribute ProductDTO productDTO
-            , @ModelAttribute ProductDetailDTO productDetailDTO) throws Exception {
-        Product updatedProduct = productService.updateProduct(id, productDTO,productDetailDTO);
+            @RequestBody ProductDTO productDTO) throws Exception {
+        Product updatedProduct = productService.updateProduct(id, productDTO);
         return ResponseEntity.ok(ResponseObject.builder()
                 .data(updatedProduct)
                 .message("Update product successfully")

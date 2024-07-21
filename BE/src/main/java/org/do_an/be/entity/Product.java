@@ -44,7 +44,7 @@ public class Product extends BaseEntity {
     private Float price;
 
     @Column(name = "discount")
-    private Integer discountId;
+    private Integer discount;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     @JsonManagedReference

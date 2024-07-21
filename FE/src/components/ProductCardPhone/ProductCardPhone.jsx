@@ -36,7 +36,7 @@ const ProductCard = ({ product }) => {
             message.warning("Chưa đăng nhập nhau vui lòng thử lại");
             navigate("/login");
             return;
-          }
+        }
         // console.log("product", product);
         const save_cart = product;
         // xử lý trên firebase

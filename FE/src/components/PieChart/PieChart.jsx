@@ -46,18 +46,18 @@ const dataTotal = [
 ];
 
 const revenueData = [
-  { name: 'Tháng 1', revenue: 10000000, fill: '#8884d8', },
-  { name: 'Tháng 2', revenue: 12000000, fill: '#82ca9d', },
-  { name: 'Tháng 3', revenue: 13000000, fill: '#ffc658', },
-  { name: 'Tháng 4', revenue: 9000000, fill: '#8884d8' },
-  { name: 'Tháng 5', revenue: 11000000, fill: '#82ca9d', },
-  { name: 'Tháng 6', revenue: 14000000, fill: '#ffc658', },
-  { name: 'Tháng 7', revenue: 15000000, fill: '#8884d8', },
-  { name: 'Tháng 8', revenue: 16000000, fill: '#82ca9d', },
-  { name: 'Tháng 9', revenue: 17000000, fill: '#ffc658', },
-  { name: 'Tháng 10', revenue: 18000000, fill: '#8884d8',  },
-  { name: 'Tháng 11', revenue: 19000000, fill: '#82ca9d',  },
-  { name: 'Tháng 12', revenue: 20000000, fill: '#ffc658', }
+  { name: 'Tháng 1', revenue: 10000000, fill: '#8884d8', product: [{ id: 11, name: 'Điện thoại Samsung', price: 15000000 }] },
+  { name: 'Tháng 2', revenue: 12000000, fill: '#82ca9d', product: [{ id: 11, name: 'Điện thoại Samsung', price: 15000000 }] },
+  { name: 'Tháng 3', revenue: 13000000, fill: '#ffc658', product: [{ id: 11, name: 'Điện thoại Samsung', price: 15000000 }] },
+  { name: 'Tháng 4', revenue: 9000000, fill: '#8884d8', product: [{ id: 11, name: 'Điện thoại Samsung', price: 15000000 }] },
+  { name: 'Tháng 5', revenue: 11000000, fill: '#82ca9d', product: [{ id: 11, name: 'Điện thoại Samsung', price: 15000000 }] },
+  { name: 'Tháng 6', revenue: 14000000, fill: '#ffc658', product: [{ id: 11, name: 'Điện thoại Samsung', price: 15000000 }] },
+  { name: 'Tháng 7', revenue: 15000000, fill: '#8884d8', product: [{ id: 11, name: 'Điện thoại Samsung', price: 15000000 }] },
+  { name: 'Tháng 8', revenue: 16000000, fill: '#82ca9d', product: [{ id: 11, name: 'Điện thoại Samsung', price: 15000000 }] },
+  { name: 'Tháng 9', revenue: 17000000, fill: '#ffc658', product: [{ id: 11, name: 'Điện thoại Samsung', price: 15000000 }] },
+  { name: 'Tháng 10', revenue: 18000000, fill: '#8884d8', product: [{ id: 11, name: 'Điện thoại Samsung', price: 15000000 }] },
+  { name: 'Tháng 11', revenue: 19000000, fill: '#82ca9d', product: [{ id: 11, name: 'Điện thoại Samsung', price: 15000000 }] },
+  { name: 'Tháng 12', revenue: 20000000, fill: '#ffc658', product: [{ id: 11, name: 'Điện thoại Samsung', price: 15000000 }] }
 ];
 
 const formatCurrency = (value) => {
