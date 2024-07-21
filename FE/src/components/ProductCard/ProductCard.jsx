@@ -31,7 +31,7 @@ const ProductCard = ({ product }) => {
         message.success("Đã thêm vào giỏ hàng");
 
 
-        const productWithPrice = { ...product, price: newPrice };
+        const productWithPrice = { ...product, price: newPrice, id: id };
         addItem(productWithPrice);
 
     };
