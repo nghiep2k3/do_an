@@ -9,7 +9,8 @@ export default function Pk() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("https://api.trandai03.online/api/products?category_id=1");
+                const response = await axios.get("https://api.trandai03.online/api/products?category_id=1&limit=100");
+                console.log(response.data);
                 setData(response.data.data.products);
             } catch (error) {
                 console.error('Có lỗi xảy ra:', error);

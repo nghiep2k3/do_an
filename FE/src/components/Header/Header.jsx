@@ -253,7 +253,7 @@ export default function Header() {
                 <div className={styles.sub_nav}>
                   <div className={styles.sub_nav_item}><Link to='/headphone'>Tai nghe</Link></div>
                   <div className={styles.sub_nav_item}><Link to='/mouse'>Chuột</Link></div>
-                  {/* <div className={styles.sub_nav_item}><Link to='/keyboard'>Bàn phím</Link></div> */}
+                  <div className={styles.sub_nav_item}><Link to='/keyboard'>Bàn phím</Link></div>
                 </div>
               )}
             </div>
