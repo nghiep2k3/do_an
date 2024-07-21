@@ -117,7 +117,7 @@ export default function Header() {
       cartTotal: 0,
       metadata: {},
     };
-    await localStorage.setItem('react-use-cart', JSON.stringify(cartData));
+    localStorage.setItem('react-use-cart', JSON.stringify(cartData));
 
     // Reload trang và đặt lại trạng thái authentication
     window.location.reload();

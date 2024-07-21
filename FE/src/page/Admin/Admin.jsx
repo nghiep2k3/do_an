@@ -363,7 +363,6 @@ const Admin = () => {
                     )}
                     {activeSection === 'Statistic' && (
                         <div>
-                            <h1>Thống kê</h1>
                             <PieChart />
                         </div>
                     )}
