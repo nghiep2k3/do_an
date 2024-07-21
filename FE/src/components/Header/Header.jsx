@@ -1,7 +1,7 @@
 // Header.jsx
 import React, { useEffect, useState } from 'react';
 import styles from './Header.module.css';
-import { HeartOutlined, LockOutlined, PhoneOutlined, SearchOutlined, ShoppingCartOutlined, ShoppingOutlined, UserOutlined } from '@ant-design/icons';
+import { HeartOutlined, LockOutlined, LogoutOutlined, PhoneOutlined, SearchOutlined, ShoppingCartOutlined, ShoppingOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Skeleton, Space } from "antd";
 import { Link } from 'react-router-dom';
 import ButtonBs from 'react-bootstrap/Button';
@@ -57,7 +57,7 @@ export default function Header() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("https://trandai03.online/api/products/all");
+        const response = await axios.get("https://api.trandai03.online/api/products/all");
         setData2(response.data.data.products);
         setLoad(false);
         console.log(11111, response.data.data.products?.[0].name);
@@ -85,7 +85,7 @@ export default function Header() {
   const handle = (term) => {
   };
   const handleScroll = () => {
-    if (window.scrollY > 350) {
+    if (window.scrollY > 300) {
       setSticky(true);
     } else {
       if (window.scrollY === 0) {
@@ -102,10 +102,11 @@ export default function Header() {
   }, []);
 
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     // Xóa token và user từ cookies và local storage
     cookies.remove("auth-token-nghiep");
     localStorage.removeItem("user");
+    localStorage.removeItem("role");
 
     // Đặt lại dữ liệu giỏ hàng trong local storage về trạng thái rỗng
     const cartData = {
@@ -143,13 +144,15 @@ export default function Header() {
   return (
     <div>
       <div className={`${styles.First_Navbar} animate__animated animate__fadeInDown`}>
-        {role == "admin" ? (<Link to='/admin'> <div className={styles.Item}><UserOutlined />Quản lý</div></Link>) : ""}
+        {role == "ADMIN" ? (<Link to='/admin'> <div className={styles.Item}><UserOutlined />Quản lý</div></Link>) : ""}
         <Link to='/profile'>
           <div className={styles.Item}><UserOutlined />Tài khoản của tôi</div>
         </Link>
         <div className={styles.Item}><HeartOutlined />Danh sách yêu thích</div>
-        <div className={styles.Item}><ShoppingOutlined />Thanh toán</div>
-        {value ? (<div>{value} <button style={{ background: 'transparent', border: 'none' }} onClick={handleLogout}>Logout</button></div>) : (<div className={styles.Item}><LockOutlined /><Link to='/login'>Đăng nhập</Link></div>)}
+        <Link to='payments'>
+          <div className={styles.Item}><ShoppingOutlined /> Thanh toán</div>
+        </Link>
+        {value ? (<div> <button style={{ background: 'transparent', border: 'none' }} onClick={handleLogout}><LogoutOutlined />Đăng xuất</button></div>) : (<div className={styles.Item}><LockOutlined /><Link to='/login'>Đăng nhập</Link></div>)}
       </div>
       <div className={sticky ? `${styles.sticky}` : `${styles.header}`}>
         <div className={styles.Mid_Navbar}>
@@ -165,18 +168,18 @@ export default function Header() {
               <div className={`${styles.productSearch} Header_productSearch`}>
                 {filteredData.map(item => (
                   <div key={item.id}>
-                    <Link to={`/details/${item.id}`}>
+                    <a href={`/details/${item.id}`}>
                       <div style={{ display: 'none' }}>
                         {newPrice = item.price - (item.price * item.discount / 100)}
                       </div>
                       <a className='product'>
-                        <img src={item.product_images?.[0].image_url} alt="khóc" />
+                        <img src={item.product_images[0]?.image_url} alt="khóc" />
                         <span className={styles.inforSearch}>
                           <span className={styles.name}>{item.name}</span>
                           <span className={styles.price}> {formatPrice(newPrice)}   </span>
                         </span>
                       </a>
-                    </Link>
+                    </a>
                   </div>
                 ))}
               </div>
@@ -213,11 +216,11 @@ export default function Header() {
               onMouseEnter={() => toggleSubNav('laptop', true)}
               onMouseLeave={() => toggleSubNav('laptop', false)}
             >
-              <Link to='/Laptop'>Laptop</Link>
+              <Link to='/laptop'>Laptop</Link>
               {showSubNav.laptop && (
                 <div className={styles.sub_nav}>
                   <div className={styles.sub_nav_item}><Link to='/macbook'>MacBook</Link></div>
-                  <div className={styles.sub_nav_item}><Link to='/dell'>Dell</Link></div>
+                  <div className={styles.sub_nav_item}><Link to='/ldell'>Dell</Link></div>
                   <div className={styles.sub_nav_item}><Link to='/hp'>HP</Link></div>
                 </div>
               )}

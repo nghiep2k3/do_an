@@ -1,62 +1,82 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './Profile.module.css';
-
+import axios from 'axios';
 import {
     Button,
     Cascader,
-    DatePicker,
     Form,
     Input,
     InputNumber,
     Mentions,
-    Select,
     TreeSelect,
 } from 'antd';
-import { LogoutOutlined, MessageOutlined, PieChartOutlined, SettingOutlined, ShoppingOutlined, SmileOutlined, WindowsOutlined } from '@ant-design/icons';
+import { LogoutOutlined, SettingOutlined, ShoppingOutlined, WindowsOutlined } from '@ant-design/icons';
+import MyItem from '../MyItem/MyItem';
 
-const { RangePicker } = DatePicker;
-
-const formItemLayout = {
-    labelCol: {
-        xs: { span: 24 },
-        sm: { span: 6 },
-    },
-    wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 14 },
-    },
-};
 const Profile = () => {
+    const userData = localStorage.getItem('userId');
+    const [activeSection, setActiveSection] = useState('Dashboard');
+    const [data2, setData] = useState(null);
+    const [form] = Form.useForm();
+
+    const formItemLayout = {
+        labelCol: {
+            xs: { span: 24 },
+            sm: { span: 6 },
+        },
+        wrapperCol: {
+            xs: { span: 24 },
+            sm: { span: 14 },
+        },
+    };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(`https://api.trandai03.online/api/auth/profile/${userData}`);
+                setData(response.data.data);
+                form.setFieldsValue({
+                    full_name: response.data.data.full_name,
+                    telephone: response.data.data.telephone,
+                    email: response.data.data.email,
+                    addressLine: response.data.data.address?.addressLine,
+                    city: response.data.data.address?.city,
+                    country: response.data.data.address?.country,
+                });
+            } catch (error) {
+                console.error('Có lỗi xảy ra:', error);
+            }
+        };
+
+        fetchData();
+    }, [userData, form]);
+
+    if (!data2 && !userData) {
+        return (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '300px' }}>
+                Loading
+            </div>
+        );
+    }
+
+    const handleMenuClick = (section) => {
+        setActiveSection(section);
+    };
+
     return (
         <div style={{ display: 'flex' }}>
             <section className={styles.sidebar}>
-                <a href="#" className={styles.brand}>
-                    <span className={styles.text}>Tài khoản của</span>
-                </a>
-
                 <ul className={styles.sideMenu}>
-                    <li>
-                        <a href="#">
+                    <li className={activeSection === 'Dashboard' ? styles.active : ''}>
+                        <a href="#" onClick={() => handleMenuClick('Dashboard')}>
                             <WindowsOutlined />
-                            <span className={styles.text}>Dashboard</span>
+                            <span className={styles.text}>Thông tin tài khoản</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="#">
+                    <li className={activeSection === 'MyStore' ? styles.active : ''}>
+                        <a href="#" onClick={() => handleMenuClick('MyStore')}>
                             <ShoppingOutlined />
-                            <span className={styles.text}>My Store</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <PieChartOutlined />
-                            <span className={styles.text}>Thống kê</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <MessageOutlined />
-                            <span className={styles.text}>Tin nhắn</span>
+                            <span className={styles.text}>Đơn hàng của tôi</span>
                         </a>
                     </li>
                 </ul>
@@ -75,67 +95,84 @@ const Profile = () => {
                     </li>
                 </ul>
             </section>
-            <Form {...formItemLayout} variant="filled" style={{ width: '70%', marginTop: '140px' }}>
-                <Form.Item label="Họ tên" name="Input" rules={[{ required: true, message: 'Please input!' }]}>
-                    <Input />
-                </Form.Item>
+            {data2?.full_name}
+            <main style={{ overflow: "visible", width: '70%', marginTop: '20px' }}>
+                {activeSection === 'Dashboard' && (
+                    <Form
+                        {...formItemLayout}
+                        form={form}
+                        initialValues={data2}
+                        variant="filled"
+                    >
+                        <Form.Item
+                            label="Họ tên"
+                            name="full_name"
+                            rules={[{ required: true, message: 'Please input!' }]}
+                        >
+                            <Input />
+                        </Form.Item>
 
-                <Form.Item
-                    label="Số điện thoại"
-                    name="InputNumber"
-                    rules={[{ required: true, message: 'Please input!' }]}
-                >
-                    <InputNumber style={{ width: '100%' }} />
-                </Form.Item>
+                        <Form.Item
+                            label="Số điện thoại"
+                            name="telephone"
+                            rules={[{ required: true, message: 'Please input!' }]}
+                        >
+                            <InputNumber style={{ width: '100%' }} />
+                        </Form.Item>
 
-                <Form.Item
-                    label="Email"
-                    name="TextArea"
-                    rules={[{ required: true, message: 'Please input!' }]}
-                >
-                    <Input.TextArea />
-                </Form.Item>
+                        <Form.Item
+                            label="Email"
+                            name="email"
+                            rules={[{ required: true, message: 'Please input!' }]}
+                        >
+                            <Input.TextArea />
+                        </Form.Item>
 
-                <Form.Item
-                    label="Giới tính"
-                    name="Mentions"
-                    rules={[{ required: true, message: 'Please input!' }]}
-                >
-                    <Mentions />
-                </Form.Item>
+                        <Form.Item
+                            label="Giới tính"
+                            name="gender"
+                            rules={[{ required: true, message: 'Please input!' }]}
+                        >
+                            <Mentions />
+                        </Form.Item>
 
-                <Form.Item
-                    label="Địa chỉ"
-                    name="Cascader"
-                    rules={[{ required: true, message: 'Please input!' }]}
-                >
-                    <Cascader />
-                </Form.Item>
+                        <Form.Item
+                            label="Địa chỉ"
+                            name="addressLine"
+                            rules={[{ required: true, message: 'Please input!' }]}
+                        >
+                            <Cascader />
+                        </Form.Item>
 
-                <Form.Item
-                    label="Tỉnh thành phố"
-                    name="TreeSelect"
-                    rules={[{ required: true, message: 'Please input!' }]}
-                >
-                    <TreeSelect />
-                </Form.Item>
+                        <Form.Item
+                            label="Tỉnh thành phố"
+                            name="city"
+                            rules={[{ required: true, message: 'Please input!' }]}
+                        >
+                            <TreeSelect />
+                        </Form.Item>
 
-                <Form.Item
-                    label="Quận huyện"
-                    name="TreeSelect"
-                    rules={[{ required: true, message: 'Please input!' }]}
-                >
-                    <TreeSelect />
-                </Form.Item>
+                        <Form.Item
+                            label="Quận huyện"
+                            name="country"
+                            rules={[{ required: true, message: 'Please input!' }]}
+                        >
+                            <TreeSelect />
+                        </Form.Item>
 
-                <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
-                    <Button type="primary" htmlType="submit">
-                        Cập nhật
-                    </Button>
-                </Form.Item>
-            </Form>
+                        <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
+                            <Button type="primary" htmlType="submit">
+                                Cập nhật
+                            </Button>
+                        </Form.Item>
+                    </Form>
+                )}
+                {activeSection === 'MyStore' && (
+                    <MyItem />
+                )}
+            </main>
         </div>
     );
-}
+};
 
 export default Profile;

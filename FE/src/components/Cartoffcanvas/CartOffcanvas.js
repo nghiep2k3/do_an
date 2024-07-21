@@ -3,6 +3,7 @@ import { useCart } from "react-use-cart";
 import { database } from "../../firebase";
 import { ref, get, remove } from "firebase/database";
 import { ShoppingCartOutlined } from "@ant-design/icons";
+import { Link } from "react-router-dom";
 
 const CartOffcanvas = () => {
   const userData = localStorage.getItem("user");
@@ -15,22 +16,25 @@ const CartOffcanvas = () => {
     setItems,
   } = useCart();
   const [loading, setLoading] = useState(true);
-  const [totalItems, setTotalItems] = useState(0); // New state for total items
+  const [totalItems, setTotalItems] = useState(0);
 
   useEffect(() => {
     const fetchCartData = async () => {
       try {
-        const dbRef = ref(database, `user_cart/${userData}`);
-        const snapshot = await get(dbRef);
-        if (snapshot.exists()) {
-          const data = snapshot.val();
-          const itemsArray = Object.keys(data).map((key) => ({
-            ...data[key],
-            id: key,
-          }));
+        if (userData) {
+          const dbRef = ref(database, `user_cart/${userData}`);
+          const snapshot = await get(dbRef);
+          if (snapshot.exists()) {
+            const data = snapshot.val();
+            const itemsArray = Object.keys(data).map((key) => ({
+              ...data[key],
+              id: key,
+            }));
 
-          // Update cart with new data
-          setItems(itemsArray);
+            // Update cart with new data
+            console.log(99999999, itemsArray);
+            setItems(itemsArray);
+          }
         }
       } catch (error) {
         console.error("Error fetching cart data: ", error);
@@ -40,7 +44,7 @@ const CartOffcanvas = () => {
     };
 
     fetchCartData();
-  }, []);
+  }, [userData]);
 
   useEffect(() => {
     const cartData = {
@@ -55,7 +59,7 @@ const CartOffcanvas = () => {
       metadata: {},
     };
 
-    setTotalItems(cartData.totalItems)
+    setTotalItems(cartData.totalItems);
     localStorage.setItem("react-use-cart", JSON.stringify(cartData));
   }, [items]);
 
@@ -146,7 +150,7 @@ const CartOffcanvas = () => {
                         style={{ width: "50px", marginRight: "10px" }}
                       />
                       <div>
-                        <div>{item.name}</div>
+                        <div style={{ width: 150 }}>{item.name}</div>
                         <div>
                           {item.quantity} x {formatPrice(item.price)}
                         </div>
@@ -204,6 +208,27 @@ const CartOffcanvas = () => {
                 </button>
               </>
             )}
+          </div>
+
+          <div className="d-flex justify-content-between pb-2 px-2">
+            <a
+              href="/myitem"
+              className="btn btn-secondary"
+              tabIndex="-1"
+              role="button"
+              aria-disabled="true"
+            >
+              Đơn hàng của tôi
+            </a>
+            <a
+              href="/payments"
+              className="btn btn-primary"
+              tabIndex="-1"
+              role="button"
+              aria-disabled="true"
+            >
+              Thanh toán
+            </a>
           </div>
         </div>
       </div>

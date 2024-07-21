@@ -37,9 +37,12 @@ function Login() {
 
         console.log(2222, formData);
         try {
-            const response = await axios.post('https://trandai03.online/api/auth/signup', formData);
+            const response = await axios.post('https://api.trandai03.online/api/auth/signup', formData);
+            localStorage.setItem('user', username);
             console.log(22222, response.data);
-            navigate("/xiaomi");
+            const username = email.split('@')[0];
+            localStorage.setItem('role', "user");
+            navigate("/");
         } catch (error) {
             if (error.response) {
                 // Lỗi nhận từ phía máy chủ
@@ -60,20 +63,20 @@ function Login() {
         };
 
         try {
-            const response = await axios.post('https://trandai03.online/api/auth/signin', loginData);
-            console.log(22222, response.data);
+            const response = await axios.post('https://api.trandai03.online/api/auth/signin', loginData);
             const username = email.split('@')[0];
             localStorage.setItem('user', username);
+            localStorage.setItem('role', response.data.data.roles);
+            localStorage.setItem('userId', response.data.data.id);
             navigate("/");
         } catch (error) {
-            if (error.response) {
+            if (error) {
                 // Lỗi nhận từ phía máy chủ
-                setError(error.response.data);
-                console.error('Có lỗi xảy ra:', error.response.data);
+                setError("Lỗi tài khoản");
+                console.error('Có lỗi xảy ra:');
             } else {
-                // Lỗi không liên quan đến máy chủ (VD: không thể kết nối)
                 setError('Không thể kết nối tới máy chủ');
-                console.error('Có lỗi xảy ra:', error.message);
+                console.error('Có lỗi xảy ra:');
             }
         }
     };
@@ -101,7 +104,8 @@ function Login() {
             cookies.set("auth-token-nghiep", result.user.refreshToken);
             console.log(result.user.displayName);
             localStorage.setItem('user', result.user.displayName);
-            navigate('/xiaomi');
+            localStorage.setItem('role', "user");
+            navigate('/');
         } catch (err) {
             console.error(err);
         }

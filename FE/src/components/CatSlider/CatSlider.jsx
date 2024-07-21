@@ -6,6 +6,7 @@ import "slick-carousel/slick/slick-theme.css";
 import Card from '../Card/Card';
 import { Skeleton } from 'antd';
 import axios from 'axios';
+import ProductCard from '../ProductCardPhone/ProductCardPhone';
 
 export default function CatSlider() {
     const [data, setData] = useState(null);
@@ -13,7 +14,7 @@ export default function CatSlider() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("https://trandai03.online/api/products?category_id=3");
+                const response = await axios.get("https://api.trandai03.online/api/products?category_id=3");
                 setData(response.data.data.products);
             } catch (error) {
                 console.error('Có lỗi xảy ra:', error);
@@ -73,7 +74,7 @@ export default function CatSlider() {
                     {displayedData.map((x, index) => {
                         return (
                             <div className={`${styles.item} animate__animated animate__fadeInDownBig`} key={index}>
-                                <Card product={x} />
+                                <ProductCard product={x} />
                             </div>
                         )
                     })}
