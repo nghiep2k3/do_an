@@ -33,7 +33,7 @@ const ProductCard = ({ product }) => {
 
     const handleAddItem = async () => {
         if (!userData) {
-            message.warning("Chưa đăng nhập nhau mà đòi thêm");
+            message.warning("Chưa đăng nhập nhau vui lòng thử lại");
             navigate("/login");
             return;
           }
@@ -76,7 +76,7 @@ const ProductCard = ({ product }) => {
             >
                 {name}
             </Title>
-            <Text delete style={{ fontSize: '16px', color: '#888' }}>
+            <Text delete style={{ fontSize: '16px', color: '#888', textAlign: 'center' }}>
                 Giá cũ: {formatPrice(oldPrice)}
             </Text>
             <br></br>

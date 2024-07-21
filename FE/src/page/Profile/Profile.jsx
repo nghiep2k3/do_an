@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from './Profile.module.css';
-import { Tabs } from 'antd';
+import { message, Tabs } from 'antd';
 import axios from 'axios';
 
 import {
@@ -16,11 +16,14 @@ import {
 import { LogoutOutlined, SettingOutlined, ShoppingOutlined, WindowsOutlined } from '@ant-design/icons';
 import { Divider, List, Typography } from 'antd';
 import MyItem from '../MyItem/MyItem';
+import { useNavigate } from 'react-router-dom';
 const Profile = () => {
+    const navigate = useNavigate();
     const userData = localStorage.getItem('userId');
     const [activeSection, setActiveSection] = useState('Dashboard');
     const { RangePicker } = DatePicker;
     const [data2, setData] = useState(null);
+    const [checkLogin, setCheckLogin] = useState(null);
 
     const formItemLayout = {
         labelCol: {
@@ -36,9 +39,14 @@ const Profile = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                if (!userData) {
+                    message.warning("Chưa đăng nhập nhau vui lòng thử lại");
+                    navigate("/login");
+                    return;
+                }
                 const response = await axios.get(`https://api.trandai03.online/api/auth/profile/${userData}`);
                 setData(response.data.data);
-                console.log(333, response.data.data);
+                console.log(333, response.data.data); 
             } catch (error) {
                 console.error('Có lỗi xảy ra:', error);
             }
@@ -46,13 +54,15 @@ const Profile = () => {
 
         fetchData();
     }, []);
-    if (!data2 && !userData) {
+    if (!data2) {
         return (
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '300px' }}>
-                Loading
+                Loading...
             </div>
         )
     }
+
+
 
     const handleMenuClick = (section) => {
         setActiveSection(section);

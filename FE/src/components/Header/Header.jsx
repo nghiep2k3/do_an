@@ -107,6 +107,7 @@ export default function Header() {
     cookies.remove("auth-token-nghiep");
     localStorage.removeItem("user");
     localStorage.removeItem("role");
+    localStorage.removeItem("userId");
 
     // Đặt lại dữ liệu giỏ hàng trong local storage về trạng thái rỗng
     const cartData = {
@@ -154,9 +155,12 @@ export default function Header() {
       </div>
       <div className={sticky ? `${styles.sticky}` : `${styles.header}`}>
         <div className={styles.Mid_Navbar}>
-          <div style={{ width: "25%" }} className='fw-bold fs-4'>
-            TL ELECTRONIC
+          <div style={{ width: "25%", color: 'black' }} className='fw-bold fs-4'>
+            <a href="/" className='text-dark'>
+              TL ELECTRONIC
+            </a>
           </div>
+
 
           <div className={styles.search_container}>
             <input type="text" value={searchTerm} className={styles.search_input} placeholder="Tìm kiếm..." onChange={handleSearch} />
@@ -247,11 +251,11 @@ export default function Header() {
                 <div className={styles.sub_nav}>
                   <div className={styles.sub_nav_item}><Link to='/headphone'>Tai nghe</Link></div>
                   <div className={styles.sub_nav_item}><Link to='/mouse'>Chuột</Link></div>
-                  <div className={styles.sub_nav_item}><Link to='/keyboard'>Bàn phím</Link></div>
+                  {/* <div className={styles.sub_nav_item}><Link to='/keyboard'>Bàn phím</Link></div> */}
                 </div>
               )}
             </div>
-            <Link to='/test'>Test</Link>
+            {/* <Link to='/test'>Test</Link> */}
           </div>
         </div>
       </div>

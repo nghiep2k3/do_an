@@ -71,6 +71,11 @@ const CartOffcanvas = () => {
     updateItemQuantity(itemId, quantity);
   };
 
+  const DeleteAllItem = async () => {
+    emptyCart();
+    await remove(ref(database, `user_cart/${userData}`));
+  };
+
   const handleRemoveItem = async (itemId) => {
     console.log("id xóa:", itemId);
     try {
@@ -150,7 +155,7 @@ const CartOffcanvas = () => {
                         style={{ width: "50px", marginRight: "10px" }}
                       />
                       <div>
-                        <div style={{width: 150}}>{item.name}</div>
+                        <div style={{ width: 150 }}>{item.name}</div>
                         <div>
                           {item.quantity} x {formatPrice(item.price)}
                         </div>
@@ -200,16 +205,13 @@ const CartOffcanvas = () => {
                       })}
                   </h5>
                 </div>
-                <button
-                  className="btn btn-danger mt-3"
-                  onClick={() => emptyCart()}
-                >
+                <button className="btn btn-danger mt-3" onClick={DeleteAllItem}>
                   Xóa hết
                 </button>
               </>
             )}
           </div>
-          
+
           <div className="d-flex justify-content-between pb-2 px-2">
             <a
               href="/myitem"

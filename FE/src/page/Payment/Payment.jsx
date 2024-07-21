@@ -6,11 +6,13 @@ import ItemPayments from '../ItemPayments/ItemPayments';
 import { useCart } from "react-use-cart";
 import { database } from "../../firebase";
 import { ref, get, remove } from "firebase/database";
+import { useNavigate } from 'react-router-dom';
 
 
 const { Option } = Select;
 
 const Payment = () => {
+    const navigate = useNavigate();
     const [form] = Form.useForm();
     const [cartTotal, setCartTotal] = useState(0);
     const userData = localStorage.getItem("user");
@@ -79,7 +81,7 @@ const Payment = () => {
 
     console.log(12345, idsp);
 
-    const onFinish = (values) => {
+    const onFinish = async (values) => {
         const cartData = JSON.parse(localStorage.getItem('react-use-cart'));
 
         const combinedItems = idsp.map(product => {
@@ -103,19 +105,19 @@ const Payment = () => {
 
         console.log(9999, data);
 
-        axios.post('https://api.trandai03.online/api/orders', data)
+        await axios.post('https://api.trandai03.online/api/orders', data)
             .then(response => {
                 message.success("Đặt hàng thành công");
                 form.resetFields();
                 console.log('Order created:', response.data);
-
-
                 // Xóa trên firebase mới được
-                
             })
             .catch(error => {
                 console.error('There was an error creating the order!', error);
             });
+        await remove(ref(database, `user_cart/${userData}`));
+        emptyCart();
+
     };
     const formatPrice = (price) => {
         return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " đ";

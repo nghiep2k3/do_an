@@ -38,11 +38,11 @@ function Login() {
         console.log(2222, formData);
         try {
             const response = await axios.post('https://api.trandai03.online/api/auth/signup', formData);
-            localStorage.setItem('user', username);
-            console.log(22222, response.data);
             const username = email.split('@')[0];
+            localStorage.setItem('user', username);
             localStorage.setItem('role', "user");
-            navigate("/");
+            console.log(22222, response.data);
+            window.location.reload();
         } catch (error) {
             if (error.response) {
                 // Lỗi nhận từ phía máy chủ
