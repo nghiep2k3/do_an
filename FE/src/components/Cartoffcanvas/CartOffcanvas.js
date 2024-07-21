@@ -149,7 +149,7 @@ const CartOffcanvas = () => {
                         style={{ width: "50px", marginRight: "10px" }}
                       />
                       <div>
-                        <div style={{width: 150}}>{item.name}</div>
+                        <div style={{ width: 150 }}>{item.name}</div>
                         <div>
                           {item.quantity} x {formatPrice(item.price)}
                         </div>
@@ -208,7 +208,7 @@ const CartOffcanvas = () => {
               </>
             )}
           </div>
-          
+
           <div className="d-flex justify-content-between pb-2 px-2">
             <a
               href="/myitem"

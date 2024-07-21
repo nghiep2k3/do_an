@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import styles from './Profile.module.css';
-import { Tabs } from 'antd';
 import axios from 'axios';
-
 import {
     Button,
     Cascader,
-    DatePicker,
     Form,
     Input,
     InputNumber,
@@ -14,13 +11,13 @@ import {
     TreeSelect,
 } from 'antd';
 import { LogoutOutlined, SettingOutlined, ShoppingOutlined, WindowsOutlined } from '@ant-design/icons';
-import { Divider, List, Typography } from 'antd';
 import MyItem from '../MyItem/MyItem';
+
 const Profile = () => {
     const userData = localStorage.getItem('userId');
     const [activeSection, setActiveSection] = useState('Dashboard');
-    const { RangePicker } = DatePicker;
     const [data2, setData] = useState(null);
+    const [form] = Form.useForm();
 
     const formItemLayout = {
         labelCol: {
@@ -38,20 +35,28 @@ const Profile = () => {
             try {
                 const response = await axios.get(`https://api.trandai03.online/api/auth/profile/${userData}`);
                 setData(response.data.data);
-                console.log(333, response.data.data);
+                form.setFieldsValue({
+                    full_name: response.data.data.full_name,
+                    telephone: response.data.data.telephone,
+                    email: response.data.data.email,
+                    addressLine: response.data.data.address?.addressLine,
+                    city: response.data.data.address?.city,
+                    country: response.data.data.address?.country,
+                });
             } catch (error) {
                 console.error('Có lỗi xảy ra:', error);
             }
         };
 
         fetchData();
-    }, []);
+    }, [userData, form]);
+
     if (!data2 && !userData) {
         return (
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '300px' }}>
                 Loading
             </div>
-        )
+        );
     }
 
     const handleMenuClick = (section) => {
@@ -59,14 +64,8 @@ const Profile = () => {
     };
 
     return (
-        < div style={{ display: 'flex' }
-        }>
+        <div style={{ display: 'flex' }}>
             <section className={styles.sidebar}>
-                <a href="#" className={styles.brand}>
-                    <span className={styles.text}>Tài khoản của</span>
-                </a>
-                {data2?.email}
-
                 <ul className={styles.sideMenu}>
                     <li className={activeSection === 'Dashboard' ? styles.active : ''}>
                         <a href="#" onClick={() => handleMenuClick('Dashboard')}>
@@ -96,32 +95,42 @@ const Profile = () => {
                     </li>
                 </ul>
             </section>
+            {data2?.full_name}
             <main style={{ overflow: "visible", width: '70%', marginTop: '20px' }}>
                 {activeSection === 'Dashboard' && (
-                    <Form {...formItemLayout} variant="filled">
-                        <Form.Item label="Họ tên" name="Input" rules={[{ required: true, message: 'Please input!' }]}>
-                            <Input defaultValue={data2?.full_name || ''} />
+                    <Form
+                        {...formItemLayout}
+                        form={form}
+                        initialValues={data2}
+                        variant="filled"
+                    >
+                        <Form.Item
+                            label="Họ tên"
+                            name="full_name"
+                            rules={[{ required: true, message: 'Please input!' }]}
+                        >
+                            <Input />
                         </Form.Item>
 
                         <Form.Item
                             label="Số điện thoại"
-                            name="InputNumber"
+                            name="telephone"
                             rules={[{ required: true, message: 'Please input!' }]}
                         >
-                            <InputNumber style={{ width: '100%' }} defaultValue={data2?.telephone || ''} />
+                            <InputNumber style={{ width: '100%' }} />
                         </Form.Item>
 
                         <Form.Item
                             label="Email"
-                            name="TextArea"
+                            name="email"
                             rules={[{ required: true, message: 'Please input!' }]}
                         >
-                            <Input.TextArea defaultValue={data2?.email} />
+                            <Input.TextArea />
                         </Form.Item>
 
                         <Form.Item
                             label="Giới tính"
-                            name="Mentions"
+                            name="gender"
                             rules={[{ required: true, message: 'Please input!' }]}
                         >
                             <Mentions />
@@ -129,26 +138,26 @@ const Profile = () => {
 
                         <Form.Item
                             label="Địa chỉ"
-                            name="Cascader"
+                            name="addressLine"
                             rules={[{ required: true, message: 'Please input!' }]}
                         >
-                            <Cascader defaultValue={data2?.address.addressLine || ''} />
+                            <Cascader />
                         </Form.Item>
 
                         <Form.Item
                             label="Tỉnh thành phố"
-                            name="TreeSelect"
+                            name="city"
                             rules={[{ required: true, message: 'Please input!' }]}
                         >
-                            <TreeSelect defaultValue={data2?.address.city || ''} />
+                            <TreeSelect />
                         </Form.Item>
 
                         <Form.Item
                             label="Quận huyện"
-                            name="TreeSelect"
+                            name="country"
                             rules={[{ required: true, message: 'Please input!' }]}
                         >
-                            <TreeSelect defaultValue={data2?.address.country || ''} />
+                            <TreeSelect />
                         </Form.Item>
 
                         <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
@@ -162,8 +171,8 @@ const Profile = () => {
                     <MyItem />
                 )}
             </main>
-        </div >
+        </div>
     );
-}
+};
 
 export default Profile;

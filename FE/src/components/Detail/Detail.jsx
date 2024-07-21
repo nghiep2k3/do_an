@@ -207,83 +207,89 @@ export default function Detail() {
                     <a className={styles.txt} href="#">Sản phẩm chưa qua sử dụng, tình trạng mới 100% full-box</a>
                   </div>
                 </div>
-                <div className={styles.configHolder}>
-                  {data?.category_id == 3 ? ("") : (<div className={styles.SelectConfig}>
-                    <span className={styles.name}>CPU: </span>
-                    <ul>
-                      <li className={styles.SelectedValue}>
-                        <span>Intel Core i7 1360P</span>
-                      </li>
-                    </ul>
-                  </div>)}
-                  <div className={styles.SelectConfig}>
-                    <span className={styles.name}>Camara trước: </span>
-                    <ul>
-                      <li className={styles.SelectedValue}>
-                        <span>{data?.product_details[0]?.frontCamera}</span>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className={styles.SelectConfig}>
-                    <span className={styles.name}>Camara sau: </span>
-                    <ul>
-                      <li className={styles.SelectedValue}>
-                        <span>{data?.product_details[0]?.behindCamera}</span>
-                      </li>
-                    </ul>
-                  </div>
+                {data?.category_id == 1 ? ("") : (
+                  <div className={styles.configHolder}>
+                    <div className={styles.SelectConfig}>
+                      <span className={styles.name}>CPU: </span>
+                      <ul>
+                        <li className={styles.SelectedValue}>
+                          <span>{data?.product_details[0]?.cpu}</span>
+                        </li>
+                      </ul>
+                    </div>
+                    {data?.category_id == 2 ? ("") : (
+                      <>
+                        <div className={styles.SelectConfig}>
+                          <span className={styles.name}>Camara trước: </span>
+                          <ul>
+                            <li className={styles.SelectedValue}>
+                              <span>{data?.product_details[0]?.frontCamera}</span>
+                            </li>
+                          </ul>
+                        </div>
+                        <div className={styles.SelectConfig}>
+                          <span className={styles.name}>Camara sau: </span>
+                          <ul>
+                            <li className={styles.SelectedValue}>
+                              <span>{data?.product_details[0]?.behindCamera}</span>
+                            </li>
+                          </ul>
+                        </div>
+                      </>
+                    )}
 
-                  <div className={styles.SelectConfig}>
-                    <span className={styles.name}>RAM: </span>
-                    <ul>
-                      <li className={styles.SelectedValue}>
-                        <span>{data?.product_details[0]?.ram} GB</span>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className={styles.SelectConfig}>
-                    <span className={styles.name}>Ổ cứng: </span>
-                    <ul>
-                      <li className={styles.SelectedValue}>
-                        <span>{data?.product_details[0]?.drive}</span>
-                      </li>
-                    </ul>
-                  </div>
+                    <div className={styles.SelectConfig}>
+                      <span className={styles.name}>RAM: </span>
+                      <ul>
+                        <li className={styles.SelectedValue}>
+                          <span>{data?.product_details[0]?.ram} GB</span>
+                        </li>
+                      </ul>
+                    </div>
+                    <div className={styles.SelectConfig}>
+                      <span className={styles.name}>Ổ cứng: </span>
+                      <ul>
+                        <li className={styles.SelectedValue}>
+                          <span>{data?.product_details[0]?.drive}</span>
+                        </li>
+                      </ul>
+                    </div>
 
 
-                  {data?.category_id == 3 ? ("") : (<div className={styles.SelectConfig}>
-                    <span className={styles.name}>Card đồ họa: </span>
-                    <ul>
-                      <li className={styles.SelectedValue}>
-                        <span>Card Intel Iris Xe Graphics</span>
-                      </li>
-                    </ul>
-                  </div>)}
-                  <div className={styles.SelectConfig}>
-                    <span className={styles.name}>Màn hình: </span>
-                    <ul>
-                      <li className={styles.SelectedValue}>
-                        <span>{data?.product_details[0]?.display}</span>
-                      </li>
-                    </ul>
+                    {data?.category_id == 3 ? ("") : (<div className={styles.SelectConfig}>
+                      <span className={styles.name}>Card đồ họa: </span>
+                      <ul>
+                        <li className={styles.SelectedValue}>
+                          <span>{data?.product_details[0]?.vga}</span>
+                        </li>
+                      </ul>
+                    </div>)}
+                    <div className={styles.SelectConfig}>
+                      <span className={styles.name}>Màn hình: </span>
+                      <ul>
+                        <li className={styles.SelectedValue}>
+                          <span>{data?.product_details[0]?.display}</span>
+                        </li>
+                      </ul>
+                    </div>
+                    <div className={styles.SelectConfig}>
+                      <span className={styles.name}>Pin: </span>
+                      <ul>
+                        <li className={styles.SelectedValue}>
+                          <span>{data.product_details[0]?.battery}</span>
+                        </li>
+                      </ul>
+                    </div>
+                    <div className={styles.SelectConfig}>
+                      <span className={styles.name}>Bảo hành: </span>
+                      <ul>
+                        <li className={styles.SelectedValue}>
+                          <span>GÓI BẢO HÀNH CƠ BẢN</span>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
-                  <div className={styles.SelectConfig}>
-                    <span className={styles.name}>Pin: </span>
-                    <ul>
-                      <li className={styles.SelectedValue}>
-                        <span>5000 mAh</span>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className={styles.SelectConfig}>
-                    <span className={styles.name}>Bảo hành: </span>
-                    <ul>
-                      <li className={styles.SelectedValue}>
-                        <span>GÓI BẢO HÀNH CƠ BẢN</span>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
+                )}
                 <div className={styles.proQuantity}>
                   <a href="" onClick={handleDecrement} data-value="-1">-</a>
                   <input type="number"

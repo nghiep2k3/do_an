@@ -36,7 +36,7 @@ const ProductCard = ({ product }) => {
             message.warning("Chưa đăng nhập nhau mà đòi thêm");
             navigate("/login");
             return;
-          }
+        }
         // console.log("product", product);
         const save_cart = product;
         // xử lý trên firebase
@@ -44,7 +44,7 @@ const ProductCard = ({ product }) => {
         message.success("Đã thêm vào giỏ hàng");
 
 
-        const productWithPrice = { ...product, price: newPrice };
+        const productWithPrice = { ...product, price: newPrice, id: id };
         addItem(productWithPrice);
 
     };

@@ -1,7 +1,7 @@
 // Header.jsx
 import React, { useEffect, useState } from 'react';
 import styles from './Header.module.css';
-import { HeartOutlined, LockOutlined, PhoneOutlined, SearchOutlined, ShoppingCartOutlined, ShoppingOutlined, UserOutlined } from '@ant-design/icons';
+import { HeartOutlined, LockOutlined, LogoutOutlined, PhoneOutlined, SearchOutlined, ShoppingCartOutlined, ShoppingOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Skeleton, Space } from "antd";
 import { Link } from 'react-router-dom';
 import ButtonBs from 'react-bootstrap/Button';
@@ -149,8 +149,10 @@ export default function Header() {
           <div className={styles.Item}><UserOutlined />Tài khoản của tôi</div>
         </Link>
         <div className={styles.Item}><HeartOutlined />Danh sách yêu thích</div>
-        <div className={styles.Item}><ShoppingOutlined />Thanh toán</div>
-        {value ? (<div>{value} <button style={{ background: 'transparent', border: 'none' }} onClick={handleLogout}>Logout</button></div>) : (<div className={styles.Item}><LockOutlined /><Link to='/login'>Đăng nhập</Link></div>)}
+        <Link to='payments'>
+          <div className={styles.Item}><ShoppingOutlined /> Thanh toán</div>
+        </Link>
+        {value ? (<div> <button style={{ background: 'transparent', border: 'none' }} onClick={handleLogout}><LogoutOutlined />Đăng xuất</button></div>) : (<div className={styles.Item}><LockOutlined /><Link to='/login'>Đăng nhập</Link></div>)}
       </div>
       <div className={sticky ? `${styles.sticky}` : `${styles.header}`}>
         <div className={styles.Mid_Navbar}>
